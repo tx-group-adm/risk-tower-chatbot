@@ -1,0 +1,45 @@
+{
+	"name": "risk-tower-chatbot",
+	"version": "1.0.0",
+	"description": "",
+	"main": ".eslintrc.js",
+	"dependencies": {},
+	"devDependencies": {
+		"@types/aws-lambda": "^8.10.61",
+		"@types/jest": "^26.0.12",
+		"@types/node": "^14.6.2",
+		"@typescript-eslint/eslint-plugin": "^4.0.1",
+		"@typescript-eslint/parser": "^4.0.1",
+		"aws-lambda": "^1.0.6",
+		"eslint": "^7.8.1",
+		"eslint-config-airbnb": "^18.2.0",
+		"eslint-config-airbnb-base": "^14.2.0",
+		"eslint-config-prettier": "^6.11.0",
+		"eslint-import-resolver-typescript": "^2.3.0",
+		"eslint-plugin-import": "^2.22.0",
+		"eslint-plugin-json": "^2.1.2",
+		"eslint-plugin-jsx-a11y": "^6.3.1",
+		"eslint-plugin-prettier": "^3.1.4",
+		"eslint-plugin-react": "^7.20.6",
+		"jest": "^26.4.2",
+		"prettier": "^2.1.1",
+		"ts-jest": "^26.3.0",
+		"typescript": "^4.0.2"
+	},
+	"scripts": {
+		"build": "tsc",
+		"test": "jest",
+		"deploy": "lambda deploy ./aws/config.lambda"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tamedia-pmd/risk-tower-chatbot.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/tamedia-pmd/risk-tower-chatbot/issues"
+	},
+	"homepage": "https://github.com/tamedia-pmd/risk-tower-chatbot#readme"
+}

@@ -1,0 +1,106 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      # circleci node image version
+      - image: circleci/node:12
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+
+      - run:
+          name: Install Dependencies
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+
+      - run:
+          name: Build project
+          command: npm run build
+
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - node_modules/
+            - dist/
+            - aws/
+            - package.json
+  deploy:
+    docker:
+      # circleci node image version
+      - image: circleci/node:12
+
+    environment:
+      BASH_ENV: bash_env
+
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+
+      - run:
+          name: Export Stage name into BASH_ENV
+          command: |
+            chmod u+x ~/project/.circleci/helpers/setStageName.sh
+            echo "export STAGE=`~/project/.circleci/helpers/setStageName.sh`" >> $BASH_ENV
+
+      - run:
+          name: Prepare deployment file
+          command: |
+            echo "deploying to $STAGE"
+
+            sed -i "s~###FUNCTION_NAME###~texbot-dialogflow-fulfillment-$STAGE~" ~/project/aws/config.lambda
+            sed -i "s~###STAGE###~$STAGE~" ~/project/aws/config.lambda
+
+      - run:
+          name: Run tests
+          command: npm test
+
+      - run:
+          name: Deploy to AWS Lambda
+          command: npm run deploy
+
+workflows:
+  version: 2
+  staging-build:
+    jobs:
+      - build:
+          name: build stage
+          filters:
+            branches:
+              only: /(^develop$)/
+      - deploy:
+          name: deploy stage
+          requires:
+            - build stage
+
+  un-tagged-build:
+    jobs:
+      - build:
+          filters:
+            tags:
+              ignore: /(^v.*)/
+            branches:
+              ignore: /(^develop$)/
+  tagged-build:
+    jobs:
+      - build:
+          name: build tag
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      - deploy:
+          # environment: prod
+          name: deploy prod
+          requires:
+            - build tag
