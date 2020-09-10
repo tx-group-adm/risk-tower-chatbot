@@ -7,3 +7,18 @@ export interface HandlerResponse {
 	};
 	body: string;
 }
+
+export interface ISlackMessageEvent {
+	type: string;
+	channel: string;
+	user: string;
+	text: string;
+	ts: string;
+	//eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[index: string]: any;
+}
+
+export interface ISlackMessageIMEvent extends ISlackMessageEvent {
+	event_ts: string;
+	channel_type: string;
+}
