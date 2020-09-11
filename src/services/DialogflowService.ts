@@ -89,8 +89,9 @@ export default class DialogflowService {
 			console.log(`processTextMessage succesfully called makeRequest`);
 
 			console.log(`!!response?.[0]?.queryResult?.fulfillmentText = ${!!response?.[0]?.queryResult?.fulfillmentText}`);
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			console.log(`response[0].queryResult.fulfillmentText = ${response[0].queryResult!.fulfillmentText}`);
+			console.log(
+				`response[0].queryResult.fulfillmentText = ${response?.[0]?.queryResult?.fulfillmentText || 'empty'}`
+			);
 
 			if (!!response?.[0]?.queryResult?.fulfillmentMessages?.length) {
 				return response[0].queryResult.fulfillmentMessages.map((message) => message?.text?.text?.[0] ?? '').join('\n');

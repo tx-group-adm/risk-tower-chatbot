@@ -56,7 +56,7 @@ jobs:
           command: |
             echo "deploying to $STAGE"
 
-            sed -i "s~###FUNCTION_NAME###~texbot-dialogflow-fulfillment-$STAGE~" ~/project/aws/config.lambda
+            sed -i "s~###FUNCTION_NAME###~risk-tower-chatbot-$STAGE~" ~/project/aws/config.lambda
             sed -i "s~###STAGE###~$STAGE~" ~/project/aws/config.lambda
 
       - run:

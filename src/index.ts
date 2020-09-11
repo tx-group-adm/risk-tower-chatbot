@@ -1,14 +1,22 @@
-import { HandlerResponse } from './interfaces';
+import { HandlerResponse, ISlackMessageIMEvent } from './interfaces';
+import { slackMessageIMHandler } from './handlers/slackMessageIMHandler';
+import { errorHandler } from './handlers/errorHandler';
 
 export const handler = (event: { body: string }): HandlerResponse => {
-	console.log(`Received event: ${JSON.stringify(event)}`);
+	try {
+		console.log(`Received event: ${JSON.stringify(event)}`);
+		const slackEvent = JSON.parse(event.body) as ISlackMessageIMEvent;
+		slackMessageIMHandler(slackEvent);
+	} catch (err) {
+		errorHandler(err, err.message);
+	}
 
 	return {
-		body: 'Hello from AWS Lambda',
-		statusCode: 200,
+		body: '',
 		headers: {
-			'Content-Type': 'applicaton/json',
+			'Content-Type': 'application/json',
 		},
 		isBase64Encoded: false,
+		statusCode: 200,
 	};
 };
