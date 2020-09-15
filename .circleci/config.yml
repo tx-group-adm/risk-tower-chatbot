@@ -71,7 +71,7 @@ jobs:
             cat config/config.dev.json
 
             echo "config.prod.json"
-            cat /config/config.prod.json
+            cat config/config.prod.json
 
       - run:
           name: Run tests
