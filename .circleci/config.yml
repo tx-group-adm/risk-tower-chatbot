@@ -73,7 +73,7 @@ jobs:
       - run:
           name: Deploy to AWS Lambda
           command: |
-            if [ $STAGE == 'prod']
+            if [ $STAGE == 'prod' ]
             then
               npm run deploy-prod
             else
