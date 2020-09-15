@@ -1,4 +1,5 @@
-import { handler } from '../index';
+import { slackevent } from '../../handler';
+import { Context } from 'aws-lambda';
 
 describe('Testing handler function', () => {
 	it('should return the default 200 OK response', () => {
@@ -8,7 +9,7 @@ describe('Testing handler function', () => {
 			}),
 		};
 
-		expect(handler(event)).toEqual({
+		expect(slackevent(event, {} as Context)).toEqual({
 			statusCode: 200,
 			body: '',
 			headers: {
