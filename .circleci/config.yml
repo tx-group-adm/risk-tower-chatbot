@@ -66,16 +66,12 @@ jobs:
             sed -i "s~###DIALOGFLOW_PROJECT_ID_PROD###~$DIALOGFLOW_PROJECT_ID_PROD~" ~/project/config/config.prod.json
             sed -i "s~###SLACK_BOT_TOKEN_PROD###~$SLACK_BOT_TOKEN_PROD~" ~/project/config/config.prod.json
 
-            pwd
 
-            ls
+            echo "config.dev.json"
+            cat config/config.dev.json
 
-
-          # echo "config.dev.json"
-          # cat ./project/config/config.dev.json
-
-          # echo "config.prod.json"
-          # cat ./project/config/config.prod.json
+            echo "config.prod.json"
+            cat config/config.prod.json
 
       - run:
           name: Run tests
