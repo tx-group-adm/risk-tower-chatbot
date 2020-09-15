@@ -1,6 +1,6 @@
 import { handler } from '../index';
 
-describe('Testing index handler function', () => {
+describe('Testing handler function', () => {
 	it('should return the default 200 OK response', () => {
 		const event: { body: string } = {
 			body: JSON.stringify({
@@ -9,12 +9,11 @@ describe('Testing index handler function', () => {
 		};
 
 		expect(handler(event)).toEqual({
-			body: 'Hello from AWS Lambda',
 			statusCode: 200,
+			body: '',
 			headers: {
-				'Content-Type': 'applicaton/json',
+				'Content-Type': 'application/json',
 			},
-			isBase64Encoded: false,
 		});
 	});
 });
