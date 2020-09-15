@@ -12,11 +12,10 @@ export const handler = (event: { body: string }): HandlerResponse => {
 	}
 
 	return {
+		statusCode: 200,
 		body: '',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		isBase64Encoded: false,
-		statusCode: 200,
 	};
 };

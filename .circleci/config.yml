@@ -29,8 +29,8 @@ jobs:
           root: ~/project
           paths:
             - node_modules/
+            - config/
             - dist/
-            - aws/
             - package.json
   deploy:
     docker:
@@ -56,8 +56,15 @@ jobs:
           command: |
             echo "deploying to $STAGE"
 
-            sed -i "s~###FUNCTION_NAME###~risk-tower-chatbot-$STAGE~" ~/project/aws/config.lambda
-            sed -i "s~###STAGE###~$STAGE~" ~/project/aws/config.lambda
+            sed -i "s~###DIALOGFLOW_CLIENT_EMAIL_DEV###~$DIALOGFLOW_CLIENT_EMAIL_DEV~" ~/project/config/config.dev.json
+            sed -i "s~###DIALOGFLOW_PRIVATE_KEY_DEV###~$DIALOGFLOW_PRIVATE_KEY_DEV~" ~/project/config/config.dev.json
+            sed -i "s~###DIALOGFLOW_PROJECT_ID_DEV###~$DIALOGFLOW_PROJECT_ID_DEV~" ~/project/config/config.dev.json
+            sed -i "s~###SLACK_BOT_TOKEN_DEV###~$SLACK_BOT_TOKEN_DEV~" ~/project/config/config.dev.json
+
+            sed -i "s~###DIALOGFLOW_CLIENT_EMAIL_PROD###~$DIALOGFLOW_CLIENT_EMAIL_PROD~" ~/project/config/config.prod.json
+            sed -i "s~###DIALOGFLOW_PRIVATE_KEY_PROD###~$DIALOGFLOW_PRIVATE_KEY_PROD~" ~/project/config/config.prod.json
+            sed -i "s~###DIALOGFLOW_PROJECT_ID_PROD###~$DIALOGFLOW_PROJECT_ID_PROD~" ~/project/config/config.prod.json
+            sed -i "s~###SLACK_BOT_TOKEN_PROD###~$SLACK_BOT_TOKEN_PROD~" ~/project/config/config.prod.json
 
       - run:
           name: Run tests
@@ -65,7 +72,13 @@ jobs:
 
       - run:
           name: Deploy to AWS Lambda
-          command: npm run deploy
+          command: |
+            if [ $STAGE == 'prod']
+            then
+              npm run deploy-prod
+            else
+              npm run deploy
+            fi
 
 workflows:
   version: 2
