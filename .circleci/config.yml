@@ -56,7 +56,7 @@ jobs:
           command: |
             echo "deploying to $STAGE"
 
-            pwd
+            chmod u+x ~/project/.circleci/helpers/setEnvironmentVariables.sh
 
             ./.circleci/helpers/setEnvironmentVariables.sh
 
