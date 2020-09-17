@@ -56,7 +56,7 @@ jobs:
           command: |
             echo "deploying to $STAGE"
 
-            ./setEnvironmentVariables.sh
+            ./project/.circleci/helpers/setEnvironmentVariables.sh
 
       - run:
           name: Run tests
