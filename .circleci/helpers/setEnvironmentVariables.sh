@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+cd ../../config
+
 jq --arg pk "$DIALOGFLOW_CLIENT_EMAIL_DEV" '.DIALOGFLOW_CLIENT_EMAIL_DEV = $pk' config.dev.json > config.dev.json.tmp \
     && mv config.dev.json.tmp config.dev.json
 
