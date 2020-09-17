@@ -56,24 +56,7 @@ jobs:
           command: |
             echo "deploying to $STAGE"
 
-            echo $DIALOGFLOW_PRIVATE_KEY_DEV
-
-            sed -i "s~###DIALOGFLOW_CLIENT_EMAIL_DEV###~$DIALOGFLOW_CLIENT_EMAIL_DEV~" ~/project/config/config.dev.json
-            sed -i "s~###DIALOGFLOW_PRIVATE_KEY_DEV###~$DIALOGFLOW_PRIVATE_KEY_DEV~" ~/project/config/config.dev.json
-            sed -i "s~###DIALOGFLOW_PROJECT_ID_DEV###~$DIALOGFLOW_PROJECT_ID_DEV~" ~/project/config/config.dev.json
-            sed -i "s~###SLACK_BOT_TOKEN_DEV###~$SLACK_BOT_TOKEN_DEV~" ~/project/config/config.dev.json
-
-            sed -i "s~###DIALOGFLOW_CLIENT_EMAIL_PROD###~$DIALOGFLOW_CLIENT_EMAIL_PROD~" ~/project/config/config.prod.json
-            sed -i "s~###DIALOGFLOW_PRIVATE_KEY_PROD###~$DIALOGFLOW_PRIVATE_KEY_PROD~" ~/project/config/config.prod.json
-            sed -i "s~###DIALOGFLOW_PROJECT_ID_PROD###~$DIALOGFLOW_PROJECT_ID_PROD~" ~/project/config/config.prod.json
-            sed -i "s~###SLACK_BOT_TOKEN_PROD###~$SLACK_BOT_TOKEN_PROD~" ~/project/config/config.prod.json
-
-
-            echo "config.dev.json"
-            cat config/config.dev.json
-
-            echo "config.prod.json"
-            cat config/config.prod.json
+            ./setEnvironmentVariables.sh
 
       - run:
           name: Run tests
