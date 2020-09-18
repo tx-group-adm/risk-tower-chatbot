@@ -107,5 +107,8 @@ workflows:
               only: /^v.*/
       - deploy:
           name: deploy prod
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - build tag
