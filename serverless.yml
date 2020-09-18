@@ -1,0 +1,50 @@
+service: risk-tower-chatbot
+
+plugins:
+  - serverless-webpack
+  - serverless-plugin-warmup
+
+package:
+  individually: true
+  exclude:
+    - '**'
+  include:
+    - '!node_modules/@types/**'
+    - src/**
+
+provider:
+  name: aws
+  region: eu-central-1
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs12.x
+  timeout: 30
+  environment:
+    DIALOGFLOW_CLIENT_EMAIL: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_CLIENT_EMAIL}
+    DIALOGFLOW_PRIVATE_KEY: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PRIVATE_KEY}
+    DIALOGFLOW_PROJECT_ID: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PROJECT_ID}
+    SLACK_BOT_TOKEN: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):SLACK_BOT_TOKEN}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource: '*'
+
+functions:
+  slackevent:
+    warmup: true
+    timeout: 30
+    handler: handler.slackevent
+    events:
+      - http:
+          method: post
+          path: slackvent
+          async: true
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packager: 'npm'
+    includeModules: true
+    forceExclude:
+      - aws-sdk
+      - reflect-metadata
