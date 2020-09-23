@@ -4,6 +4,17 @@ import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 import { errorHandler } from './src/handlers/errorHandler';
 
 export const slackevent = (event: { body: string }, context: Context): HandlerResponse => {
+	if (JSON.parse(event.body).type === 'url_verification') {
+		return {
+			statusCode: 200,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: '',
+			challenge: JSON.parse(event.body).challenge,
+		};
+	}
+
 	try {
 		context.callbackWaitsForEmptyEventLoop = false;
 		console.log(`Received event: ${JSON.stringify(event)}`);

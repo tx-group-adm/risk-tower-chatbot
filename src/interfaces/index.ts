@@ -5,6 +5,7 @@ export interface HandlerResponse {
 		[header: string]: any;
 	};
 	body: string;
+	challenge?: string;
 }
 
 export interface ISlackMessageEvent {
