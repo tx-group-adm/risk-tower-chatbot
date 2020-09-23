@@ -1,14 +1,14 @@
 import { Context } from 'aws-lambda';
-import { HandlerResponse /* ISlackMessageIMEvent */ } from './src/interfaces';
-// import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
+import { HandlerResponse, ISlackMessageIMEvent } from './src/interfaces';
+import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 import { errorHandler } from './src/handlers/errorHandler';
 
 export const slackevent = (event: { body: string }, context: Context): HandlerResponse => {
 	try {
 		context.callbackWaitsForEmptyEventLoop = false;
 		console.log(`Received event: ${JSON.stringify(event)}`);
-		// const slackEvent = JSON.parse(event.body) as ISlackMessageIMEvent;
-		// slackMessageIMHandler(slackEvent);
+		const slackEvent = JSON.parse(event.body) as ISlackMessageIMEvent;
+		slackMessageIMHandler(slackEvent);
 	} catch (err) {
 		errorHandler(err, err.message);
 	}
