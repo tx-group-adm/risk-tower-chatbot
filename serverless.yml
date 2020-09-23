@@ -7,9 +7,9 @@ plugins:
 package:
   individually: true
   exclude:
-    - '**'
+    - "**"
   include:
-    - '!node_modules/@types/**'
+    - "!node_modules/@types/**"
     - src/**
 
 provider:
@@ -24,10 +24,10 @@ provider:
     DIALOGFLOW_PROJECT_ID: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PROJECT_ID}
     SLACK_BOT_TOKEN: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):SLACK_BOT_TOKEN}
   iamRoleStatements:
-    - Effect: 'Allow'
+    - Effect: "Allow"
       Action:
-        - 'lambda:InvokeFunction'
-      Resource: '*'
+        - "lambda:InvokeFunction"
+      Resource: "*"
 
 functions:
   slackevent:
@@ -38,12 +38,12 @@ functions:
       - http:
           method: post
           path: slackvent
-          async: true
+          # async: true
 
 custom:
   webpack:
-    webpackConfig: 'webpack.config.js'
-    packager: 'npm'
+    webpackConfig: "webpack.config.js"
+    packager: "npm"
     includeModules: true
     forceExclude:
       - aws-sdk
