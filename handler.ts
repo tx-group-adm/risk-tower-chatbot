@@ -7,8 +7,6 @@ export const slackevent = (event: { body: string }, context: Context): HandlerRe
 	try {
 		context.callbackWaitsForEmptyEventLoop = false;
 		console.log(`Received event: ${JSON.stringify(event)}`);
-		console.log('v1.0 works');
-
 		const slackEvent = JSON.parse(event.body) as ISlackMessageIMEvent;
 		slackMessageIMHandler(slackEvent);
 	} catch (err) {
