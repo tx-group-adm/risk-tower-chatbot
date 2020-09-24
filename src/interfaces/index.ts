@@ -1,10 +1,10 @@
 export interface HandlerResponse {
-	statusCode: number;
-	headers: {
+	statusCode?: number;
+	headers?: {
 		//eslint-disable-next-line @typescript-eslint/no-explicit-any
 		[header: string]: any;
 	};
-	body: string;
+	body?: string;
 	challenge?: string;
 }
 
