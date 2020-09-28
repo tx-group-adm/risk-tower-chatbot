@@ -53,5 +53,6 @@ export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context):
 		headers: {
 			'Content-Type': 'application/json',
 		},
+		body: '',
 	};
 };
