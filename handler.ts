@@ -12,6 +12,7 @@ export const slackevent = (event: { body: string }, context: Context): HandlerRe
 
 	return {
 		statusCode: 200,
+		body: '',
 		headers: {
 			'Content-Type': 'application/json',
 		},
