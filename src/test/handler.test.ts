@@ -17,6 +17,7 @@ describe('Testing handler function', () => {
 				'Content-Type': 'application/json',
 			},
 			isBase64Encoded: false,
+			body: '',
 		};
 		expect(slackevent(event, {} as Context)).toEqual(expectedEventCallbackResponse);
 	});
