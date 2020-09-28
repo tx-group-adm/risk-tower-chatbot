@@ -24,12 +24,12 @@ export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context):
 				case 'url_verification':
 					console.log('URL_VERIFICATION');
 					return {
+						isBase64Encoded: false,
 						statusCode: 200,
 						headers: {
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify({ challenge: slackEvent.challenge }),
-						isBase64Encoded: false,
 					};
 
 				case 'event_callback':
@@ -48,10 +48,11 @@ export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context):
 	}
 
 	return {
+		isBase64Encoded: false,
 		statusCode: 200,
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		isBase64Encoded: false,
+		body: false,
 	};
 };
