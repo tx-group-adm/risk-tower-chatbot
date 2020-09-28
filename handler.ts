@@ -6,9 +6,9 @@ import { HandlerResponse, ISlackMessageIMEvent, ISlackMessageEvent, IWarmupEvent
 export const slackevent = (event: { body: string }, context: Context): HandlerResponse => {
 	context.callbackWaitsForEmptyEventLoop = false;
 
-	const slackEvent: ISlackMessageEvent | IWarmupEvent = JSON.parse(event.body);
+	// const slackEvent: ISlackMessageEvent | IWarmupEvent = JSON.parse(event.body);
 
-	console.log(slackEvent);
+	console.log(JSON.stringify(event));
 
 	return {
 		statusCode: 200,
