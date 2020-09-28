@@ -1,20 +1,23 @@
 import { slackevent } from '../../handler';
 import { Context } from 'aws-lambda';
+import { ISlackEventCallback, HandlerResponse } from '../interfaces';
 
 describe('Testing handler function', () => {
 	it('should return the default 200 OK response', () => {
 		const event: { body: string } = {
 			body: JSON.stringify({
-				message: 'Hello World',
-			}),
+				type: 'event_callback',
+				event: { body: '' },
+			} as ISlackEventCallback),
 		};
 
-		expect(slackevent(event, {} as Context)).toEqual({
+		const expectedEventCallbackResponse: HandlerResponse = {
 			statusCode: 200,
-			body: '',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		});
+			isBase64Encoded: false,
+		};
+		expect(slackevent(event, {} as Context)).toEqual(expectedEventCallbackResponse);
 	});
 });
