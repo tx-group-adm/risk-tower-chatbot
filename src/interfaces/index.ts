@@ -1,11 +1,13 @@
 export interface HandlerResponse {
-	statusCode?: number;
+	statusCode: number;
 	headers?: {
-		//eslint-disable-next-line @typescript-eslint/no-explicit-any
-		[header: string]: any;
+		[header: string]: string | number | boolean;
 	};
-	body?: string;
-	challenge?: string;
+	multiValueHeaders?: {
+		[headerName: string]: Array<string>;
+	};
+	body?: string | false;
+	isBase64Encoded: boolean;
 }
 
 export interface ISlackUrlVerificationEvent {

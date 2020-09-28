@@ -25,7 +25,11 @@ export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context):
 					console.log('URL_VERIFICATION');
 					return {
 						statusCode: 200,
-						challenge: slackEvent.challenge,
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ challenge: slackEvent.challenge }),
+						isBase64Encoded: false,
 					};
 
 				case 'event_callback':
@@ -35,6 +39,8 @@ export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context):
 				default:
 					break;
 			}
+		} else {
+			console.log('WARMUP');
 		}
 	} catch (err) {
 		errorHandler(err);
@@ -43,9 +49,9 @@ export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context):
 
 	return {
 		statusCode: 200,
-		body: '',
 		headers: {
 			'Content-Type': 'application/json',
 		},
+		isBase64Encoded: false,
 	};
 };
