@@ -9,29 +9,35 @@ import {
 	ISlackEventCallback,
 } from './src/interfaces';
 import { isSlackEvent } from './src/handlers/helpers/isSlackEvent';
+import { errorHandler } from './src/handlers/errorHandler';
 // import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 // import { errorHandler } from './src/handlers/errorHandler';
 
 export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context): HandlerResponse => {
 	context.callbackWaitsForEmptyEventLoop = false;
 
-	if (isSlackEvent(event)) {
-		const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = JSON.parse(event.body);
+	try {
+		if (isSlackEvent(event)) {
+			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = JSON.parse(event.body);
 
-		switch (slackEvent.type) {
-			case 'url_verification':
-				return {
-					statusCode: 200,
-					challenge: slackEvent.challenge,
-				};
+			switch (slackEvent.type) {
+				case 'url_verification':
+					console.log('URL_VERIFICATION');
+					return {
+						statusCode: 200,
+						challenge: slackEvent.challenge,
+					};
 
-			case 'event_callback':
-				console.log('event_callback');
-				break;
+				case 'event_callback':
+					console.log('EVENT_CALLBACK');
+					break;
 
-			default:
-				break;
+				default:
+					break;
+			}
 		}
+	} catch (err) {
+		errorHandler(err, err.message);
 	}
 
 	return {
