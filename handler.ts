@@ -1,14 +1,38 @@
 import { Context } from 'aws-lambda';
-import { HandlerResponse, ISlackMessageIMEvent, ISlackMessageEvent, IWarmupEvent } from './src/interfaces';
+import {
+	HandlerResponse,
+	ISlackMessageIMEvent,
+	ISlackMessageEvent,
+	IWarmupEvent,
+	ISlackEvent,
+	ISlackUrlVerificationEvent,
+	ISlackEventCallback,
+} from './src/interfaces';
+import { isSlackEvent } from './src/handlers/helpers/isSlackEvent';
 // import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 // import { errorHandler } from './src/handlers/errorHandler';
 
-export const slackevent = (event: { body: string }, context: Context): HandlerResponse => {
+export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context): HandlerResponse => {
 	context.callbackWaitsForEmptyEventLoop = false;
 
-	// const slackEvent: ISlackMessageEvent | IWarmupEvent = JSON.parse(event.body);
+	if (isSlackEvent(event)) {
+		const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = JSON.parse(event.body);
 
-	console.log(JSON.stringify(event));
+		switch (slackEvent.type) {
+			case 'url_verification':
+				return {
+					statusCode: 200,
+					challenge: slackEvent.challenge,
+				};
+
+			case 'event_callback':
+				console.log('event_callback');
+				break;
+
+			default:
+				break;
+		}
+	}
 
 	return {
 		statusCode: 200,
