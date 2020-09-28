@@ -37,7 +37,7 @@ export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context):
 			}
 		}
 	} catch (err) {
-		errorHandler(err, err.message);
+		errorHandler(err);
 	}
 
 	return {
