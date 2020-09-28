@@ -1,4 +1,4 @@
-export const errorHandler = (err: Error, msg: string): void => {
-	console.log(`Error: ${msg}`);
+export const errorHandler = (err: Error): void => {
+	console.log(`Error:`);
 	console.error(err);
 };
