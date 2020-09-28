@@ -22,3 +22,7 @@ export interface ISlackMessageIMEvent extends ISlackMessageEvent {
 	event_ts: string;
 	channel_type: string;
 }
+
+export interface IWarmupEvent {
+	message: string;
+}
