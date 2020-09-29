@@ -12,10 +12,9 @@ import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 export const slackevent = async (event: ISlackEvent | IWarmupEvent): Promise<HandlerResponse> => {
 	try {
 		if (isSlackEvent(event)) {
-			console.log('this should be slackevent:');
-			console.log(event, JSON.stringify(event));
+			console.log(`Event is a ${typeof event}`);
 
-			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = JSON.parse(event.body);
+			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = event.body;
 
 			switch (slackEvent.type) {
 				case 'url_verification':
