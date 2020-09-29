@@ -3,7 +3,7 @@ import { Context } from 'aws-lambda';
 import { ISlackEventCallback, HandlerResponse } from '../interfaces';
 
 describe('Testing handler function', () => {
-	it('should return the default 200 OK response', () => {
+	it('should return the default 200 OK response', async () => {
 		const event: { body: string } = {
 			body: JSON.stringify({
 				type: 'event_callback',
@@ -19,6 +19,6 @@ describe('Testing handler function', () => {
 			isBase64Encoded: false,
 			body: '',
 		};
-		expect(slackevent(event, {} as Context)).toEqual(expectedEventCallbackResponse);
+		expect(await slackevent(event, {} as Context)).toEqual(expectedEventCallbackResponse);
 	});
 });
