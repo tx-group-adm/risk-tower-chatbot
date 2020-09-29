@@ -34,6 +34,7 @@ export const slackevent = async (event: ISlackEvent | IWarmupEvent, context: Con
 
 				case 'event_callback':
 					console.log('EVENT_CALLBACK');
+					console.log(JSON.stringify(slackEvent));
 					break;
 
 				default:
