@@ -13,7 +13,7 @@ export interface HandlerResponse {
 export type IEvent = ISlackEvent | IWarmupEvent;
 
 export interface ISlackEvent {
-	body: ISlackEvent | IWarmupEvent;
+	body: ISlackUrlVerificationEvent | ISlackEventCallback;
 }
 
 export interface ISlackUrlVerificationEvent {
