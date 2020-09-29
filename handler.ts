@@ -1,8 +1,6 @@
 import { Context } from 'aws-lambda';
 import {
 	HandlerResponse,
-	ISlackMessageIMEvent,
-	ISlackMessageEvent,
 	IWarmupEvent,
 	ISlackEvent,
 	ISlackUrlVerificationEvent,
@@ -10,8 +8,7 @@ import {
 } from './src/interfaces';
 import { isSlackEvent } from './src/handlers/helpers/isSlackEvent';
 import { errorHandler } from './src/handlers/errorHandler';
-// import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
-// import { errorHandler } from './src/handlers/errorHandler';
+import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 
 export const slackevent = async (event: ISlackEvent | IWarmupEvent, context: Context): Promise<HandlerResponse> => {
 	context.callbackWaitsForEmptyEventLoop = false;
@@ -35,6 +32,7 @@ export const slackevent = async (event: ISlackEvent | IWarmupEvent, context: Con
 				case 'event_callback':
 					console.log('EVENT_CALLBACK');
 					console.log(JSON.stringify(slackEvent));
+					slackMessageIMHandler(slackEvent.event);
 					break;
 
 				default:

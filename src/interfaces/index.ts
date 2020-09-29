@@ -10,6 +10,12 @@ export interface HandlerResponse {
 	isBase64Encoded: boolean;
 }
 
+export type IEvent = ISlackEvent | IWarmupEvent;
+
+export interface ISlackEvent {
+	body: string;
+}
+
 export interface ISlackUrlVerificationEvent {
 	token: string;
 	challenge: string;
@@ -18,15 +24,9 @@ export interface ISlackUrlVerificationEvent {
 
 export interface ISlackEventCallback {
 	type: 'event_callback';
-	event: ISlackEvent;
+	event: ISlackMessageIMEvent;
 	//eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[index: string]: any;
-}
-
-export type IEvent = ISlackEvent | IWarmupEvent;
-
-export interface ISlackEvent {
-	body: string;
 }
 
 export interface ISlackMessageEvent {
