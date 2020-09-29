@@ -39,7 +39,7 @@ functions:
       - http:
           method: post
           path: slackvent
-          # async: true
+          async: true
 
 custom:
   webpack:
