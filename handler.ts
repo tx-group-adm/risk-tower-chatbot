@@ -11,7 +11,7 @@ import { errorHandler } from './src/handlers/errorHandler';
 import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 
 export const slackevent = async (event: ISlackEvent | IWarmupEvent, context: Context): Promise<HandlerResponse> => {
-	context.callbackWaitsForEmptyEventLoop = false;
+	// context.callbackWaitsForEmptyEventLoop = false;
 
 	try {
 		if (isSlackEvent(event)) {
