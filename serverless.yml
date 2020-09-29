@@ -33,7 +33,7 @@ provider:
 functions:
   slackevent:
     warmup: true
-    timeout: 30
+    timeout: 300
     handler: handler.slackevent
     events:
       - http:
