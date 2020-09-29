@@ -1,6 +1,6 @@
 import { slackevent } from '../../handler';
 import { Context } from 'aws-lambda';
-import { ISlackEventCallback, HandlerResponse } from '../interfaces';
+import { HandlerResponse } from '../interfaces';
 
 describe('Testing handler function', () => {
 	it('should return the default 200 OK response', async () => {
@@ -8,7 +8,7 @@ describe('Testing handler function', () => {
 			body: JSON.stringify({
 				type: 'event_callback',
 				event: { body: '' },
-			} as ISlackEventCallback),
+			}),
 		};
 
 		const expectedEventCallbackResponse: HandlerResponse = {
