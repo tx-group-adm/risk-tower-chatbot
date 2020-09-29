@@ -1,6 +1,7 @@
 service: risk-tower-chatbot
 
 plugins:
+  - serverless-offline
   - serverless-webpack
   - serverless-plugin-warmup
 

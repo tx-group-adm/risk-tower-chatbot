@@ -13,7 +13,7 @@ import { errorHandler } from './src/handlers/errorHandler';
 // import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 // import { errorHandler } from './src/handlers/errorHandler';
 
-export const slackevent = (event: ISlackEvent | IWarmupEvent, context: Context): HandlerResponse => {
+export const slackevent = async (event: ISlackEvent | IWarmupEvent, context: Context): Promise<HandlerResponse> => {
 	context.callbackWaitsForEmptyEventLoop = false;
 
 	try {
