@@ -39,7 +39,7 @@ functions:
       - http:
           method: post
           path: slackvent
-          # async: true  # remove when needing to verify the url with slack
+          # async: true
 
 custom:
   webpack:
