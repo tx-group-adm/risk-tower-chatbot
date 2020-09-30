@@ -11,7 +11,7 @@ export default class DialogflowService {
 	constructor(projectId: string) {
 		const options: GoogleAuthOptions = {
 			credentials: {
-				private_key: process.env.DIALOGFLOW_PRIVATE_KEY,
+				private_key: (process.env.DIALOGFLOW_PRIVATE_KEY as string).replace(/\\n/gm, '\n'),
 				client_email: process.env.DIALOGFLOW_CLIENT_EMAIL,
 			},
 		};
