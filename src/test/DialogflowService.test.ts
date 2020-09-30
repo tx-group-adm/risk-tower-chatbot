@@ -22,6 +22,8 @@ jest.mock('@google-cloud/dialogflow', () => {
 
 import DialogflowService from '../services/DialogflowService';
 
+process.env.DIALOGFLOW_PRIVATE_KEY = '';
+
 describe('Testing DialogfloService class', () => {
 	it('should return a processed dialogflow message', async () => {
 		const response = await new DialogflowService('project-id').processTextMessage('message', 'session-id');
