@@ -1,10 +1,32 @@
 export interface HandlerResponse {
 	statusCode: number;
-	headers: {
-		//eslint-disable-next-line @typescript-eslint/no-explicit-any
-		[header: string]: any;
+	headers?: {
+		[header: string]: string | number | boolean;
 	};
-	body: string;
+	multiValueHeaders?: {
+		[headerName: string]: Array<string>;
+	};
+	body?: string | false;
+	isBase64Encoded: boolean;
+}
+
+export type IEvent = ISlackEvent | IWarmupEvent;
+
+export interface ISlackEvent {
+	body: ISlackUrlVerificationEvent | ISlackEventCallback;
+}
+
+export interface ISlackUrlVerificationEvent {
+	token: string;
+	challenge: string;
+	type: 'url_verification';
+}
+
+export interface ISlackEventCallback {
+	type: 'event_callback';
+	event: ISlackMessageIMEvent;
+	//eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[index: string]: any;
 }
 
 export interface ISlackMessageEvent {
@@ -20,4 +42,8 @@ export interface ISlackMessageEvent {
 export interface ISlackMessageIMEvent extends ISlackMessageEvent {
 	event_ts: string;
 	channel_type: string;
+}
+
+export interface IWarmupEvent {
+	source: string;
 }
