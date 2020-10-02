@@ -38,8 +38,7 @@ functions:
     events:
       - http:
           method: post
-          path: slackevent
-          # async: true
+          path: slackvent
 
 custom:
   webpack:
