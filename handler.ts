@@ -14,6 +14,8 @@ export const slackevent = async (event: ISlackEvent | IWarmupEvent): Promise<Han
 		if (isSlackEvent(event)) {
 			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = event.body;
 
+			console.log(JSON.stringify(event));
+
 			switch (slackEvent.type) {
 				case 'url_verification':
 					console.log('URL_VERIFICATION');
