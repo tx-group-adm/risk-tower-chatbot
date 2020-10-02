@@ -16,41 +16,55 @@ export const slackevent = async (event: ISlackEvent | IWarmupEvent): Promise<Han
 
 			console.log(JSON.stringify(event));
 
-			switch (slackEvent.type) {
-				case 'url_verification':
-					console.log('URL_VERIFICATION');
-					return {
-						isBase64Encoded: false,
-						statusCode: 200,
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({ challenge: slackEvent.challenge }),
-					};
+			if (slackEvent.type === 'url_verification') {
+				console.log('URL_VERIFICATION');
+				return {
+					isBase64Encoded: false,
+					statusCode: 200,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ challenge: slackEvent.challenge }),
+				};
+			} else if (slackEvent.type === 'event_callback') {
+				console.log('EVENT_CALLBACK');
+				console.log(JSON.stringify(slackEvent));
+				await slackMessageIMHandler(slackEvent.event);
+				return {
+					isBase64Encoded: false,
+					statusCode: 200,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: '',
+				};
+			} else {
+				console.log('INVALID EVENT');
 
-				case 'event_callback':
-					console.log('EVENT_CALLBACK');
-					console.log(JSON.stringify(slackEvent));
-					await slackMessageIMHandler(slackEvent.event);
-					break;
-
-				default:
-					break;
+				console.log(JSON.stringify(event));
+				return {
+					isBase64Encoded: false,
+					statusCode: 500,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: 'Invalid event',
+				};
 			}
 		} else {
-			console.log('WARMUP');
+			console.log('WARMUP EVENT');
+			console.log(JSON.stringify(event));
+			return {
+				isBase64Encoded: false,
+				statusCode: 200,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: '',
+			};
 		}
 	} catch (err) {
 		errorHandler(err);
 		throw err;
 	}
-
-	return {
-		isBase64Encoded: false,
-		statusCode: 200,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: '',
-	};
 };
