@@ -38,7 +38,7 @@ functions:
     events:
       - http:
           method: post
-          path: slackvent
+          path: slackevent
           # async: true
 
 custom:
