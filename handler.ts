@@ -12,43 +12,56 @@ import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 export const slackevent = async (event: ISlackEvent | IWarmupEvent): Promise<HandlerResponse> => {
 	try {
 		if (isSlackEvent(event)) {
-			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = event.body;
+			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = JSON.parse(event.body);
 
-			switch (slackEvent.type) {
-				case 'url_verification':
-					console.log('URL_VERIFICATION');
-					return {
-						isBase64Encoded: false,
-						statusCode: 200,
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({ challenge: slackEvent.challenge }),
-					};
-
-				case 'event_callback':
-					console.log('EVENT_CALLBACK');
-					console.log(JSON.stringify(slackEvent));
-					await slackMessageIMHandler(slackEvent.event);
-					break;
-
-				default:
-					break;
+			if (slackEvent.type === 'url_verification') {
+				console.log('URL_VERIFICATION');
+				return {
+					isBase64Encoded: false,
+					statusCode: 200,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ challenge: slackEvent.challenge }),
+				};
+			} else if (slackEvent.type === 'event_callback') {
+				console.log('EVENT_CALLBACK');
+				console.log(JSON.stringify(slackEvent));
+				await slackMessageIMHandler(slackEvent.event);
+				return {
+					isBase64Encoded: false,
+					statusCode: 200,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: '',
+				};
+			} else {
+				console.log('INVALID EVENT');
+				console.log(JSON.stringify(event));
+				return {
+					isBase64Encoded: false,
+					statusCode: 500,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: 'Invalid event',
+				};
 			}
 		} else {
-			console.log('WARMUP');
+			console.log('WARMUP EVENT');
+			console.log(JSON.stringify(event));
+			return {
+				isBase64Encoded: false,
+				statusCode: 200,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: '',
+			};
 		}
 	} catch (err) {
 		errorHandler(err);
 		throw err;
 	}
-
-	return {
-		isBase64Encoded: false,
-		statusCode: 200,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: '',
-	};
 };

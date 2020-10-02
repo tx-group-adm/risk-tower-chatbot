@@ -39,7 +39,6 @@ functions:
       - http:
           method: post
           path: slackvent
-          async: false
 
 custom:
   webpack:
