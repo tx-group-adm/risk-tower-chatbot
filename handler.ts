@@ -14,10 +14,6 @@ export const slackevent = async (event: ISlackEvent | IWarmupEvent): Promise<Han
 		if (isSlackEvent(event)) {
 			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = JSON.parse(event.body);
 
-			console.log(`typeof slackEvent: ${typeof slackEvent}`);
-
-			console.log(JSON.stringify(event));
-
 			if (slackEvent.type === 'url_verification') {
 				console.log('URL_VERIFICATION');
 				return {
@@ -42,7 +38,6 @@ export const slackevent = async (event: ISlackEvent | IWarmupEvent): Promise<Han
 				};
 			} else {
 				console.log('INVALID EVENT');
-
 				console.log(JSON.stringify(event));
 				return {
 					isBase64Encoded: false,
