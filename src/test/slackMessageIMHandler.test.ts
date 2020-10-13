@@ -11,7 +11,11 @@ jest.mock('@slack/web-api', () => {
 				},
 				users: {
 					profile: {
-						get: jest.fn(),
+						get: jest.fn().mockResolvedValue({
+							profile: {
+								email: 'user@tx.group',
+							},
+						}),
 					},
 				},
 			};
