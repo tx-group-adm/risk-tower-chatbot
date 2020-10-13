@@ -1,4 +1,4 @@
-import { ISlackMessageIMEvent } from '../interfaces';
+import { ISlackMessageIMEvent, ISLackProfile } from '../interfaces';
 import { WebClient } from '@slack/web-api';
 import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
@@ -16,13 +16,11 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 
 		const sessionId = event.user;
 
-		const email = await webClient.users.profile.get({
+		const email = (((await webClient.users.profile.get({
 			user: event.user,
-		});
+		})) as unknown) as ISLackProfile).profile.email;
 
-		console.log(JSON.stringify(email));
-
-		const response = await dialogflowService.processTextMessage(event.text, sessionId, 'user@tx.group');
+		const response = await dialogflowService.processTextMessage(event.text, sessionId, email);
 
 		const message = slackify(response, event);
 
