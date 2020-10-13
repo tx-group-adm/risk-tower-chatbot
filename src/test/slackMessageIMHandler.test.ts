@@ -9,6 +9,11 @@ jest.mock('@slack/web-api', () => {
 				chat: {
 					postMessage,
 				},
+				users: {
+					profile: {
+						get: jest.fn(),
+					},
+				},
 			};
 		}),
 	};
@@ -48,7 +53,7 @@ describe('Testing the slackMessageIMHandler function', () => {
 		expect(MockedDialogflowService.prototype.processTextMessage).toHaveBeenCalledWith(
 			mockedIMEvent.text,
 			mockedIMEvent.user,
-			mockedIMEvent.user
+			'user@tx.group'
 		);
 
 		expect(postMessage).toHaveBeenCalledWith({
