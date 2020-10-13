@@ -6,7 +6,7 @@ import { slackify } from '../utils/slackify';
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
 	const dialogflowService = new DialogflowService(DIALOGFLOW_PROJECT_ID as string);
-	const webClient = new WebClient(SLACK_BOT_TOKEN);
+	const webClient = new WebClient(SLACK_BOT_TOKEN, { retryConfig: { retries: 0 } });
 
 	if (event.hasOwnProperty('bot_id')) {
 		console.log(`ignore bot event`);
