@@ -22,13 +22,18 @@ export default class DialogflowService {
 
 	private async makeRequest(
 		message: string,
-		sessionId: string
+		sessionId: string,
+		email: string
 	): Promise<google.cloud.dialogflow.v2.IDetectIntentResponse[]> {
-		console.log(`makeRequest was called with -> message: ${message} and sessionId: ${sessionId}`);
+		console.log(`makeRequest was called with -> message: ${message} and sessionId: ${sessionId} for user ${email}`);
 
 		const sessionPath = this.sessionClient.projectAgentSessionPath(this.projectId, sessionId);
 
 		console.log(`sessionPath: ${sessionPath}`);
+
+		const user: google.protobuf.IValue = {
+			stringValue: email,
+		};
 
 		const request: google.cloud.dialogflow.v2.IDetectIntentRequest = {
 			session: sessionPath,
@@ -36,6 +41,13 @@ export default class DialogflowService {
 				text: {
 					text: message,
 					languageCode: 'en-US',
+				},
+			},
+			queryParams: {
+				payload: {
+					fields: {
+						user,
+					},
 				},
 			},
 		};
@@ -61,9 +73,13 @@ export default class DialogflowService {
 		}
 	}
 
-	async getIntentName(message: string, sessionId: string): Promise<string> {
+	async getIntentName(message: string, sessionId: string, email: string): Promise<string> {
 		try {
-			const response: google.cloud.dialogflow.v2.IDetectIntentResponse[] = await this.makeRequest(message, sessionId);
+			const response: google.cloud.dialogflow.v2.IDetectIntentResponse[] = await this.makeRequest(
+				message,
+				sessionId,
+				email
+			);
 
 			if (!!response?.[0]?.queryResult?.intent?.displayName) {
 				console.log(`response[0].queryResult.intent.displayName is available`);
@@ -82,9 +98,9 @@ export default class DialogflowService {
 		}
 	}
 
-	async processTextMessage(message: string, sessionId: string): Promise<string> {
+	async processTextMessage(message: string, sessionId: string, email: string): Promise<string> {
 		try {
-			const response = await this.makeRequest(message, sessionId);
+			const response = await this.makeRequest(message, sessionId, email);
 
 			console.log(`processTextMessage succesfully called makeRequest`);
 
