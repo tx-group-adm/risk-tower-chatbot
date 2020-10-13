@@ -26,8 +26,11 @@ process.env.DIALOGFLOW_PRIVATE_KEY = '';
 
 describe('Testing DialogfloService class', () => {
 	it('should return a processed dialogflow message', async () => {
-		const response = await new DialogflowService('project-id').processTextMessage('message', 'session-id');
-
+		const response = await new DialogflowService('project-id').processTextMessage(
+			'message',
+			'session-id',
+			'user@tx.group'
+		);
 		expect(mockedSessionPath).toHaveBeenCalledWith('project-id', 'session-id');
 		expect(mockedDetectIntent).toHaveBeenCalledWith({
 			session: 'session-path',
@@ -37,12 +40,21 @@ describe('Testing DialogfloService class', () => {
 					languageCode: 'en-US',
 				},
 			},
+			queryParams: {
+				payload: {
+					fields: {
+						user: {
+							stringValue: 'user@tx.group',
+						},
+					},
+				},
+			},
 		});
 		expect(response).toEqual('Dialogflow answer');
 	});
 
 	it('should return the intent name', async () => {
-		const response = await new DialogflowService('project-id').getIntentName('message', 'session-id');
+		const response = await new DialogflowService('project-id').getIntentName('message', 'session-id', 'user@tx.group');
 		expect(mockedSessionPath).toHaveBeenCalledWith('project-id', 'session-id');
 		expect(mockedDetectIntent).toHaveBeenCalledWith({
 			session: 'session-path',
@@ -50,6 +62,15 @@ describe('Testing DialogfloService class', () => {
 				text: {
 					text: 'message',
 					languageCode: 'en-US',
+				},
+			},
+			queryParams: {
+				payload: {
+					fields: {
+						user: {
+							stringValue: 'user@tx.group',
+						},
+					},
 				},
 			},
 		});
@@ -58,7 +79,9 @@ describe('Testing DialogfloService class', () => {
 
 	it('Should throw an error', async () => {
 		try {
-			expect(await new DialogflowService('project-id').processTextMessage('message', 'session-id')).toThrow();
+			expect(
+				await new DialogflowService('project-id').processTextMessage('message', 'session-id', 'user@tx.group')
+			).toThrow();
 		} catch (err) {
 			// Expected
 		}

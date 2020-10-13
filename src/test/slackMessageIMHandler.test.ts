@@ -47,6 +47,7 @@ describe('Testing the slackMessageIMHandler function', () => {
 
 		expect(MockedDialogflowService.prototype.processTextMessage).toHaveBeenCalledWith(
 			mockedIMEvent.text,
+			mockedIMEvent.user,
 			mockedIMEvent.user
 		);
 
