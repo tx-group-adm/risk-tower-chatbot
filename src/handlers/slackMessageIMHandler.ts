@@ -15,7 +15,14 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 		console.log(`user event`);
 
 		const sessionId = event.user;
-		const response = await dialogflowService.processTextMessage(event.text, sessionId, event.user);
+
+		const email = await webClient.users.profile.get({
+			user: event.user,
+		});
+
+		console.log(JSON.stringify(email));
+
+		const response = await dialogflowService.processTextMessage(event.text, sessionId, 'user@tx.group');
 
 		const message = slackify(response, event);
 
