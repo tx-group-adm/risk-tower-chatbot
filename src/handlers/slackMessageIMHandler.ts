@@ -1,4 +1,4 @@
-import { ISlackMessageIMEvent } from '../interfaces';
+import { ISlackMessageIMEvent, ISLackProfile } from '../interfaces';
 import { WebClient } from '@slack/web-api';
 import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
@@ -6,7 +6,7 @@ import { slackify } from '../utils/slackify';
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
 	const dialogflowService = new DialogflowService(DIALOGFLOW_PROJECT_ID as string);
-	const webClient = new WebClient(SLACK_BOT_TOKEN);
+	const webClient = new WebClient(SLACK_BOT_TOKEN, { retryConfig: { retries: 0 } });
 
 	if (event.hasOwnProperty('bot_id')) {
 		console.log(`ignore bot event`);
@@ -16,13 +16,11 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 
 		const sessionId = event.user;
 
-		const email = await webClient.users.profile.get({
+		const email = (((await webClient.users.profile.get({
 			user: event.user,
-		});
+		})) as unknown) as ISLackProfile).profile.email;
 
-		console.log(JSON.stringify(email));
-
-		const response = await dialogflowService.processTextMessage(event.text, sessionId, 'user@tx.group');
+		const response = await dialogflowService.processTextMessage(event.text, sessionId, email);
 
 		const message = slackify(response, event);
 
