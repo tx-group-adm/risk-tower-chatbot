@@ -1,17 +1,13 @@
 service: risk-tower-chatbot
 
 plugins:
-  - serverless-webpack
   - serverless-offline
-  - serverless-plugin-warmup
 
 package:
   individually: true
-  exclude:
-    - '**'
   include:
-    - '!node_modules/@types/**'
-    - src/**
+    - node_modules
+    - dist
 
 provider:
   name: aws
@@ -34,17 +30,8 @@ functions:
   slackevent:
     warmup: true
     timeout: 300
-    handler: handler.slackevent
+    handler: dist/handler.slackevent
     events:
       - http:
           method: post
           path: slackevent
-
-custom:
-  webpack:
-    webpackConfig: 'webpack.config.js'
-    packager: 'npm'
-    includeModules: true
-    forceExclude:
-      - aws-sdk
-      - reflect-metadata
