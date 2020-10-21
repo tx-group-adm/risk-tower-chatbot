@@ -10,42 +10,30 @@ export interface HandlerResponse {
 	isBase64Encoded: boolean;
 }
 
-export type IEvent = ISlackEvent | IWarmupEvent;
-
 export interface ISlackEvent {
 	body: string;
 }
 
-export interface ISlackUrlVerificationEvent {
-	token: string;
-	challenge: string;
-	type: 'url_verification';
-}
-
 export interface ISlackEventCallback {
-	type: 'event_callback';
+	api_app_id: string;
+	authed_users: Array<string>;
 	event: ISlackMessageIMEvent;
-	//eslint-disable-next-line @typescript-eslint/no-explicit-any
-	[index: string]: any;
+	event_id: string;
+	event_time: number;
+	team_id: string;
+	token: string;
+	type: 'event_callback';
 }
 
-export interface ISlackMessageEvent {
+export interface ISlackMessageIMEvent {
 	type: string;
 	channel: string;
 	user: string;
 	text: string;
 	ts: string;
-	//eslint-disable-next-line @typescript-eslint/no-explicit-any
-	[index: string]: any;
-}
-
-export interface ISlackMessageIMEvent extends ISlackMessageEvent {
 	event_ts: string;
 	channel_type: string;
-}
-
-export interface IWarmupEvent {
-	source: string;
+	bot_id?: string;
 }
 
 export interface ISLackProfile {
