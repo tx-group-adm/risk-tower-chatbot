@@ -1,5 +1,4 @@
 jest.mock('../services/DialogflowService');
-jest.mock('fs');
 
 const postMessage = jest.fn();
 const upload = jest.fn();
@@ -31,7 +30,6 @@ jest.mock('@slack/web-api', () => {
 import { slackMessageIMHandler } from '../handlers/slackMessageIMHandler';
 import { mockSlackMessageIMEvent } from './data/mockSlackMessageIMEvent';
 import DialogflowService from '../services/DialogflowService';
-import fs, { ReadStream } from 'fs';
 
 const old_env = process.env;
 
@@ -39,9 +37,6 @@ const MockedDialogflowService = DialogflowService as jest.Mocked<typeof Dialogfl
 MockedDialogflowService.prototype.processTextMessage = jest
 	.fn()
 	.mockResolvedValue('Dear __user__, welcome to the channel __channel__!');
-
-const mockedFs = fs as jest.Mocked<typeof fs>;
-mockedFs.createReadStream = jest.fn().mockReturnValue({} as ReadStream);
 
 describe('Testing the slackMessageIMHandler function', () => {
 	beforeEach(() => {

@@ -3,6 +3,7 @@ import { WebClient } from '@slack/web-api';
 import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
 import fs from 'fs';
+import path from 'path';
 
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
@@ -25,16 +26,14 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 
 		const message = slackify(response, event);
 
-		const postMessageResponse = await webClient.chat.postMessage({
+		await webClient.chat.postMessage({
 			channel: event.channel,
 			text: message,
 		});
 
-		console.log(postMessageResponse);
-
 		/* ### Post static image ### */
 
-		const fileName = '../images/itachi.jpg';
+		const fileName = path.join(__dirname, '../images/itachi.jpg');
 
 		const fileUploadResponse = await webClient.files.upload({
 			title: 'My static file',
