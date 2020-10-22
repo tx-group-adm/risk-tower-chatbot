@@ -103,14 +103,11 @@ export default class DialogflowService {
 			const response = await this.makeRequest(message, sessionId, email);
 
 			console.log(`processTextMessage succesfully called makeRequest`);
+			console.log('Fullfillment messages:');
+			console.log(response[0].queryResult?.fulfillmentMessages);
 
-			console.log(`!!response?.[0]?.queryResult?.fulfillmentText = ${!!response?.[0]?.queryResult?.fulfillmentText}`);
-			console.log(
-				`response[0].queryResult.fulfillmentText = ${response?.[0]?.queryResult?.fulfillmentText || 'empty'}`
-			);
-
-			if (!!response?.[0]?.queryResult?.fulfillmentMessages?.length) {
-				return response[0].queryResult.fulfillmentMessages.map((message) => message?.text?.text?.[0] ?? '').join('\n');
+			if (!!response[0].queryResult?.fulfillmentMessages?.length) {
+				return response[0].queryResult.fulfillmentMessages.map((message) => message.text?.text?.[0]).join('\n');
 			} else {
 				console.log(JSON.stringify(response));
 				throw Error('The response from makeRequest is invalid, check the logs!');
