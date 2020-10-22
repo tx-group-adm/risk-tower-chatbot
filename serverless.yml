@@ -8,6 +8,7 @@ package:
   include:
     - node_modules
     - dist
+    - images
 
 provider:
   name: aws
