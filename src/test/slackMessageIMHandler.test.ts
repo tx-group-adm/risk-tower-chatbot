@@ -1,6 +1,7 @@
 jest.mock('../services/DialogflowService');
 
 const postMessage = jest.fn();
+const upload = jest.fn();
 
 jest.mock('@slack/web-api', () => {
 	return {
@@ -17,6 +18,9 @@ jest.mock('@slack/web-api', () => {
 							},
 						}),
 					},
+				},
+				files: {
+					upload,
 				},
 			};
 		}),
