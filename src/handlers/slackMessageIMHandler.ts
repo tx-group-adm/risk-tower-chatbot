@@ -37,6 +37,7 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 		const fileUploadResponse = await webClient.files.upload({
 			title: 'My static file',
 			file: fs.createReadStream(fileName),
+			channels: event.channel,
 		});
 
 		console.log(fileUploadResponse);
