@@ -32,8 +32,6 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 		});
 
 		/* ### Post static image ### */
-
-		console.log();
 		const fileName = path.join(__dirname, '../../../images/itachi.jpg');
 
 		const fileUploadResponse = await webClient.files.upload({
