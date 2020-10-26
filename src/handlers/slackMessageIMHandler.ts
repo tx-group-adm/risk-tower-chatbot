@@ -13,6 +13,9 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 	if (event.hasOwnProperty('bot_id')) {
 		console.log(`ignore bot event`);
 		return Promise.resolve();
+	} else if (event.upload) {
+		console.log(`ignore file upload`);
+		return Promise.resolve();
 	} else {
 		console.log(`user event`);
 
