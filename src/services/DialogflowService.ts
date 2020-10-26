@@ -31,10 +31,6 @@ export default class DialogflowService {
 
 		console.log(`sessionPath: ${sessionPath}`);
 
-		const user: google.protobuf.IValue = {
-			stringValue: email,
-		};
-
 		const request: google.cloud.dialogflow.v2.IDetectIntentRequest = {
 			session: sessionPath,
 			queryInput: {
@@ -46,7 +42,9 @@ export default class DialogflowService {
 			queryParams: {
 				payload: {
 					fields: {
-						user,
+						user: {
+							stringValue: email,
+						},
 					},
 				},
 			},

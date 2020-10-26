@@ -34,6 +34,7 @@ export interface ISlackMessageIMEvent {
 	event_ts: string;
 	channel_type: string;
 	bot_id?: string;
+	upload?: boolean;
 }
 
 export interface ISLackProfile {
