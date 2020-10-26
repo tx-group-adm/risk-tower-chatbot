@@ -33,7 +33,8 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 
 		/* ### Post static image ### */
 
-		const fileName = path.join(__dirname, '../../images/itachi.jpg');
+		console.log();
+		const fileName = path.join(__dirname, '../../../images/itachi.jpg');
 
 		const fileUploadResponse = await webClient.files.upload({
 			title: 'My static file',
