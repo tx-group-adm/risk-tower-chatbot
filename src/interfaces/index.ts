@@ -14,6 +14,12 @@ export interface ISlackEvent {
 	body: string;
 }
 
+export interface IWarmupEvent {
+	source: string;
+}
+
+export type IEvent = ISlackEvent | IWarmupEvent;
+
 export interface ISlackEventCallback {
 	api_app_id: string;
 	authed_users: Array<string>;
