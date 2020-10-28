@@ -3,7 +3,7 @@ import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 import { isSlackEvent } from './src/helpers/isSlackEvent';
 import { HTTP200 } from './src/responses';
 
-export const slackevent = async (event: IEvent): Promise<HandlerResponse> => {
+export const slackevent = (event: IEvent): HandlerResponse => {
 	console.log(JSON.stringify(event));
 	if (isSlackEvent(event)) {
 		console.log('EVENT_CALLBACK');
