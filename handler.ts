@@ -8,7 +8,7 @@ export const slackevent = async (event: IEvent): Promise<HandlerResponse> => {
 	if (isSlackEvent(event)) {
 		console.log('EVENT_CALLBACK');
 		const slackEvent: ISlackEventCallback = JSON.parse(event.body);
-		await slackMessageIMHandler(slackEvent.event);
+		slackMessageIMHandler(slackEvent.event);
 		return HTTP200();
 	} else {
 		return HTTP200('warmup received');
