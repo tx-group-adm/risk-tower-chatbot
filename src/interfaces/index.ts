@@ -1,15 +1,11 @@
 export interface HandlerResponse {
 	statusCode: number;
-	headers?: {
+	body: string;
+	headers: {
 		[header: string]: string | number | boolean;
 	};
-	multiValueHeaders?: {
-		[headerName: string]: Array<string>;
-	};
-	body?: string | false;
 	isBase64Encoded: boolean;
 }
-
 export interface ISlackEvent {
 	body: string;
 }

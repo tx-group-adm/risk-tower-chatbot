@@ -1,4 +1,5 @@
 jest.mock('../services/DialogflowService');
+jest.mock('fs');
 
 const postMessage = jest.fn();
 const upload = jest.fn();
@@ -30,6 +31,7 @@ jest.mock('@slack/web-api', () => {
 import { slackMessageIMHandler } from '../handlers/slackMessageIMHandler';
 import { mockSlackMessageIMEvent } from './data/mockSlackMessageIMEvent';
 import DialogflowService from '../services/DialogflowService';
+import fs from 'fs';
 
 const old_env = process.env;
 
@@ -37,6 +39,9 @@ const MockedDialogflowService = DialogflowService as jest.Mocked<typeof Dialogfl
 MockedDialogflowService.prototype.processTextMessage = jest
 	.fn()
 	.mockResolvedValue('Dear __user__, welcome to the channel __channel__!');
+
+const mockedFs = fs as jest.Mocked<typeof fs>;
+mockedFs.createReadStream = jest.fn().mockReturnValue('rs');
 
 describe('Testing the slackMessageIMHandler function', () => {
 	beforeEach(() => {
@@ -68,6 +73,13 @@ describe('Testing the slackMessageIMHandler function', () => {
 			channel: mockedIMEvent.channel,
 			text: `Dear <@${mockedIMEvent.user}>, welcome to the channel <#${mockedIMEvent.channel}>!`,
 		});
+
+		expect(upload).toHaveBeenCalledWith({
+			title: 'My static file',
+			file: 'rs',
+			channels: mockedIMEvent.channel,
+		});
+		expect(mockedFs.createReadStream).toHaveBeenCalled();
 	});
 
 	it('should ignore message events which are from the bot himself', async () => {
