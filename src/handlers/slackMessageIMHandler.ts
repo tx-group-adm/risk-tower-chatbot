@@ -4,6 +4,7 @@ import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
 import fs from 'fs';
 import path from 'path';
+import { createDiagram } from '../helpers/createDiagram';
 
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
@@ -23,20 +24,29 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 		})) as unknown) as ISLackProfile).profile.email;
 
 		const response = await dialogflowService.processTextMessage(event.text, sessionId, email);
-		const message = slackify(response, event);
+		let message = slackify(response, event);
 
-		await webClient.chat.postMessage({
-			channel: event.channel,
-			text: message,
-		});
+		if (message.includes('@chart')) {
+			const chartData: { impact: number; probability: number } = JSON.parse(message.split('@chart')[1]);
+			message = message.split('@chart')[0];
+			const fileName = await createDiagram(chartData);
+			const filePath = path.join(__dirname, fileName);
+			await webClient.chat.postMessage({
+				channel: event.channel,
+				text: message,
+			});
+			await webClient.files.upload({
+				title: 'My static file',
+				file: fs.createReadStream(filePath),
+				channels: event.channel,
+			});
+		} else {
+			await webClient.chat.postMessage({
+				channel: event.channel,
+				text: message,
+			});
+		}
 
-		const fileName = path.join(__dirname, '../../../images/itachi.jpg');
-
-		await webClient.files.upload({
-			title: 'My static file',
-			file: fs.createReadStream(fileName),
-			channels: event.channel,
-		});
 		return Promise.resolve();
 	}
 };

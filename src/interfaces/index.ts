@@ -78,3 +78,17 @@ export interface ISLackProfile {
 		acceptedScopes: Array<string>;
 	};
 }
+
+export interface IDiagramOptions {
+	fileName: string;
+	impact: number;
+	probability: number;
+	width: number;
+	height: number;
+	margin: number;
+	size: number;
+	lineWidth: number;
+	fillStyle: string;
+	strokeStyle: string;
+	itemColor: string;
+}
