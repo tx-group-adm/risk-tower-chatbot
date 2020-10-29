@@ -6,6 +6,7 @@
 	"dependencies": {
 		"@google-cloud/dialogflow": "^3.2.0",
 		"@slack/web-api": "^5.11.0",
+		"canvas": "^2.6.1",
 		"dialogflow": "^1.2.0",
 		"google-auth-library": "^6.0.6",
 		"google-gax": "^2.7.0"
