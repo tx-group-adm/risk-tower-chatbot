@@ -32,8 +32,11 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 			if (message.includes('@chart')) {
 				console.log('got chart data:');
 				console.log(message);
-				const chartData: { impact: number; probability: number } = JSON.parse(message.split('@chart')[1]);
-				message = message.split('@chart')[0];
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				const match = message.match(/@chart{.+}/g)![0];
+				const chartString = match.split('@chart')[1];
+				const chartData: { impact: number; probability: number } = JSON.parse(chartString);
+				message = message.replace(/@chart{.+}/g, '');
 				const fileName = await createDiagram(chartData);
 				const filePath = path.join(__dirname, fileName);
 				await webClient.chat.postMessage({
@@ -47,7 +50,11 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 				});
 			} else {
 				if (message.includes('@options')) {
-					const options: string[] = JSON.parse(message.split('@options')[1]);
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					const match = message.match(/@options\[.+\]/g)![0];
+					const optionsString = match.split('@options')[1];
+					const options: string[] = JSON.parse(optionsString);
+					message = message.replace(/@options{.+}/g, '');
 					const blocks = createQuickReplyBlock(message, options);
 					await webClient.chat.postMessage({
 						channel: event.channel,
