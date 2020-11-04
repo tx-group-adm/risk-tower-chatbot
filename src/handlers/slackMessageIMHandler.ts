@@ -5,6 +5,7 @@ import { slackify } from '../utils/slackify';
 import fs from 'fs';
 import path from 'path';
 import { createDiagram } from '../helpers/createDiagram';
+import { createQuickReplyBlock } from '../helpers/createQuickReplyBlock';
 
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
@@ -44,6 +45,15 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 					channels: event.channel,
 				});
 			} else {
+				if (message.includes('@options')) {
+					const options: string[] = JSON.parse(message.split('@options')[1]);
+					const blocks = createQuickReplyBlock(message, options);
+					await webClient.chat.postMessage({
+						channel: event.channel,
+						text: '123',
+						blocks,
+					});
+				}
 				await webClient.chat.postMessage({
 					channel: event.channel,
 					text: message,
