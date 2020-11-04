@@ -5,6 +5,7 @@ import { slackify } from '../utils/slackify';
 import fs from 'fs';
 import path from 'path';
 import { createDiagram } from '../helpers/createDiagram';
+import { createQuickReplyBlock } from '../helpers/createQuickReplyBlock';
 
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
@@ -29,7 +30,8 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 			let message = slackify(response, event);
 
 			if (message.includes('@chart')) {
-				console.log('got chart data');
+				console.log('got chart data:');
+				console.log(message);
 				const chartData: { impact: number; probability: number } = JSON.parse(message.split('@chart')[1]);
 				message = message.split('@chart')[0];
 				const fileName = await createDiagram(chartData);
@@ -44,6 +46,15 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 					channels: event.channel,
 				});
 			} else {
+				if (message.includes('@options')) {
+					const options: string[] = JSON.parse(message.split('@options')[1]);
+					const blocks = createQuickReplyBlock(message, options);
+					await webClient.chat.postMessage({
+						channel: event.channel,
+						text: '123',
+						blocks,
+					});
+				}
 				await webClient.chat.postMessage({
 					channel: event.channel,
 					text: message,
