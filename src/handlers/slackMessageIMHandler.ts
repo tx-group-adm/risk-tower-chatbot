@@ -30,7 +30,8 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 			let message = slackify(response, event);
 
 			if (message.includes('@chart')) {
-				console.log('got chart data');
+				console.log('got chart data:');
+				console.log(message);
 				const chartData: { impact: number; probability: number } = JSON.parse(message.split('@chart')[1]);
 				message = message.split('@chart')[0];
 				const fileName = await createDiagram(chartData);
