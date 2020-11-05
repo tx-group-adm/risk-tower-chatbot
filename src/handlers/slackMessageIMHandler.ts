@@ -38,14 +38,14 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 				const chartData: { impact: number; probability: number } = JSON.parse(chartString);
 				message = message.replace(/@chart{.+}/g, '');
 				const fileName = await createDiagram(chartData);
-				const filePath = path.join(__dirname, fileName);
+				// const filePath = path.join(__dirname, fileName);
 				await webClient.chat.postMessage({
 					channel: event.channel,
 					text: message,
 				});
 				await webClient.files.upload({
 					title: 'My static file',
-					file: fs.createReadStream(filePath),
+					file: fs.createReadStream(fileName),
 					channels: event.channel,
 				});
 			} else {
