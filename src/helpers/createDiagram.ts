@@ -3,7 +3,7 @@ import fs from 'fs';
 import { IDiagramOptions } from '../interfaces';
 
 const _defaultOptions: IDiagramOptions = {
-	fileName: '../../../images/diagram.png',
+	fileName: 'diagram.png',
 	impact: 0,
 	probability: 0,
 	width: 800,
@@ -46,6 +46,6 @@ export const createDiagram = async (options: Partial<IDiagramOptions>): Promise<
 
 	// save canvas to file
 	const buffer = canvas.toBuffer();
-	await fs.promises.writeFile('canvas.png', buffer);
+	await fs.promises.writeFile(`/tmp/${config.fileName}`, buffer);
 	return config.fileName;
 };
