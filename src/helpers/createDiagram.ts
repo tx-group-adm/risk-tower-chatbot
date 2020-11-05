@@ -46,6 +46,6 @@ export const createDiagram = async (options: Partial<IDiagramOptions>): Promise<
 
 	// save canvas to file
 	const buffer = canvas.toBuffer();
-	await fs.promises.writeFile(`/tmp/${config.fileName}`, buffer);
+	await fs.promises.writeFile(`../../../../../tmp/${config.fileName}`, buffer);
 	return config.fileName;
 };
