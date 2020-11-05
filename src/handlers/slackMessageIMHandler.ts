@@ -39,7 +39,6 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 				message = message.replace(/@chart{.+}/g, '');
 				const fileName = await createDiagram(chartData);
 				const filePath = path.join(__dirname, fileName);
-				fs.chmodSync(filePath, 0o700);
 				await webClient.chat.postMessage({
 					channel: event.channel,
 					text: message,
