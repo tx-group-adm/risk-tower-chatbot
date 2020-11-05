@@ -2,8 +2,6 @@ import { ISlackMessageIMEvent, ISLackProfile } from '../interfaces';
 import { WebClient } from '@slack/web-api';
 import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
-import fs from 'fs';
-import path from 'path';
 import { createDiagram } from '../helpers/createDiagram';
 import { createQuickReplyBlock } from '../helpers/createQuickReplyBlock';
 
