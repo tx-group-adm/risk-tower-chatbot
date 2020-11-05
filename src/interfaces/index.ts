@@ -80,7 +80,6 @@ export interface ISLackProfile {
 }
 
 export interface IDiagramOptions {
-	fileName: string;
 	impact: number;
 	probability: number;
 	width: number;
