@@ -2,8 +2,6 @@ import { ISlackMessageIMEvent, ISLackProfile } from '../interfaces';
 import { WebClient } from '@slack/web-api';
 import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
-import fs from 'fs';
-import path from 'path';
 import { createDiagram } from '../helpers/createDiagram';
 import { createQuickReplyBlock } from '../helpers/createQuickReplyBlock';
 
@@ -37,15 +35,14 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 				const chartString = match.split('@chart')[1];
 				const chartData: { impact: number; probability: number } = JSON.parse(chartString);
 				message = message.replace(/@chart{.+}/g, '');
-				const fileName = await createDiagram(chartData);
-				// const filePath = path.join(__dirname, fileName);
+				const diagram = await createDiagram(chartData);
 				await webClient.chat.postMessage({
 					channel: event.channel,
 					text: message,
 				});
 				await webClient.files.upload({
 					title: 'My static file',
-					file: fs.createReadStream(fileName),
+					file: diagram,
 					channels: event.channel,
 				});
 			} else {

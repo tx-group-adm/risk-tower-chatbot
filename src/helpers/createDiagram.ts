@@ -1,9 +1,7 @@
 import { createCanvas } from 'canvas';
-import fs from 'fs';
 import { IDiagramOptions } from '../interfaces';
 
 const _defaultOptions: IDiagramOptions = {
-	fileName: 'diagram.png',
 	impact: 0,
 	probability: 0,
 	width: 800,
@@ -16,7 +14,7 @@ const _defaultOptions: IDiagramOptions = {
 	itemColor: '#FF8000',
 };
 
-export const createDiagram = async (options: Partial<IDiagramOptions>): Promise<string> => {
+export const createDiagram = (options: Partial<IDiagramOptions>): Buffer => {
 	const config: IDiagramOptions = {
 		..._defaultOptions,
 		...options,
@@ -45,7 +43,5 @@ export const createDiagram = async (options: Partial<IDiagramOptions>): Promise<
 	ctx.fill();
 
 	// save canvas to file
-	const buffer = canvas.toBuffer();
-	await fs.promises.writeFile(`../../../../../tmp/${config.fileName}`, buffer);
-	return config.fileName;
+	return canvas.toBuffer();
 };
