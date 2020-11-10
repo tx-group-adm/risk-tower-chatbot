@@ -54,6 +54,7 @@ export default class DialogflowService {
 			console.log(`sessionClient.detectIntent is being called...`);
 
 			const response = await this.sessionClient.detectIntent(request);
+			console.log(JSON.stringify(response));
 
 			console.log(`detectIntent was successfully called`);
 
