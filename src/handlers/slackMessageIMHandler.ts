@@ -25,18 +25,16 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 			})) as unknown) as ISLackProfile).profile.email;
 
 			const { fulfillmentMessage, payload } = await dialogflowService.processTextMessage(event.text, sessionId, email);
-			let message = slackify(fulfillmentMessage, event);
+			const message = slackify(fulfillmentMessage, event);
 
 			console.log(JSON.stringify(payload));
 
-			if (message.includes('@chart')) {
-				console.log('got chart data:');
-				console.log(message);
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				const match = message.match(/@chart{.+}/g)![0];
-				const chartString = match.split('@chart')[1];
-				const chartData: { impact: number; probability: number } = JSON.parse(chartString);
-				message = message.replace(/@chart{.+}/g, '');
+			if (payload.id) {
+				console.log('got payload, drawing chart');
+				const chartData: { impact: number; probability: number } = {
+					impact: payload.impact,
+					probability: payload.probability,
+				};
 				const diagram = await createDiagram(chartData);
 				await webClient.chat.postMessage({
 					channel: event.channel,
@@ -48,13 +46,8 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 					channels: event.channel,
 				});
 			} else {
-				if (message.includes('@options')) {
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					const match = message.match(/@options\[.+\]/g)![0];
-					const optionsString = match.split('@options')[1];
-					const options: string[] = JSON.parse(optionsString);
-					message = message.replace(/@options{.+}/g, '');
-					const blocks = createQuickReplyBlock(message, options);
+				if (payload.options) {
+					const blocks = createQuickReplyBlock(message, payload.options);
 					await webClient.chat.postMessage({
 						channel: event.channel,
 						text: '123',
