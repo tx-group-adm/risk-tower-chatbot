@@ -55,7 +55,7 @@ export default class DialogflowService {
 				throw new Error('no fulfillment message');
 			}
 			const fields = response.queryResult?.webhookPayload?.fields?.data.structValue;
-			const payload = struct.decode(fields as Struct);
+			const payload = fields ? struct.decode(fields as Struct) : {};
 			return {
 				fulfillmentMessage,
 				payload,
