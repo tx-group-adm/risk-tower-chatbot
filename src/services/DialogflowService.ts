@@ -48,6 +48,7 @@ export default class DialogflowService {
 
 		try {
 			const [response] = await this.sessionClient.detectIntent(request);
+			console.log(JSON.stringify(response));
 			const fulfillmentMessage = response.queryResult?.fulfillmentMessages
 				?.map((msg) => msg.text?.text?.[0])
 				.join('\n');
