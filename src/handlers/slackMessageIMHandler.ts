@@ -24,8 +24,10 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 				user: event.user,
 			})) as unknown) as ISLackProfile).profile.email;
 
-			const response = await dialogflowService.processTextMessage(event.text, sessionId, email);
-			let message = slackify(response, event);
+			const { fulfillmentMessage, payload } = await dialogflowService.processTextMessage(event.text, sessionId, email);
+			let message = slackify(fulfillmentMessage, event);
+
+			console.log(JSON.stringify(payload));
 
 			if (message.includes('@chart')) {
 				console.log('got chart data:');
