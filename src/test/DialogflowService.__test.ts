@@ -53,30 +53,6 @@ describe('Testing DialogfloService class', () => {
 		expect(response).toEqual('Dialogflow answer');
 	});
 
-	it('should return the intent name', async () => {
-		const response = await new DialogflowService('project-id').getIntentName('message', 'session-id', 'user@tx.group');
-		expect(mockedSessionPath).toHaveBeenCalledWith('project-id', 'session-id');
-		expect(mockedDetectIntent).toHaveBeenCalledWith({
-			session: 'session-path',
-			queryInput: {
-				text: {
-					text: 'message',
-					languageCode: 'en-US',
-				},
-			},
-			queryParams: {
-				payload: {
-					fields: {
-						user: {
-							stringValue: 'user@tx.group',
-						},
-					},
-				},
-			},
-		});
-		expect(response).toEqual('intentName');
-	});
-
 	it('Should throw an error', async () => {
 		try {
 			expect(

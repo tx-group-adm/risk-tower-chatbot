@@ -91,3 +91,24 @@ export interface IDiagramOptions {
 	strokeStyle: string;
 	itemColor: string;
 }
+
+export interface IValue {
+	numberValue?: number;
+	stringValue?: string;
+	boolValue?: boolean;
+	listValue?: {
+		values: IValue[];
+	};
+}
+
+export interface IDialogflowResponsePayload {
+	[index: string]: IValue & { kind: string };
+}
+
+export interface IDetectIntentResponseData {
+	fulfillmentMessage: string;
+	payload: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		[index: string]: any;
+	};
+}
