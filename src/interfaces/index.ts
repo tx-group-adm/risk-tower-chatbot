@@ -111,4 +111,52 @@ export interface IDetectIntentResponseData {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		[index: string]: any;
 	};
+	allRequiredParamsPresent: boolean;
+	missingParameters: Array<IParameter>;
 }
+
+export type IParameter = 'tx_company' | 'tx_assessment_type';
+
+export interface IAssessment {
+	name: ICompany;
+	highlight: boolean;
+	id: number;
+	type: string;
+	parentId: number | null;
+	hasAssessment: boolean;
+	children: Array<IAssessment>;
+	impact: number;
+	probability: number;
+	rating: number;
+	ratingColor: string;
+}
+
+export type ICompany =
+	| 'TX Group'
+	| 'Goldbach'
+	| 'TX Markets'
+	| 'Tutti'
+	| 'Ricardo'
+	| 'CarForYou'
+	| 'Homegate'
+	| 'Technology & Ventures'
+	| 'TX Ventures'
+	| 'Doodle'
+	| 'Zattoo'
+	| 'Olmero'
+	| 'IT'
+	| 'Digital Technology Services'
+	| 'Coorporate Services'
+	| '20 Minuten'
+	| 'Tamedia'
+	| 'Logistics & Printing'
+	| 'Paid Media'
+	| 'Goldbach entity'
+	| 'Jobcloud'
+	| 'Asana-test'
+	| 'Neo Advertising'
+	| 'DreiFive'
+	| 'Corporate Services'
+	| 'Paid Media';
+
+export type IType = 'security' | 'privacy' | 'technology' | 'compliance' | 'soc2';
