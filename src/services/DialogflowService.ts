@@ -62,7 +62,7 @@ export default class DialogflowService {
 			console.log(`parameter fields: ${JSON.stringify(parameterFields)}`);
 			const parameterData = parameterFields ? struct.decode(parameterFields as Struct) : {};
 			console.log(`parameter data: ${JSON.stringify(parameterData)}`);
-			const missingParameters = Object.keys(parameterData).filter((key) => parameterData[key] !== '') as Array<
+			const missingParameters = Object.keys(parameterData).filter((key) => parameterData[key] === '') as Array<
 				IParameter
 			>;
 			console.log(`Missing parameters: ${JSON.stringify(missingParameters)}`);
