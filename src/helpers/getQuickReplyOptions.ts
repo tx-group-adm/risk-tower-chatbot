@@ -4,7 +4,7 @@ const QUICKREPLIES: {
 	TX_COMPANY: Array<ICompany>;
 	TX_ASSESSMENT_TYPE: Array<IType>;
 } = {
-	TX_COMPANY: ['20 Minuten', 'CarForYou', 'Doodle', 'Goldbach', 'Homegate', 'Ricardo', 'Tamedia', 'Tutti', 'Zattoo'],
+	TX_COMPANY: ['20 Minuten', 'Doodle', 'Ricardo', 'Tamedia', 'Tutti'],
 	TX_ASSESSMENT_TYPE: ['compliance', 'privacy', 'security', 'soc2', 'technology'],
 };
 

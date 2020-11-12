@@ -1,6 +1,4 @@
 import { Button, KnownBlock } from '@slack/web-api';
-import { IParameter } from '../interfaces';
-
 export const createQuickReplyBlock = (message: string, options: Array<string>): KnownBlock[] => {
 	return [
 		{
