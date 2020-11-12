@@ -1,9 +1,10 @@
-import { ISlackMessageIMEvent, ISLackProfile } from '../interfaces';
+import { ISlackMessageIMEvent, ISLackProfile, IAssessment, IParameter } from '../interfaces';
 import { WebClient } from '@slack/web-api';
 import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
 import { createDiagram } from '../helpers/createDiagram';
 import { createQuickReplyBlock } from '../helpers/createQuickReplyBlock';
+import { getQuickReplyOptions } from '../helpers/getQuickReplyOptions';
 
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
@@ -25,12 +26,16 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 				user: event.user,
 			})) as unknown) as ISLackProfile).profile.email;
 
-			const { fulfillmentMessage, payload } = await dialogflowService.processTextMessage(event.text, sessionId, email);
+			const response = await dialogflowService.processTextMessage(event.text, sessionId, email);
+			const payload: Partial<IAssessment> = response.payload;
+			const fulfillmentMessage: string = response.fulfillmentMessage;
+			const allRequiredParamsPresent: boolean = response.allRequiredParamsPresent;
+			const missingParameters: Array<IParameter> = response.missingParameters;
 			const message = slackify(fulfillmentMessage, event);
 
 			console.log(JSON.stringify(payload));
 
-			if (payload.id) {
+			if (payload.impact && payload.probability) {
 				console.log('got payload, drawing chart');
 				const chartData: { impact: number; probability: number } = {
 					impact: payload.impact,
@@ -47,18 +52,20 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 					channels: event.channel,
 				});
 			} else {
-				if (payload.options) {
-					const blocks = createQuickReplyBlock(message, payload.options);
+				if (!allRequiredParamsPresent) {
+					const options = getQuickReplyOptions(missingParameters[0]);
+					const blocks = createQuickReplyBlock(message, options);
 					await webClient.chat.postMessage({
 						channel: event.channel,
 						text: '123',
 						blocks,
 					});
+				} else {
+					await webClient.chat.postMessage({
+						channel: event.channel,
+						text: message,
+					});
 				}
-				await webClient.chat.postMessage({
-					channel: event.channel,
-					text: message,
-				});
 			}
 		}
 	} catch (error) {

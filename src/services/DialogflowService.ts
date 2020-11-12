@@ -3,7 +3,7 @@ import { GoogleAuthOptions } from 'google-auth-library/build/src/auth/googleauth
 import { Struct, struct } from 'pb-util';
 import { v2 } from '@google-cloud/dialogflow';
 import { google } from '@google-cloud/dialogflow/build/protos/protos';
-import { IDetectIntentResponseData } from '../interfaces';
+import { IDetectIntentResponseData, IParameter } from '../interfaces';
 
 export default class DialogflowService {
 	private sessionClient: v2.SessionsClient;
@@ -55,11 +55,19 @@ export default class DialogflowService {
 			if (!fulfillmentMessage) {
 				throw new Error('no fulfillment message');
 			}
-			const fields = response.queryResult?.webhookPayload?.fields?.data.structValue;
-			const payload = fields ? struct.decode(fields as Struct) : {};
+			const payloadFields = response.queryResult?.webhookPayload?.fields?.data.structValue;
+			const payload = payloadFields ? struct.decode(payloadFields as Struct) : {};
+			const allRequiredParamsPresent = !!response.queryResult?.allRequiredParamsPresent;
+			const parameterFields = response.queryResult?.parameters;
+			const parameterData = parameterFields ? struct.decode(parameterFields as Struct) : {};
+			const missingParameters = Object.keys(parameterData).filter((key) => parameterData[key] !== '') as Array<
+				IParameter
+			>;
 			return {
 				fulfillmentMessage,
 				payload,
+				allRequiredParamsPresent,
+				missingParameters,
 			};
 		} catch (err) {
 			console.log(err);
