@@ -1,4 +1,4 @@
-import { HandlerResponse, IEvent, ISlackEventCallback } from './src/interfaces';
+import { IEvent, ISlackEventCallback } from './src/interfaces';
 import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
 import { isSlackEvent } from './src/helpers/isSlackEvent';
 import { HTTP200 } from './src/responses';

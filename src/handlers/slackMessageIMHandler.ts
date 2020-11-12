@@ -3,8 +3,7 @@ import { WebClient } from '@slack/web-api';
 import DialogflowService from '../services/DialogflowService';
 import { slackify } from '../utils/slackify';
 import { createDiagram } from '../helpers/createDiagram';
-import { createQuickReplyBlock } from '../helpers/createQuickReplyBlock';
-import { getQuickReplyOptions } from '../helpers/getQuickReplyOptions';
+import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../blocks/createQuickReplyBlock';
 
 export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promise<void> => {
 	const { DIALOGFLOW_PROJECT_ID, SLACK_BOT_TOKEN } = process.env;
@@ -47,17 +46,16 @@ export const slackMessageIMHandler = async (event: ISlackMessageIMEvent): Promis
 					text: message,
 				});
 				await webClient.files.upload({
-					title: 'My static file',
 					file: diagram,
 					channels: event.channel,
 				});
 			} else {
 				if (!allRequiredParamsPresent) {
-					const options = getQuickReplyOptions(missingParameters[0]);
+					const options = getQuickReplyOptionsFor(missingParameters[0]);
 					const blocks = createQuickReplyBlock(message, options);
 					await webClient.chat.postMessage({
 						channel: event.channel,
-						text: '123',
+						text: '',
 						blocks,
 					});
 				} else {

@@ -1,24 +1,22 @@
-import { ClientOptions } from 'google-gax/build/src/clientInterface';
-import { GoogleAuthOptions } from 'google-auth-library/build/src/auth/googleauth';
 import { Struct, struct } from 'pb-util';
-import { v2 } from '@google-cloud/dialogflow';
-import { google } from '@google-cloud/dialogflow/build/protos/protos';
 import { IDetectIntentResponseData, IParameter } from '../interfaces';
+import { ClientOptions, DetectIntentRequest, SessionsClientv2 } from '../interfaces/dialogflow';
+import { SessionsClient } from '@google-cloud/dialogflow';
 
 export default class DialogflowService {
-	private sessionClient: v2.SessionsClient;
+	private sessionClient: SessionsClientv2;
 	private projectId: string;
 
 	constructor(projectId: string) {
-		const options: GoogleAuthOptions = {
+		const options: ClientOptions = {
 			credentials: {
 				private_key: (process.env.DIALOGFLOW_PRIVATE_KEY as string).replace(/\\n/gm, '\n'),
-				client_email: process.env.DIALOGFLOW_CLIENT_EMAIL,
+				client_email: process.env.DIALOGFLOW_CLIENT_EMAIL as string,
 			},
 		};
 
 		this.projectId = projectId;
-		this.sessionClient = new v2.SessionsClient(options as ClientOptions);
+		this.sessionClient = new SessionsClient(options) as SessionsClientv2;
 	}
 
 	public async processTextMessage(
@@ -27,14 +25,8 @@ export default class DialogflowService {
 		email: string
 	): Promise<IDetectIntentResponseData> {
 		const sessionPath = this.sessionClient.projectAgentSessionPath(this.projectId, sessionId);
-		const request: google.cloud.dialogflow.v2.IDetectIntentRequest = {
+		const request: DetectIntentRequest = {
 			session: sessionPath,
-			queryInput: {
-				text: {
-					text: message,
-					languageCode: 'en-US',
-				},
-			},
 			queryParams: {
 				payload: {
 					fields: {
@@ -44,28 +36,22 @@ export default class DialogflowService {
 					},
 				},
 			},
+			queryInput: {
+				text: {
+					text: message,
+					languageCode: 'en-US',
+				},
+			},
 		};
 
 		try {
-			const [response] = await this.sessionClient.detectIntent(request);
-			console.log(JSON.stringify(response));
-			const fulfillmentMessage = response.queryResult?.fulfillmentMessages
-				?.map((msg) => msg.text?.text?.[0])
-				.join('\n');
-			if (!fulfillmentMessage) {
-				throw new Error('no fulfillment message');
-			}
-			const payloadFields = response.queryResult?.webhookPayload?.fields?.data.structValue;
-			const payload = payloadFields ? struct.decode(payloadFields as Struct) : {};
-			const allRequiredParamsPresent = !!response.queryResult?.allRequiredParamsPresent;
-			const parameterFields = response.queryResult?.parameters;
-			console.log(`parameter fields: ${JSON.stringify(parameterFields)}`);
-			const parameterData = parameterFields ? struct.decode(parameterFields as Struct) : {};
-			console.log(`parameter data: ${JSON.stringify(parameterData)}`);
-			const missingParameters = Object.keys(parameterData).filter((key) => parameterData[key] === '') as Array<
-				IParameter
-			>;
-			console.log(`Missing parameters: ${JSON.stringify(missingParameters)}`);
+			const [{ queryResult }] = await this.sessionClient.detectIntent(request);
+			const { fulfillmentMessages, webhookPayload, allRequiredParamsPresent, parameters } = queryResult;
+			const fulfillmentMessage = fulfillmentMessages.map((msg) => msg.text?.text?.[0]).join('\n');
+			const payloadFields: Struct = webhookPayload.fields?.data.structValue || ({} as Struct);
+			const payload = struct.decode(payloadFields);
+			const paramData = struct.decode(parameters);
+			const missingParameters = Object.keys(paramData).filter((key) => paramData[key] === '') as Array<IParameter>;
 			return {
 				fulfillmentMessage,
 				payload,

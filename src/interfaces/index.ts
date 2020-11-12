@@ -108,8 +108,7 @@ export interface IDialogflowResponsePayload {
 export interface IDetectIntentResponseData {
 	fulfillmentMessage: string;
 	payload: {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		[index: string]: any;
+		[index: string]: unknown;
 	};
 	allRequiredParamsPresent: boolean;
 	missingParameters: Array<IParameter>;
