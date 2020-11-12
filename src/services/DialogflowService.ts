@@ -59,10 +59,13 @@ export default class DialogflowService {
 			const payload = payloadFields ? struct.decode(payloadFields as Struct) : {};
 			const allRequiredParamsPresent = !!response.queryResult?.allRequiredParamsPresent;
 			const parameterFields = response.queryResult?.parameters;
+			console.log(`parameter fields: ${JSON.stringify(parameterFields)}`);
 			const parameterData = parameterFields ? struct.decode(parameterFields as Struct) : {};
+			console.log(`parameter data: ${JSON.stringify(parameterData)}`);
 			const missingParameters = Object.keys(parameterData).filter((key) => parameterData[key] !== '') as Array<
 				IParameter
 			>;
+			console.log(`Missing parameters: ${JSON.stringify(missingParameters)}`);
 			return {
 				fulfillmentMessage,
 				payload,
