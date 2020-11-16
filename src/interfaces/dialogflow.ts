@@ -1,6 +1,6 @@
 import { Struct } from 'pb-util';
 
-export interface SessionsClientv2 {
+export interface SessionsClientV2 {
 	projectAgentSessionPath(project: string, session: string): string;
 	detectIntent(
 		request: DetectIntentRequest
@@ -66,9 +66,14 @@ export interface QueryResult {
 	webhookPayload: Struct;
 	intentDetectionConfidence?: number;
 	diagnosticInfo?: Struct;
+	intent: Intent;
 	// outputContexts?: google.cloud.dialogflow.v2.IContext[] | null;
-	// intent?: google.cloud.dialogflow.v2.IIntent | null;
 	// sentimentAnalysisResult?: google.cloud.dialogflow.v2.ISentimentAnalysisResult | null;
+}
+
+export interface Intent {
+	name: string;
+	displayName: string;
 }
 
 export interface Message {

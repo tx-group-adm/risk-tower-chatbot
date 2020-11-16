@@ -1,10 +1,10 @@
 import { Struct, struct } from 'pb-util';
 import { IDetectIntentResponseData, IParameter } from '../interfaces';
-import { ClientOptions, DetectIntentRequest, SessionsClientv2 } from '../interfaces/dialogflow';
+import { ClientOptions, DetectIntentRequest, SessionsClientV2 } from '../interfaces/dialogflow';
 import { SessionsClient } from '@google-cloud/dialogflow';
 
 export default class DialogflowService {
-	private sessionClient: SessionsClientv2;
+	private sessionClient: SessionsClientV2;
 	private projectId: string;
 
 	constructor(projectId: string) {
@@ -16,7 +16,7 @@ export default class DialogflowService {
 		};
 
 		this.projectId = projectId;
-		this.sessionClient = new SessionsClient(options) as SessionsClientv2;
+		this.sessionClient = new SessionsClient(options) as SessionsClientV2;
 	}
 
 	public async processTextMessage(
@@ -46,17 +46,21 @@ export default class DialogflowService {
 
 		try {
 			const [{ queryResult }] = await this.sessionClient.detectIntent(request);
-			const { fulfillmentMessages, webhookPayload, allRequiredParamsPresent, parameters } = queryResult;
-			const fulfillmentMessage = fulfillmentMessages.map((msg) => msg.text?.text?.[0]).join('\n');
+			const { fulfillmentMessages, webhookPayload, allRequiredParamsPresent, parameters, intent } = queryResult;
+			const messages = fulfillmentMessages
+				.map((msg) => msg.text?.text?.[0])
+				.filter((msg) => msg !== undefined) as Array<string>;
 			const payloadFields: Struct = webhookPayload.fields?.data.structValue || ({} as Struct);
 			const payload = struct.decode(payloadFields);
 			const paramData = struct.decode(parameters);
 			const missingParameters = Object.keys(paramData).filter((key) => paramData[key] === '') as Array<IParameter>;
+			const intentName = intent.displayName;
 			return {
-				fulfillmentMessage,
+				messages,
 				payload,
 				allRequiredParamsPresent,
 				missingParameters,
+				intentName,
 			};
 		} catch (err) {
 			console.log(err);

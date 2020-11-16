@@ -28,13 +28,13 @@ export interface ISlackEventCallback {
 }
 
 export interface ISlackMessageIMEvent {
-	type: string;
+	type: 'message';
 	channel: string;
 	user: string;
 	text: string;
 	ts: string;
 	event_ts: string;
-	channel_type: string;
+	channel_type: 'im';
 	bot_id?: string;
 	upload?: boolean;
 }
@@ -106,12 +106,13 @@ export interface IDialogflowResponsePayload {
 }
 
 export interface IDetectIntentResponseData {
-	fulfillmentMessage: string;
+	messages: Array<string>;
 	payload: {
 		[index: string]: unknown;
 	};
 	allRequiredParamsPresent: boolean;
 	missingParameters: Array<IParameter>;
+	intentName: string;
 }
 
 export type IParameter = 'tx_company' | 'tx_assessment_type';

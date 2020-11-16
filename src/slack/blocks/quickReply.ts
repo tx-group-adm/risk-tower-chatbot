@@ -1,5 +1,5 @@
 import { Button, KnownBlock } from '@slack/web-api';
-import { IParameter } from '../interfaces';
+import { IParameter } from '../../interfaces';
 
 const QUICKREPLIES: {
 	[index: string]: Array<string>;
@@ -10,7 +10,7 @@ const QUICKREPLIES: {
 
 export const getQuickReplyOptionsFor = (parameter: IParameter): Array<string> => QUICKREPLIES[parameter];
 
-export const createQuickReplyBlock = (message: string, options: Array<string>): KnownBlock[] => {
+export const createQuickReplyBlock = (message: string, options: Array<string>): Array<KnownBlock> => {
 	return [
 		{
 			type: 'section',
