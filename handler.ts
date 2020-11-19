@@ -11,10 +11,8 @@ export const slackevent = (event: IEvent, context: Context, callback: Callback):
 			console.log('EVENT_CALLBACK');
 			const slackEvent: ISlackEventCallback = JSON.parse(event.body);
 			slackMessageHandler(slackEvent.event);
-			return callback(null, HTTP200());
-		} else {
-			return callback(null, HTTP200('warmup received'));
 		}
+		return callback(null, HTTP200());
 	} catch (err) {
 		return callback(err, HTTP500(err.message));
 	}

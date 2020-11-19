@@ -39,7 +39,7 @@ export interface ISlackMessageIMEvent {
 	upload?: boolean;
 }
 
-export interface ISLackProfile {
+export interface ISLackProfileResponse {
 	ok: boolean;
 	profile: {
 		title: string;

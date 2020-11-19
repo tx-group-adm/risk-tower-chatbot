@@ -1,21 +1,13 @@
-import { WebClient } from '@slack/web-api';
 import { createMessageBlock } from '../slack/blocks/message';
-import { IDetectIntentResponseData, ISlackMessageIMEvent } from '../interfaces';
+import { IDetectIntentResponseData } from '../interfaces';
+import SlackService from '../services/SlackService';
 
-export async function handleGetRisks(
-	response: IDetectIntentResponseData,
-	event: ISlackMessageIMEvent,
-	webClient: WebClient
-): Promise<void> {
+export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	const messages = response.messages;
 
 	const message = messages.join('\n');
 
 	const blocks = createMessageBlock(message);
 
-	await webClient.chat.postMessage({
-		channel: event.channel,
-		text: '',
-		blocks,
-	});
+	await slackService.postMessage('', blocks);
 }

@@ -1,12 +1,11 @@
-import { WebClient } from '@slack/web-api';
 import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/quickReply';
 import { createDiagram } from '../helpers/createDiagram';
-import { IAssessment, IDetectIntentResponseData, IParameter, ISlackMessageIMEvent } from '../interfaces';
+import { IAssessment, IDetectIntentResponseData, IParameter } from '../interfaces';
+import SlackService from '../services/SlackService';
 
 export async function handleGetAssessmentData(
 	response: IDetectIntentResponseData,
-	event: ISlackMessageIMEvent,
-	webClient: WebClient
+	slackService: SlackService
 ): Promise<void> {
 	const payload: IAssessment = (response.payload as unknown) as IAssessment;
 	const messages: Array<string> = response.messages;
@@ -20,20 +19,13 @@ export async function handleGetAssessmentData(
 		const options = getQuickReplyOptionsFor(missingParameters[0]);
 		const blocks = createQuickReplyBlock(message, options);
 
-		await webClient.chat.postMessage({
-			channel: event.channel,
-			text: '',
-			blocks,
-		});
+		await slackService.postMessage('', blocks);
 
 		return;
 	}
 
 	// respond with assessment data
-	await webClient.chat.postMessage({
-		channel: event.channel,
-		text: message,
-	});
+	await slackService.postMessage(message);
 
 	const chartData: { impact: number; probability: number } = {
 		impact: payload.impact,
@@ -41,8 +33,5 @@ export async function handleGetAssessmentData(
 	};
 	const diagram = await createDiagram(chartData);
 
-	await webClient.files.upload({
-		file: diagram,
-		channels: event.channel,
-	});
+	await slackService.uploadFile(diagram);
 }

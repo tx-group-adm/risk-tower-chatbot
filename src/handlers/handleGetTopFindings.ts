@@ -1,11 +1,10 @@
-import { WebClient } from '@slack/web-api';
 import { createMessageBlock } from '../slack/blocks/message';
-import { IDetectIntentResponseData, ISlackMessageIMEvent } from '../interfaces';
+import { IDetectIntentResponseData } from '../interfaces';
+import SlackService from '../services/SlackService';
 
 export async function handleGetTopFindings(
 	response: IDetectIntentResponseData,
-	event: ISlackMessageIMEvent,
-	webClient: WebClient
+	slackService: SlackService
 ): Promise<void> {
 	const messages = response.messages;
 
@@ -13,9 +12,5 @@ export async function handleGetTopFindings(
 
 	const blocks = createMessageBlock(message);
 
-	await webClient.chat.postMessage({
-		channel: event.channel,
-		text: '',
-		blocks,
-	});
+	await slackService.postMessage('', blocks);
 }
