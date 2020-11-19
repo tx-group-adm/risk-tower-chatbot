@@ -63,7 +63,7 @@ export interface QueryResult {
 	fulfillmentText?: string;
 	fulfillmentMessages: Array<Message>;
 	webhookSource?: string;
-	webhookPayload: Struct;
+	webhookPayload: Struct | null;
 	intentDetectionConfidence?: number;
 	diagnosticInfo?: Struct;
 	intent: Intent;
