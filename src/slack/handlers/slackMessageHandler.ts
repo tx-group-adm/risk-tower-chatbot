@@ -9,6 +9,7 @@ import {
 	handleGetTopMeasures,
 } from '../../handlers';
 import SlackService from '../../services/SlackService';
+import { defaultHandler } from '../../handlers/defaultHandler';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
@@ -45,6 +46,11 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 
 		case INTENTS.GET_TOP_MEASURES:
 			await handleGetTopMeasures(response, slackService);
+			break;
+
+		case INTENTS.DEFAULT_WELCOME:
+		case INTENTS.DEFAULT_FALLBACK:
+			await defaultHandler(response, slackService);
 			break;
 
 		default:
