@@ -16,3 +16,7 @@ export const HTTP200 = (body = '', headers?: { [headerName: string]: string }): 
 export const HTTP400 = (body = '', headers?: { [headerName: string]: string }): HandlerResponse => {
 	return createResponse(400, body, headers);
 };
+
+export const HTTP500 = (body = '', headers?: { [headerName: string]: string }): HandlerResponse => {
+	return createResponse(500, body, headers);
+};
