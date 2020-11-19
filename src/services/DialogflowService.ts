@@ -52,10 +52,15 @@ export default class DialogflowService {
 			const messages = fulfillmentMessages
 				.map((msg) => msg.text?.text?.[0])
 				.filter((msg) => msg !== undefined) as Array<string>;
-			const payloadFields: Struct = webhookPayload
-				? webhookPayload.fields?.data.structValue || ({} as Struct)
-				: ({} as Struct);
-			const payload = struct.decode(payloadFields);
+
+			let payloadFields: Struct;
+			let payload;
+			if (webhookPayload && webhookPayload.fields && webhookPayload.fields.data.structValue) {
+				payloadFields = webhookPayload.fields.data.structValue;
+				payload = struct.decode(payloadFields);
+			} else {
+				payload = {};
+			}
 			const paramData = struct.decode(parameters);
 			const missingParameters = Object.keys(paramData).filter((key) => paramData[key] === '') as Array<IParameter>;
 			const intentName = intent.displayName;
