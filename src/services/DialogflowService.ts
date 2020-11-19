@@ -45,7 +45,9 @@ export default class DialogflowService {
 		};
 
 		try {
-			const [{ queryResult }] = await this.sessionClient.detectIntent(request);
+			const [response] = await this.sessionClient.detectIntent(request);
+			console.log(JSON.stringify(response));
+			const { queryResult } = response;
 			const { fulfillmentMessages, webhookPayload, allRequiredParamsPresent, parameters, intent } = queryResult;
 			const messages = fulfillmentMessages
 				.map((msg) => msg.text?.text?.[0])
