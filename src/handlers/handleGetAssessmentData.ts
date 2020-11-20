@@ -27,11 +27,13 @@ export async function handleGetAssessmentData(
 	// respond with assessment data
 	await slackService.postMessage(message);
 
-	const chartData: { impact: number; probability: number } = {
-		impact: payload.impact,
-		probability: payload.probability,
-	};
-	const diagram = await createDiagram(chartData);
+	if (payload.impact && payload.probability) {
+		const chartData: { impact: number; probability: number } = {
+			impact: payload.impact,
+			probability: payload.probability,
+		};
+		const diagram = await createDiagram(chartData);
 
-	await slackService.uploadFile(diagram);
+		await slackService.uploadFile(diagram);
+	}
 }
