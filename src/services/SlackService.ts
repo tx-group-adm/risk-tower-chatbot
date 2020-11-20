@@ -34,4 +34,12 @@ export default class SlackService {
 			file,
 		});
 	}
+
+	async sendMessageOnUsersBehalf(text: string): Promise<void> {
+		await this.webClient.chat.postMessage({
+			channel: this.event.channel,
+			text,
+			as_user: true,
+		});
+	}
 }
