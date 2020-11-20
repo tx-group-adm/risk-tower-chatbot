@@ -20,6 +20,9 @@ export const createQuickReplyBlock = (message: string, options: Array<string>): 
 			},
 		},
 		{
+			type: 'divider',
+		},
+		{
 			type: 'actions',
 			block_id: 'quickreplyblock',
 			elements: options.map(
