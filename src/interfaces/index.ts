@@ -27,6 +27,11 @@ export interface ISlackEventCallback {
 	type: 'event_callback';
 }
 
+export interface ISlackEventOnUsersBehalf {
+	type: 'event_on_users_behalf';
+	event: ISlackMessageIMEvent;
+}
+
 export interface ISlackMessageIMEvent {
 	type: 'message';
 	channel: string;
