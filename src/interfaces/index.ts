@@ -175,3 +175,12 @@ export interface IQuickchartConfig {
 	format: 'png';
 	chart: ChartConfiguration;
 }
+
+export interface IJiraTicket {
+	area: string;
+	epicLink: string;
+	status: string;
+	epicKey: string;
+	name: string;
+	assessmentName: string;
+}

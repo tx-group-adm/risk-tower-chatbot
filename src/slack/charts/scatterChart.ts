@@ -20,6 +20,7 @@ export async function createScatterChart(data: IAssessment): Promise<string> {
 					],
 					pointRadius: 15,
 					pointBackgroundColor,
+					pointBorderColor: pointBackgroundColor,
 				},
 			],
 		},
