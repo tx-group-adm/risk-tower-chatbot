@@ -1,3 +1,5 @@
+import { ChartConfiguration } from 'chart.js';
+
 export interface HandlerResponse {
 	statusCode: number;
 	body: string;
@@ -165,3 +167,11 @@ export type ICompany =
 	| 'Paid Media';
 
 export type IType = 'security' | 'privacy' | 'technology' | 'compliance' | 'soc2';
+
+export interface IQuickchartConfig {
+	backgroundColor: 'transparent';
+	width: number;
+	height: number;
+	format: 'png';
+	chart: ChartConfiguration;
+}

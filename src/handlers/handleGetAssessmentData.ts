@@ -1,7 +1,9 @@
 import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/quickReply';
-import { createDiagram } from '../helpers/createDiagram';
 import { IAssessment, IDetectIntentResponseData, IParameter } from '../interfaces';
 import SlackService from '../services/SlackService';
+import { createScatterChart } from '../slack/charts/scatterChart';
+import { createAssessmentDataBlock } from '../slack/blocks/assessmentData';
+import { createMessageBlock } from '../slack/blocks/message';
 
 export async function handleGetAssessmentData(
 	response: IDetectIntentResponseData,
@@ -24,16 +26,12 @@ export async function handleGetAssessmentData(
 		return;
 	}
 
-	// respond with assessment data
-	await slackService.postMessage(message);
-
 	if (payload.impact && payload.probability) {
-		const chartData: { impact: number; probability: number } = {
-			impact: payload.impact,
-			probability: payload.probability,
-		};
-		const diagram = await createDiagram(chartData);
-
-		await slackService.uploadFile(diagram);
+		const url = await createScatterChart(payload);
+		const blocks = createAssessmentDataBlock(payload.name, message, url);
+		await slackService.postMessage('', blocks);
+	} else {
+		const blocks = createMessageBlock(message);
+		await slackService.postMessage('', blocks);
 	}
 }
