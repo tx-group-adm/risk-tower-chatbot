@@ -11,13 +11,12 @@ export const slackevent = (event: IEvent, context: Context, callback: Callback):
 		console.log(JSON.stringify(event));
 		if (isSlackEvent(event)) {
 			const slackEvent: ISlackEventCallback | ISlackEventOnUsersBehalf = JSON.parse(event.body);
-			if (isEventCallback(slackEvent)) {
-				console.log('EVENT_CALLBACK');
-				slackMessageHandler(slackEvent.event);
-			} else {
+			if (!isEventCallback(slackEvent)) {
 				console.log('EVENT_ON_USERS_BEHALF');
 				sendMessageOnUsersBehalf(slackEvent.event);
 			}
+			console.log('EVENT_CALLBACK');
+			slackMessageHandler(slackEvent.event);
 		}
 		return callback(null, HTTP200());
 	} catch (err) {

@@ -35,11 +35,11 @@ export default class SlackService {
 		});
 	}
 
-	async sendMessageOnUsersBehalf(text: string): Promise<void> {
+	async sendMessageOnUsersBehalf(message: string): Promise<void> {
+		const text = `You chose: "${message}".`;
 		await this.webClient.chat.postMessage({
 			channel: this.event.channel,
 			text,
-			as_user: true,
 		});
 	}
 }
