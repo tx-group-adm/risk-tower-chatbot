@@ -1,5 +1,5 @@
 import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/quickReply';
-import { IAssessment, IDetectIntentResponseData, IJiraTicket, IParameter } from '../interfaces';
+import { IAssessment, IDetectIntentResponseData, IParameter } from '../interfaces';
 import SlackService from '../services/SlackService';
 import { createScatterChart } from '../slack/charts/scatterChart';
 import { createAssessmentDataBlock } from '../slack/blocks/assessmentData';

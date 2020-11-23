@@ -184,3 +184,29 @@ export interface IJiraTicket {
 	name: string;
 	assessmentName: string;
 }
+
+export interface ITopFindingData {
+	count: number;
+	company: Array<ICompany>;
+	criticality: number;
+	configName: Array<string>;
+	stories: Array<{
+		name: string;
+		description: string;
+	}>;
+}
+
+export type ITopFinding = [string, ITopFindingData];
+
+export interface ITopMeasureData {
+	count: number;
+	company: Array<ICompany>;
+	criticality: number;
+	configName: Array<string>;
+	stories: Array<{
+		name: string;
+		description: string;
+	}>;
+}
+
+export type ITopMeasure = [string, ITopMeasureData];
