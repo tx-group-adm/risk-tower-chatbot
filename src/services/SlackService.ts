@@ -37,10 +37,9 @@ export default class SlackService {
 
 	async sendMessageOnUsersBehalf(message: string): Promise<void> {
 		message = message.replace(/\+/g, ' ');
-		const text = `You chose: *${message}*.`;
 		await this.webClient.chat.postMessage({
 			channel: this.event.channel,
-			text,
+			text: message,
 		});
 	}
 }

@@ -13,7 +13,7 @@ export const slackevent = (event: IEvent, context: Context, callback: Callback):
 			const slackEvent: ISlackEventCallback | ISlackEventOnUsersBehalf = JSON.parse(event.body);
 			if (!isEventCallback(slackEvent)) {
 				console.log('EVENT_ON_USERS_BEHALF');
-				sendMessageOnUsersBehalf(slackEvent.event);
+				sendMessageOnUsersBehalf(slackEvent.event, slackEvent.displayText);
 			}
 			console.log('EVENT_CALLBACK');
 			slackMessageHandler(slackEvent.event);
