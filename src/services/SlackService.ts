@@ -1,5 +1,5 @@
 import { KnownBlock, WebClient } from '@slack/web-api';
-import { ISlackMessageIMEvent, ISLackProfileResponse } from '../interfaces';
+import { ISlackMessageIMEvent, ISlackProfile, ISLackProfileResponse } from '../interfaces';
 
 const { SLACK_BOT_TOKEN } = process.env;
 
@@ -20,12 +20,18 @@ export default class SlackService {
 		});
 	}
 
-	async getEmailForUser(): Promise<string> {
+	async getProfile(): Promise<ISlackProfile> {
 		const response = ((await this.webClient.users.profile.get({
 			user: this.event.user,
 		})) as unknown) as ISLackProfileResponse;
 
-		return response.profile.email;
+		return response.profile;
+	}
+
+	async getEmailForUser(): Promise<string> {
+		const profile: ISlackProfile = await this.getProfile();
+
+		return profile.email;
 	}
 
 	async uploadFile(file: Buffer): Promise<void> {
@@ -35,11 +41,17 @@ export default class SlackService {
 		});
 	}
 
-	async sendMessageOnUsersBehalf(message: string): Promise<void> {
+	async sendMessageOnUsersBehalf(event: ISlackMessageIMEvent, message: string): Promise<void> {
 		message = message.replace(/\+/g, ' ');
+
+		const { real_name, image_512 } = await this.getProfile();
+
 		await this.webClient.chat.postMessage({
 			channel: this.event.channel,
 			text: message,
+			username: real_name,
+			icon_url: image_512,
+			as_user: true,
 		});
 	}
 }
