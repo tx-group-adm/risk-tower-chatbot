@@ -4,7 +4,7 @@ import { IParameter } from '../../interfaces';
 const QUICKREPLIES: {
 	[index: string]: Array<string>;
 } = {
-	tx_company: ['20 Minuten', 'Doodle', 'Ricardo', 'Tamedia', 'Tutti'],
+	tx_company: ['Jobcloud', 'IT', 'Corporate Services', '20 Minuten', 'Paid Media'],
 	tx_assessment_type: ['compliance', 'privacy', 'security', 'soc2', 'technology'],
 };
 

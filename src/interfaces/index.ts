@@ -143,27 +143,15 @@ export type ICompany =
 	| 'TX Group'
 	| 'Goldbach'
 	| 'TX Markets'
-	| 'Tutti'
-	| 'Ricardo'
-	| 'CarForYou'
-	| 'Homegate'
 	| 'Technology & Ventures'
 	| 'TX Ventures'
-	| 'Doodle'
-	| 'Zattoo'
-	| 'Olmero'
 	| 'IT'
-	| 'Digital Technology Services'
 	| 'Coorporate Services'
 	| '20 Minuten'
 	| 'Tamedia'
 	| 'Logistics & Printing'
 	| 'Paid Media'
-	| 'Goldbach entity'
 	| 'Jobcloud'
-	| 'Asana-test'
-	| 'Neo Advertising'
-	| 'DreiFive'
 	| 'Corporate Services'
 	| 'Paid Media';
 
@@ -211,3 +199,26 @@ export interface ITopMeasureData {
 }
 
 export type ITopMeasure = [string, ITopMeasureData];
+
+export interface IHierarchyItem {
+	name: ICompany;
+	companyType: 'entity' | 'organisation';
+	hasAssessment: boolean;
+	assessmentType: Array<string>;
+}
+
+export type IRole = 'user' | 'admin';
+
+export interface IOrganisation {
+	name: ICompany;
+	highlight: boolean;
+	id: number;
+	type: 'organisation';
+	parentId: number | null;
+	hasAssessment: boolean;
+	children: Array<IOrganisation | IAssessment>;
+	impact: number;
+	probability: number;
+	rating: number;
+	ratingColor: string;
+}
