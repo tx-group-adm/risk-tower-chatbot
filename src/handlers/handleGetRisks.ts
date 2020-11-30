@@ -42,7 +42,7 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 	switch (risks.type) {
 		case 'organisation':
 			const labels = risks.children.map((child) => child.name);
-			const data = risks.children.map((child) => child.rating);
+			const data = risks.children.map((child) => child.rating || 0);
 			const backgroundColor = risks.children.map((child) => child.ratingColor);
 			const barChartUrl = await createBarChart(labels, data, backgroundColor);
 			const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children);
