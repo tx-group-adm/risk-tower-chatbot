@@ -14,8 +14,14 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	const missingParameters = response.missingParameters;
 	const messages = response.messages;
-
 	const message = messages.join('\n');
+
+	if (!parameters.tx_company) {
+		const email = await slackService.getEmailForUser();
+		const topLevelCompany: ICompany = await RiskTowerService.getTopLevelCompanyForUser(email);
+		parameters.tx_company = topLevelCompany;
+		missingParameters.splice(missingParameters.indexOf('tx_company'), 1);
+	}
 
 	// check if slot filling is needed, if yes show quick reply block
 	if (!allRequiredParamsPresent) {
@@ -25,12 +31,6 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 		await slackService.postMessage('', blocks);
 
 		return;
-	}
-
-	if (!parameters.tx_company) {
-		const email = await slackService.getEmailForUser();
-		const topLevelCompany: ICompany = await RiskTowerService.getTopLevelCompanyForUser(email);
-		parameters.tx_company = topLevelCompany;
 	}
 
 	const type = parameters.tx_assessment_type;
