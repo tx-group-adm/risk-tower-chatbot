@@ -7,8 +7,6 @@ export async function createBarChart(
 	data: Array<number>,
 	backgroundColor: Array<string>
 ): Promise<string> {
-	console.log('create bar chart ' + JSON.stringify(data));
-
 	const max = Math.max(...data);
 	const stepSize = Math.round(max / 4);
 
