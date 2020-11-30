@@ -30,7 +30,9 @@ export async function handleGetTopFindings(
 
 	const findings = await DataService.getTopFindings(type, roles);
 
-	const blocks = createTopFindingsBlock(message, findings);
+	const topFindingsMessage = `Top ${type} findings`;
+
+	const blocks = createTopFindingsBlock(topFindingsMessage, findings);
 
 	await slackService.postMessage('', blocks);
 }
