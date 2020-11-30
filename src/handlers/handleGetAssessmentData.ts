@@ -1,15 +1,23 @@
 import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/quickReply';
-import { IAssessment, IDetectIntentResponseData, IParameter } from '../interfaces';
+import {
+	IAssessment,
+	ICompany,
+	IDetectIntentResponseData,
+	IGetAssessmentDataParameters,
+	IParameter,
+	IRole,
+	IType,
+} from '../interfaces';
 import SlackService from '../services/SlackService';
 import { createScatterChart } from '../slack/charts/scatterChart';
 import { createAssessmentDataBlock } from '../slack/blocks/assessmentData';
-import { createMessageBlock } from '../slack/blocks/message';
+import DataService from '../services/DataService';
 
 export async function handleGetAssessmentData(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<void> {
-	const assessment = response.payload.assessment as IAssessment;
+	const parameters = response.parameters as IGetAssessmentDataParameters;
 	const messages: Array<string> = response.messages;
 	const allRequiredParamsPresent: boolean = response.allRequiredParamsPresent;
 	const missingParameters: Array<IParameter> = response.missingParameters;
@@ -26,12 +34,14 @@ export async function handleGetAssessmentData(
 		return;
 	}
 
-	if (assessment.impact && assessment.probability) {
-		const url = await createScatterChart(assessment);
-		const blocks = createAssessmentDataBlock(assessment.name, message, url);
-		await slackService.postMessage('', blocks);
-	} else {
-		const blocks = createMessageBlock(message);
-		await slackService.postMessage('', blocks);
-	}
+	const email = await slackService.getEmailForUser();
+	const roles: IRole[] = await DataService.getRolesForUser(email);
+	const type: IType = parameters.tx_assessment_type;
+	const company: ICompany = parameters.tx_company;
+	const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
+
+	const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${assessment.impact}* and a probability of *${assessment.probability}*`;
+	const url = await createScatterChart(assessment);
+	const blocks = createAssessmentDataBlock(assessment.name, assessmentMessage, url);
+	await slackService.postMessage('', blocks);
 }

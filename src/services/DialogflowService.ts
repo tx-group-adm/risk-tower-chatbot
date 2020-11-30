@@ -1,4 +1,4 @@
-import { Struct, struct } from 'pb-util';
+import { struct } from 'pb-util';
 import { IDetectIntentResponseData, IParameter } from '../interfaces';
 import { ClientOptions, DetectIntentRequest, SessionsClientV2 } from '../interfaces/dialogflow';
 import { SessionsClient } from '@google-cloud/dialogflow';
@@ -19,23 +19,10 @@ export default class DialogflowService {
 		this.sessionClient = new SessionsClient(options) as SessionsClientV2;
 	}
 
-	public async processTextMessage(
-		message: string,
-		sessionId: string,
-		email: string
-	): Promise<IDetectIntentResponseData> {
+	public async processTextMessage(message: string, sessionId: string): Promise<IDetectIntentResponseData> {
 		const sessionPath = this.sessionClient.projectAgentSessionPath(this.projectId, sessionId);
 		const request: DetectIntentRequest = {
 			session: sessionPath,
-			queryParams: {
-				payload: {
-					fields: {
-						user: {
-							stringValue: email,
-						},
-					},
-				},
-			},
 			queryInput: {
 				text: {
 					text: message,
@@ -48,25 +35,17 @@ export default class DialogflowService {
 			const [response] = await this.sessionClient.detectIntent(request);
 			console.log(JSON.stringify(response));
 			const { queryResult } = response;
-			const { fulfillmentMessages, webhookPayload, allRequiredParamsPresent, parameters, intent } = queryResult;
+			const { fulfillmentMessages, allRequiredParamsPresent, parameters, intent } = queryResult;
 			const messages = fulfillmentMessages
 				.map((msg) => msg.text?.text?.[0])
 				.filter((msg) => msg !== undefined) as Array<string>;
 
-			let payloadFields: Struct;
-			let payload;
-			if (webhookPayload && webhookPayload.fields && webhookPayload.fields.data.structValue) {
-				payloadFields = webhookPayload.fields.data.structValue;
-				payload = struct.decode(payloadFields);
-			} else {
-				payload = {};
-			}
-			const paramData = struct.decode(parameters);
-			const missingParameters = Object.keys(paramData).filter((key) => paramData[key] === '') as Array<IParameter>;
+			const params = struct.decode(parameters) as { [index: string]: string };
+			const missingParameters = Object.keys(params).filter((key) => params[key] === '') as Array<IParameter>;
 			const intentName = intent.displayName;
 			return {
 				messages,
-				payload,
+				parameters: params,
 				allRequiredParamsPresent,
 				missingParameters,
 				intentName,

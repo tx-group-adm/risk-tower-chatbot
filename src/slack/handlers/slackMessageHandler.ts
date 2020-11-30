@@ -9,7 +9,7 @@ import {
 	handleGetTopMeasures,
 } from '../../handlers';
 import SlackService from '../../services/SlackService';
-import { defaultHandler } from '../../handlers/defaultHandler';
+import { handleDefaultIntents } from '../../handlers/handleDefaultIntents';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
@@ -23,8 +23,7 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 	}
 
 	const sessionId = event.user;
-	const email = await slackService.getEmailForUser();
-	const response = await dialogflowService.processTextMessage(event.text, sessionId, email);
+	const response = await dialogflowService.processTextMessage(event.text, sessionId);
 	const intentName = response.intentName;
 
 	switch (intentName) {
@@ -50,7 +49,7 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 
 		case INTENTS.DEFAULT_WELCOME:
 		case INTENTS.DEFAULT_FALLBACK:
-			await defaultHandler(response, slackService);
+			await handleDefaultIntents(response, slackService);
 			break;
 
 		default:
