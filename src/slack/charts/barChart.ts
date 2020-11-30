@@ -9,7 +9,7 @@ export async function createBarChart(
 ): Promise<string> {
 	console.log('create bar chart ' + JSON.stringify(data));
 
-	const max = 28;
+	const max = Math.max(...data);
 	const stepSize = Math.round(max / 4);
 
 	const chartConfig: ChartConfiguration = {
