@@ -23,7 +23,7 @@ export function createAssessmentDataBlock(company: ICompany, message: string, ur
 		{
 			type: 'image',
 			image_url: url,
-			alt_text: 'Failed to load chart. Please try again later.',
+			alt_text: 'assessment data chart',
 		},
 	];
 }
