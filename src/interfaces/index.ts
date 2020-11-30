@@ -117,8 +117,8 @@ export interface IDialogflowResponsePayload {
 
 export interface IDetectIntentResponseData {
 	messages: Array<string>;
-	payload: {
-		[index: string]: unknown;
+	parameters: {
+		[index: string]: string;
 	};
 	allRequiredParamsPresent: boolean;
 	missingParameters: Array<IParameter>;
@@ -223,4 +223,38 @@ export interface IOrganisation {
 	probability: number;
 	rating: number;
 	ratingColor: string;
+}
+
+export type IRiskResponse = IRiskOrganisationResponse | IRiskEntityResponse;
+
+export interface IRiskOrganisationResponse {
+	type: 'organisation';
+	children: Array<IOrganisation | IAssessment>;
+}
+
+export interface IRiskEntityResponse {
+	type: 'entity';
+	assessment: IAssessment;
+}
+
+export interface IIntentParameters {
+	[index: string]: string | undefined;
+}
+
+export interface IGetAssessmentDataParameters extends IIntentParameters {
+	tx_assessment_type: IType;
+	tx_company: ICompany;
+}
+
+export interface IGetRisksParameters extends IIntentParameters {
+	tx_assessment_type: IType;
+	tx_company?: ICompany;
+}
+
+export interface IGetTopFindingsParameters extends IIntentParameters {
+	tx_assessment_type: IType;
+}
+
+export interface IGetTopMeasuresParameters extends IIntentParameters {
+	tx_assessment_type: IType;
 }

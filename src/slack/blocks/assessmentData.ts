@@ -16,7 +16,7 @@ export function createAssessmentDataBlock(company: ICompany, message: string, ur
 		{
 			type: 'section',
 			text: {
-				type: 'plain_text',
+				type: 'mrkdwn',
 				text: message,
 			},
 		},

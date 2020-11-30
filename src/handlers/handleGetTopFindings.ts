@@ -1,4 +1,5 @@
-import { IDetectIntentResponseData, ITopFinding } from '../interfaces';
+import { IDetectIntentResponseData, IGetTopFindingsParameters } from '../interfaces';
+import DataService from '../services/DataService';
 import SlackService from '../services/SlackService';
 import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/quickReply';
 import { createTopFindingsBlock } from '../slack/blocks/topFindings';
@@ -7,7 +8,7 @@ export async function handleGetTopFindings(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<void> {
-	const findings = response.payload.findings as Array<ITopFinding>;
+	const parameters = response.parameters as IGetTopFindingsParameters;
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	const missingParameters = response.missingParameters;
 	const messages = response.messages;
@@ -22,6 +23,12 @@ export async function handleGetTopFindings(
 
 		return;
 	}
+
+	const type = parameters.tx_assessment_type;
+	const email = await slackService.getEmailForUser();
+	const roles = await DataService.getRolesForUser(email);
+
+	const findings = await DataService.getTopFindings(type, roles);
 
 	const blocks = createTopFindingsBlock(message, findings);
 
