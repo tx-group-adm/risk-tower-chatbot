@@ -7,6 +7,7 @@ import { createBarChart } from '../slack/charts/barChart';
 import { createScatterChart } from '../slack/charts/scatterChart';
 import { createAssessmentDataBlock } from '../slack/blocks/assessmentData';
 import { createRisksBlock } from '../slack/blocks/risks';
+import { createMessageBlock } from '../slack/blocks/message';
 
 export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	const parameters = response.parameters as IGetRisksParameters;
@@ -41,13 +42,19 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 
 	switch (risks.type) {
 		case 'organisation':
-			const labels = risks.children.map((child) => child.name);
-			const data = risks.children.map((child) => child.rating || 0);
-			const backgroundColor = risks.children.map((child) => child.ratingColor);
-			const barChartUrl = await createBarChart(labels, data, backgroundColor);
-			const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children);
-			await slackService.postMessage('', organisationBlocks);
-			break;
+			if (risks.children.length == 0) {
+				const messageBlock = createMessageBlock(`There is no risk data for ${company}.`);
+				await slackService.postMessage('', messageBlock);
+				break;
+			} else {
+				const labels = risks.children.map((child) => child.name);
+				const data = risks.children.map((child) => child.rating || 0);
+				const backgroundColor = risks.children.map((child) => child.ratingColor || '#000000');
+				const barChartUrl = await createBarChart(labels, data, backgroundColor);
+				const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children);
+				await slackService.postMessage('', organisationBlocks);
+				break;
+			}
 
 		case 'entity':
 			const scatterChartUrl = await createScatterChart(risks.assessment);

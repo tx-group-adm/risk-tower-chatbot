@@ -40,8 +40,13 @@ export async function handleGetAssessmentData(
 	const company: ICompany = parameters.tx_company;
 	const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
 
-	const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${assessment.impact}* and a probability of *${assessment.probability}*`;
-	const url = await createScatterChart(assessment);
-	const blocks = createAssessmentDataBlock(assessment.name, assessmentMessage, url);
-	await slackService.postMessage('', blocks);
+	if (assessment.hasAssessment) {
+		const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${assessment.impact}* and a probability of *${assessment.probability}*`;
+		const url = await createScatterChart(assessment);
+		const blocks = createAssessmentDataBlock(assessment.name, assessmentMessage, url);
+		await slackService.postMessage('', blocks);
+	} else {
+		const noAssessmentMessage = `Currently, there is no ${type} assessment data for ${company}.`;
+		await slackService.postMessage(noAssessmentMessage);
+	}
 }
