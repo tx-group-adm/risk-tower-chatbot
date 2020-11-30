@@ -16,13 +16,13 @@ export function createRisksBlock(
 			case 'organisation':
 				return {
 					displayText: child.name,
-					value: `Show me ${type} risks for ${company}`,
+					value: `Show me ${type} risks for ${child.name}.`,
 				};
 
 			case 'entity':
 				return {
 					displayText: child.name,
-					value: `Show me ${type} assessment data for ${company}`,
+					value: `Show me ${type} assessment data for ${child.name}.`,
 				};
 
 			default:
@@ -44,7 +44,7 @@ export function createRisksBlock(
 		{
 			type: 'image',
 			image_url: url,
-			alt_text: 'Failed to load chart. Please try again later.',
+			alt_text: 'risks chart',
 		},
 		{
 			type: 'divider',
