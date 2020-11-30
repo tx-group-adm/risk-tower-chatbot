@@ -7,7 +7,7 @@ export async function createBarChart(
 	data: Array<number>,
 	backgroundColor: Array<string>
 ): Promise<string> {
-	const max = data.sort().reverse()[0];
+	const max = Math.max(...data);
 	const stepSize = Math.round(max / 4);
 
 	const chartConfig: ChartConfiguration = {
