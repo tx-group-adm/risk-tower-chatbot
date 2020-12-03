@@ -29,9 +29,13 @@ export async function handleGetTopMeasures(
 
 	const measures = await DataService.getTopMeasures(type, roles);
 
-	const topMeasuresMessage = `Top ${type} measures`;
+	if (measures.length == 0) {
+		const noTopMeasuresMessage = `There are no ${type} measures available.`;
+		await slackService.postMessage(noTopMeasuresMessage);
+	} else {
+		const topMeasuresMessage = `Top ${type} measures`;
+		const blocks = createTopMeasuresBlock(topMeasuresMessage, measures);
 
-	const blocks = createTopMeasuresBlock(topMeasuresMessage, measures);
-
-	await slackService.postMessage('', blocks);
+		await slackService.postMessage('', blocks);
+	}
 }

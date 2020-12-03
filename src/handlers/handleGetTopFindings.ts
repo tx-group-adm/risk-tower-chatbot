@@ -29,9 +29,13 @@ export async function handleGetTopFindings(
 
 	const findings = await DataService.getTopFindings(type, roles);
 
-	const topFindingsMessage = `Top ${type} findings`;
+	if (findings.length == 0) {
+		const noTopFindingsMessage = `There are no ${type} findings available.`;
+		await slackService.postMessage(noTopFindingsMessage);
+	} else {
+		const topFindingsMessage = `Top ${type} findings`;
+		const blocks = createTopFindingsBlock(topFindingsMessage, findings);
 
-	const blocks = createTopFindingsBlock(topFindingsMessage, findings);
-
-	await slackService.postMessage('', blocks);
+		await slackService.postMessage('', blocks);
+	}
 }
