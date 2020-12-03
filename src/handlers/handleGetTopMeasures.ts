@@ -11,11 +11,10 @@ export async function handleGetTopMeasures(
 	const parameters = response.parameters as IGetTopMeasuresParameters;
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	const missingParameters = response.missingParameters;
-	const messages = response.messages;
-	const message = messages.join('\n');
 
 	// check if slot filling is needed, if yes show quick reply block
 	if (!allRequiredParamsPresent) {
+		const message = response.messages.join('\n');
 		const options = getQuickReplyOptionsFor(missingParameters[0]);
 		const blocks = createQuickReplyBlock(message, options);
 
@@ -30,7 +29,13 @@ export async function handleGetTopMeasures(
 
 	const measures = await DataService.getTopMeasures(type, roles);
 
-	const blocks = createTopMeasuresBlock(message, measures);
+	if (measures.length == 0) {
+		const noTopMeasuresMessage = `There are no ${type} measures available.`;
+		await slackService.postMessage(noTopMeasuresMessage);
+	} else {
+		const topMeasuresMessage = `Top ${type} measures`;
+		const blocks = createTopMeasuresBlock(topMeasuresMessage, measures);
 
-	await slackService.postMessage('', blocks);
+		await slackService.postMessage('', blocks);
+	}
 }

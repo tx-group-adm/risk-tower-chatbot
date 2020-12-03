@@ -11,11 +11,10 @@ export async function handleGetTopFindings(
 	const parameters = response.parameters as IGetTopFindingsParameters;
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	const missingParameters = response.missingParameters;
-	const messages = response.messages;
-	const message = messages.join('\n');
 
 	// check if slot filling is needed, if yes show quick reply block
 	if (!allRequiredParamsPresent) {
+		const message = response.messages.join('\n');
 		const options = getQuickReplyOptionsFor(missingParameters[0]);
 		const blocks = createQuickReplyBlock(message, options);
 
@@ -30,9 +29,13 @@ export async function handleGetTopFindings(
 
 	const findings = await DataService.getTopFindings(type, roles);
 
-	const topFindingsMessage = `Top ${type} findings`;
+	if (findings.length == 0) {
+		const noTopFindingsMessage = `There are no ${type} findings available.`;
+		await slackService.postMessage(noTopFindingsMessage);
+	} else {
+		const topFindingsMessage = `Top ${type} findings`;
+		const blocks = createTopFindingsBlock(topFindingsMessage, findings);
 
-	const blocks = createTopFindingsBlock(topFindingsMessage, findings);
-
-	await slackService.postMessage('', blocks);
+		await slackService.postMessage('', blocks);
+	}
 }
