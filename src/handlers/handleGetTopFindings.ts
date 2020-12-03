@@ -11,11 +11,10 @@ export async function handleGetTopFindings(
 	const parameters = response.parameters as IGetTopFindingsParameters;
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	const missingParameters = response.missingParameters;
-	const messages = response.messages;
-	const message = messages.join('\n');
 
 	// check if slot filling is needed, if yes show quick reply block
 	if (!allRequiredParamsPresent) {
+		const message = response.messages.join('\n');
 		const options = getQuickReplyOptionsFor(missingParameters[0]);
 		const blocks = createQuickReplyBlock(message, options);
 

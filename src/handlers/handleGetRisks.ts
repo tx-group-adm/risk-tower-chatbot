@@ -13,12 +13,11 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 	const parameters = response.parameters as IGetRisksParameters;
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	const missingParameters = response.missingParameters;
-	const messages = response.messages;
-	const message = messages.join('\n');
 	missingParameters.splice(missingParameters.indexOf('tx_company'), 1);
 
 	// check if slot filling is needed, if yes show quick reply block
 	if (!allRequiredParamsPresent) {
+		const message = response.messages.join('\n');
 		const options = getQuickReplyOptionsFor(missingParameters[0]);
 		const blocks = createQuickReplyBlock(message, options);
 

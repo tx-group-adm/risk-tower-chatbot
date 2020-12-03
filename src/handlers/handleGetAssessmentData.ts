@@ -18,14 +18,12 @@ export async function handleGetAssessmentData(
 	slackService: SlackService
 ): Promise<void> {
 	const parameters = response.parameters as IGetAssessmentDataParameters;
-	const messages: Array<string> = response.messages;
 	const allRequiredParamsPresent: boolean = response.allRequiredParamsPresent;
 	const missingParameters: Array<IParameter> = response.missingParameters;
 
-	const message = messages.join('\n');
-
 	// check if slot filling is needed, if yes show quick reply block
 	if (!allRequiredParamsPresent) {
+		const message = response.messages.join('\n');
 		const options = getQuickReplyOptionsFor(missingParameters[0]);
 		const blocks = createQuickReplyBlock(message, options);
 
