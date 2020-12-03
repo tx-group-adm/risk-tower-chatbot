@@ -30,7 +30,9 @@ export async function handleGetTopMeasures(
 
 	const measures = await DataService.getTopMeasures(type, roles);
 
-	const blocks = createTopMeasuresBlock(message, measures);
+	const topMeasuresMessage = `Top ${type} measures`;
+
+	const blocks = createTopMeasuresBlock(topMeasuresMessage, measures);
 
 	await slackService.postMessage('', blocks);
 }
