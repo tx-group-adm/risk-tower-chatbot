@@ -11,7 +11,6 @@ import {
 	IOrganisation,
 	IRiskResponse,
 	RiskRatingData,
-	RiskRating,
 } from '../interfaces';
 
 const URL_PREFIX = process.env.STAGE === 'prod' ? 'security' : 'security-dev';
@@ -152,14 +151,16 @@ export default class DataService {
 	}
 
 	static async getRiskRatings(type: IType, company: ICompany, roles: IRole[]): Promise<RiskRatingData> {
+		console.log(type, company, roles);
+
 		// TODO: Implement API call
 		// 1. get type, company and roles
 		// 2. get assessment data with type, company and roles
 		// 3. get assessment id
 		// 4. get risk ratings with type, assessment id and roles
 
-		const assessment: IAssessment = await this.getAssessmentData(type, roles, company);
-		const assessmentId = assessment.assessmentId;
+		// const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
+		// const assessmentId = assessment.assessmentId;
 
 		// api call goes here
 

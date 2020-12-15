@@ -13,7 +13,7 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	response.missingParameters.splice(response.missingParameters.indexOf('tx_company'), 1);
 	if (!allRequiredParamsPresent) {
-		return await showQuickReplies(response, slackService);
+		return showQuickReplies(response, slackService);
 	}
 
 	const parameters = response.parameters as IGetRisksParameters;

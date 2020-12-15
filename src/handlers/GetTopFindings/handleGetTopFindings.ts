@@ -10,7 +10,7 @@ export async function handleGetTopFindings(
 ): Promise<void> {
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	if (!allRequiredParamsPresent) {
-		return await showQuickReplies(response, slackService);
+		return showQuickReplies(response, slackService);
 	}
 
 	const parameters = response.parameters as IGetTopFindingsParameters;
