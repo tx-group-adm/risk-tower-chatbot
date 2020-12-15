@@ -12,6 +12,9 @@ import SlackService from '../../services/SlackService';
 import { handleDefaultIntents } from '../../handlers/Default/handleDefaultIntents';
 import { handleGetHelp } from '../../handlers/GetHelp/handleGetHelp';
 import { handleGetAssessmentData } from '../../handlers/GetAssessmentData/handleGetAssessmentData';
+import { handleGetEntityInfo } from '../../handlers/GetEntityInfo/handleGetEntityInfo';
+import { handleGetRiskEpics } from '../../handlers/GetRiskEpics/handleGetRiskEpics';
+import { handleGetRiskRatings } from '../../handlers/GetRiskRatings/handleGetRiskRatings';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
@@ -49,6 +52,18 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 
 		case INTENTS.GET_TOP_MEASURES:
 			await handleGetTopMeasures(response, slackService);
+			break;
+
+		case INTENTS.GET_ENTITY_INFO:
+			await handleGetEntityInfo(response, slackService);
+			break;
+
+		case INTENTS.GET_RISK_EPICS:
+			await handleGetRiskEpics(response, slackService);
+			break;
+
+		case INTENTS.GET_RISK_RATINGS:
+			await handleGetRiskRatings(response, slackService);
 			break;
 
 		case INTENTS.GET_HELP:
