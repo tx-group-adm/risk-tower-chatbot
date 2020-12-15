@@ -75,7 +75,7 @@ export default class DataService {
 
 		try {
 			const response = await axios.get(url, CONFIG);
-			return (response.data.jiraTickets || []) as IJiraTicket[];
+			return response.data.jiraTickets as IJiraTicket[];
 		} catch (err) {
 			console.log(err);
 			const error = err as AxiosError;
