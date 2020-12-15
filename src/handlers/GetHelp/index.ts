@@ -25,7 +25,7 @@ const HELP_DATA: {
 		hasImage: false,
 	},
 	GetHelpEntity: {
-		title: 'What is an Entity?',
+		title: 'What is a Entity?',
 		message:
 			'An Entity is the department/company/subsidiary or team where you actually perform your assessment. The assessment reflects back a "green", "orange" or "red" value that indicates the maturity of the assessed entity. Entity results are aggregated to the next layer usually an organization.',
 		hasImage: false,
@@ -34,7 +34,7 @@ const HELP_DATA: {
 		title: 'What is a Board Kanban?',
 		message:
 			'For each Risk Type a separate board is created with a "ToDo", "In Progress" and "Done" bucket. The board can be configured within the Entity Management. Once the initial assessment is done in the Risk Tower, the according stories (tasks) and epics are pushed to the configured board automatically. The status of single stories and epics are reflected back to the Risk Tower.',
-		hasImage: true,
+		hasImage: false,
 		image: 'board_kanban.png',
 	},
 	GetHelpOrganisation: {
@@ -64,7 +64,7 @@ const HELP_DATA: {
 		title: 'What is a Risk Type?',
 		message:
 			'A Risk Type is a scope you would like to assess. This could be security, privacy, compliance or others. The risk tower works in maturity levels but still tries to show a risk indicator on a risk map (with probability and impact). The Risk Type consists of Risk Areas, these include the according Assessment Finding and Epic and each Assessment Finding/Epic contain a minimum of one Story (Task).',
-		hasImage: true,
+		hasImage: false,
 		image: 'risk_type.png',
 	},
 	GetHelpShowAssessment: {
@@ -91,7 +91,7 @@ const HELP_DATA: {
 		title: 'What are Stories?',
 		message:
 			'In Agile projects an Epic is a large Story that is split into smaller Stories. The Story is comparable to the single tasks that need to be done to complete the Epic and with that remediate the Assessment Finding. An example would be to have a Risk Area "Detection" with three maturity levels:',
-		hasImage: true,
+		hasImage: false,
 		image: 'stories.png',
 	},
 };
