@@ -66,7 +66,7 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 			await handleGetRiskRatings(response, slackService);
 			break;
 
-		case INTENTS.GET_HELP:
+		case INTENTS.GET_GENERAL_HELP:
 			await handleGetGeneralHelp(response, slackService);
 			break;
 
