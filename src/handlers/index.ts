@@ -13,7 +13,7 @@ export const INTENTS = {
 	GET_ENTITY_INFO: 'GetEntityInfo',
 	GET_RISK_EPICS: 'GetRiskEpics',
 	GET_RISK_RATINGS: 'GetRiskRatings',
-	GET_HELP: 'GetHelp',
+	GET_GENERAL_HELP: 'GetGeneralHelp',
 	GET_HELP_ASSESSMENT_FINDINGS_EPICS: 'GetHelpAssessmentFindingsEpics',
 	GET_HELP_BOARD_TYPE: 'GetHelpBoardType',
 	GET_HELP_ENTITY: 'GetHelpEntity',
