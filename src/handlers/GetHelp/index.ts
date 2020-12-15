@@ -44,8 +44,8 @@ const HELP_DATA: {
 		hasImage: false,
 	},
 	GetHelpPrequisites: {
-		title: '',
-		message: '',
+		title: 'What are prerequisites to use it?',
+		message: '< text >',
 		hasImage: false,
 	},
 	GetHelpRiskAreas: {
@@ -68,23 +68,23 @@ const HELP_DATA: {
 		image: 'risk_type.png',
 	},
 	GetHelpShowAssessment: {
-		title: '',
-		message: '',
+		title: 'How can you show assessment?',
+		message: '< text >',
 		hasImage: false,
 	},
 	GetHelpShowFindings: {
-		title: '',
-		message: '',
+		title: 'How can you show findings?',
+		message: '< text >',
 		hasImage: false,
 	},
 	GetHelpShowMeasures: {
-		title: '',
-		message: '',
+		title: 'How can you show measures?',
+		message: '< text >',
 		hasImage: false,
 	},
 	GetHelpShowRisks: {
-		title: '',
-		message: '',
+		title: 'How can you show risks?',
+		message: '< text >',
 		hasImage: false,
 	},
 	GetHelpStories: {
