@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import {
 	IAssessment,
 	ICompany,
@@ -71,11 +71,16 @@ export default class DataService {
 	static async getJiraTickets(company: ICompany, type: IType): Promise<IJiraTicket[]> {
 		const url = `${BASE_URL}/jira-tickets?companyName=${company}&type=${type}`;
 
+		console.log(`Getting jira tickes. company:${company}, type:${type}`);
+
 		try {
 			const response = await axios.get(url, CONFIG);
-			return (response.data.jiraTickets || []) as IJiraTicket[];
+			return response.data.jiraTickets as IJiraTicket[];
 		} catch (err) {
 			console.log(err);
+			const error = err as AxiosError;
+			console.log(JSON.stringify(error.response?.data));
+
 			throw err;
 		}
 	}
