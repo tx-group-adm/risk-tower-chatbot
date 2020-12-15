@@ -16,6 +16,7 @@ export function createNavigationButtons(helpData: IHelpData): KnownBlock[] {
 			text: {
 				type: 'plain_text',
 				text: ':arrow_left: Previous',
+				emoji: true,
 			},
 			value: QUESTIONS[QUESTIONS.indexOf(helpData.title) - 1],
 			action_id: 'previous-button',
@@ -29,6 +30,7 @@ export function createNavigationButtons(helpData: IHelpData): KnownBlock[] {
 			text: {
 				type: 'plain_text',
 				text: 'Next :arrow_right:',
+				emoji: true,
 			},
 			value: QUESTIONS[QUESTIONS.indexOf(helpData.title) + 1],
 			action_id: 'next-button',
