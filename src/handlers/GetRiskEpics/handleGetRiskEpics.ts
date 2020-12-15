@@ -18,6 +18,10 @@ export async function handleGetRiskEpics(
 	const company: ICompany = parameters.tx_company;
 
 	const jiraTickets: IJiraTicket[] = await DataService.getJiraTickets(company, type);
+
+	console.log('found ' + jiraTickets.length + ' tickets');
+	console.log(jiraTickets);
+
 	const blocks = createJiraTicketsBlock(jiraTickets);
 
 	await slackService.postMessage('', blocks);
