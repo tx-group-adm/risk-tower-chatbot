@@ -7,7 +7,6 @@ export function createNavigationButtons(helpData: IHelpData): KnownBlock[] {
 	const actionsBlock: ActionsBlock = {
 		type: 'actions',
 		elements: [],
-		block_id: `navigation-buttons-${QUESTIONS.indexOf(helpData.title) + 1}`,
 	};
 
 	if (QUESTIONS.indexOf(helpData.title) > 0) {

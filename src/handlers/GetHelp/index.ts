@@ -31,7 +31,7 @@ const HELP_DATA: {
 		hasImage: false,
 	},
 	GetHelpKanbanBoard: {
-		title: 'What is a Board Kanban?',
+		title: 'What is a Kanban Board?',
 		message:
 			'For each Risk Type a separate board is created with a "ToDo", "In Progress" and "Done" bucket. The board can be configured within the Entity Management. Once the initial assessment is done in the Risk Tower, the according stories (tasks) and epics are pushed to the configured board automatically. The status of single stories and epics are reflected back to the Risk Tower.',
 		hasImage: false,
