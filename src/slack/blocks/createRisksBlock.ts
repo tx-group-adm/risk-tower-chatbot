@@ -22,7 +22,7 @@ export function createRisksBlock(
 			case 'entity':
 				return {
 					displayText: child.name,
-					value: `Show me ${type} assessment data for ${child.name}.`,
+					value: `Show me ${type} risk chart for ${child.name}.`,
 				};
 
 			default:
