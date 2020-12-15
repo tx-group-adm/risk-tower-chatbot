@@ -38,5 +38,7 @@ export function createNavigationButtons(helpData: IHelpData): KnownBlock[] {
 		actionsBlock.elements.push(nextButton);
 	}
 
+	blocks.push(actionsBlock);
+
 	return blocks;
 }
