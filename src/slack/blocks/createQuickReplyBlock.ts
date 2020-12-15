@@ -1,11 +1,14 @@
 import { Button, KnownBlock } from '@slack/web-api';
-import { IParameter } from '../../interfaces';
+import { ICategory, ICompany, IParameter, IType } from '../../interfaces';
 
 const QUICKREPLIES: {
-	[index: string]: Array<string>;
+	tx_company: ICompany[];
+	tx_assessment_type: IType[];
+	tx_assessment_category: ICategory[];
 } = {
-	tx_company: ['Jobcloud', 'IT', 'Corporate Services', '20 Minuten', 'Paid Media'],
-	tx_assessment_type: ['compliance', 'privacy', 'security', 'soc2', 'technology'],
+	tx_company: ['20 Minuten', 'IT', 'Goldbach', 'Corporate Services', 'Technology Services'],
+	tx_assessment_type: ['privacy', 'security', 'technology'],
+	tx_assessment_category: ['entity info', 'risk chart', 'risk ratings', 'risk epics'],
 };
 
 export const getQuickReplyOptionsFor = (parameter: IParameter): Array<string> => QUICKREPLIES[parameter];
