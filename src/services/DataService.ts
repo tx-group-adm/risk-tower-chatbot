@@ -77,11 +77,13 @@ export default class DataService {
 			const response = await axios.get(url, CONFIG);
 			return response.data.jiraTickets as IJiraTicket[];
 		} catch (err) {
-			console.log(err);
 			const error = err as AxiosError;
-			console.log(JSON.stringify(error.response?.data));
-
-			throw err;
+			console.log(error.response?.data.message);
+			if (error.response?.data.message === "Jira tickets don't exist for set values") {
+				return [];
+			} else {
+				throw err;
+			}
 		}
 	}
 

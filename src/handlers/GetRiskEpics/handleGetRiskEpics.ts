@@ -19,10 +19,10 @@ export async function handleGetRiskEpics(
 
 	const jiraTickets: IJiraTicket[] = await DataService.getJiraTickets(company, type);
 
-	console.log('found ' + jiraTickets.length + ' tickets');
-	console.log(jiraTickets);
-
-	const blocks = createJiraTicketsBlock(jiraTickets);
-
-	await slackService.postMessage('', blocks);
+	if (jiraTickets.length > 0) {
+		const blocks = createJiraTicketsBlock(jiraTickets);
+		await slackService.postMessage('', blocks);
+	} else {
+		await slackService.postMessage(`There are no ${type} risk epics for ${company} at the moment.`);
+	}
 }
