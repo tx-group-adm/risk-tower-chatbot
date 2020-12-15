@@ -1,5 +1,5 @@
 export const WORKFLOW = [
-	'What are prerequisites to using it?',
+	'What are prerequisites to use it?',
 	'How can you show risks?',
 	'How can you show assessment?',
 	'How can you show findings?',
@@ -13,9 +13,7 @@ export const ENTITY = [
 	'What is a Board Type?',
 	'What is a Risk Type?',
 	'What are Risk Areas?',
-	'What are Assessments?',
-	'What are Findings?',
-	'What are Epics?',
+	'What are Assessment Findings and Epics?',
 	'What are Stories?',
 	'What is a Kanban Board?',
 ];
