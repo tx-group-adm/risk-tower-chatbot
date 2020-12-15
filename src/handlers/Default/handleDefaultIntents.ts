@@ -1,5 +1,5 @@
-import { IDetectIntentResponseData } from '../interfaces';
-import SlackService from '../services/SlackService';
+import { IDetectIntentResponseData } from '../../interfaces';
+import SlackService from '../../services/SlackService';
 
 export async function handleDefaultIntents(
 	response: IDetectIntentResponseData,

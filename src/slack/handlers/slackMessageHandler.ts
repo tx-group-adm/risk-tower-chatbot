@@ -2,14 +2,16 @@ import { ISlackMessageIMEvent } from '../../interfaces';
 import DialogflowService from '../../services/DialogflowService';
 import {
 	INTENTS,
-	handleGetAssessmentData,
-	handleGetHelp,
+	handleGetRiskChart,
+	handleGetGeneralHelp,
 	handleGetRisks,
 	handleGetTopFindings,
 	handleGetTopMeasures,
 } from '../../handlers';
 import SlackService from '../../services/SlackService';
-import { handleDefaultIntents } from '../../handlers/handleDefaultIntents';
+import { handleDefaultIntents } from '../../handlers/Default/handleDefaultIntents';
+import { handleGetHelp } from '../../handlers/GetHelp/handleGetHelp';
+import { handleGetAssessmentData } from '../../handlers/GetAssessmentData/handleGetAssessmentData';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
@@ -31,8 +33,8 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 			await handleGetAssessmentData(response, slackService);
 			break;
 
-		case INTENTS.GET_HELP:
-			await handleGetHelp(response, slackService);
+		case INTENTS.GET_RISK_CHART:
+			await handleGetRiskChart(response, slackService);
 			break;
 
 		case INTENTS.GET_RISKS:
@@ -45,6 +47,27 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 
 		case INTENTS.GET_TOP_MEASURES:
 			await handleGetTopMeasures(response, slackService);
+			break;
+
+		case INTENTS.GET_HELP:
+			await handleGetGeneralHelp(response, slackService);
+			break;
+
+		case INTENTS.GET_HELP_ASSESSMENT_FINDINGS_EPICS:
+		case INTENTS.GET_HELP_BOARD_TYPE:
+		case INTENTS.GET_HELP_ENTITY:
+		case INTENTS.GET_HELP_KANBAN_BOARD:
+		case INTENTS.GET_HELP_ORGANISATION:
+		case INTENTS.GET_HELP_PREQUISITES:
+		case INTENTS.GET_HELP_RISK_AREAS:
+		case INTENTS.GET_HELP_RISK_TOWER:
+		case INTENTS.GET_HELP_RISK_TYPE:
+		case INTENTS.GET_HELP_SHOW_ASSESSMENT:
+		case INTENTS.GET_HELP_SHOW_FINDINGS:
+		case INTENTS.GET_HELP_SHOW_MEASURES:
+		case INTENTS.GET_HELP_SHOW_RISKS:
+		case INTENTS.GET_HELP_STORIES:
+			await handleGetHelp(response, slackService);
 			break;
 
 		case INTENTS.DEFAULT_WELCOME:

@@ -1,31 +1,22 @@
-import { ICompany, IDetectIntentResponseData, IGetRisksParameters } from '../interfaces';
-import SlackService from '../services/SlackService';
-import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/quickReply';
-import RiskTowerService from '../services/RiskTowerService';
-import DataService from '../services/DataService';
-import { createBarChart } from '../slack/charts/barChart';
-import { createScatterChart } from '../slack/charts/scatterChart';
-import { createAssessmentDataBlock } from '../slack/blocks/assessmentData';
-import { createRisksBlock } from '../slack/blocks/risks';
-import { createMessageBlock } from '../slack/blocks/message';
+import { ICompany, IDetectIntentResponseData, IGetRisksParameters } from '../../interfaces';
+import SlackService from '../../services/SlackService';
+import RiskTowerService from '../../services/RiskTowerService';
+import DataService from '../../services/DataService';
+import { createBarChart } from '../../slack/charts/barChart';
+import { createScatterChart } from '../../slack/charts/scatterChart';
+import { createAssessmentDataBlock } from '../../slack/blocks/createAssessmentDataBlock';
+import { createRisksBlock } from '../../slack/blocks/createRisksBlock';
+import { createMessageBlock } from '../../slack/blocks/createMessageBlock';
+import { showQuickReplies } from '..';
 
 export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
-	const parameters = response.parameters as IGetRisksParameters;
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
-	const missingParameters = response.missingParameters;
-	missingParameters.splice(missingParameters.indexOf('tx_company'), 1);
-
-	// check if slot filling is needed, if yes show quick reply block
+	response.missingParameters.splice(response.missingParameters.indexOf('tx_company'), 1);
 	if (!allRequiredParamsPresent) {
-		const message = response.messages.join('\n');
-		const options = getQuickReplyOptionsFor(missingParameters[0]);
-		const blocks = createQuickReplyBlock(message, options);
-
-		await slackService.postMessage('', blocks);
-
-		return;
+		return showQuickReplies(response, slackService);
 	}
 
+	const parameters = response.parameters as IGetRisksParameters;
 	if (!parameters.tx_company) {
 		const email = await slackService.getEmailForUser();
 		const topLevelCompany: ICompany = await RiskTowerService.getTopLevelCompanyForUser(email);

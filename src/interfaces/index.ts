@@ -125,9 +125,10 @@ export interface IDetectIntentResponseData {
 	intentName: string;
 }
 
-export type IParameter = 'tx_company' | 'tx_assessment_type';
+export type IParameter = 'tx_company' | 'tx_assessment_type' | 'tx_assessment_category';
 
 export interface IAssessment {
+	assessmentId: string;
 	name: ICompany;
 	highlight: boolean;
 	id: number;
@@ -143,21 +144,22 @@ export interface IAssessment {
 
 export type ICompany =
 	| 'TX Group'
-	| 'Goldbach'
 	| 'TX Markets'
-	| 'Technology & Ventures'
-	| 'TX Ventures'
-	| 'IT'
-	| 'Coorporate Services'
-	| '20 Minuten'
+	| 'Group and Services'
 	| 'Tamedia'
-	| 'Logistics & Printing'
-	| 'Paid Media'
-	| 'Jobcloud'
+	| 'Goldbach Group'
+	| '20 Minuten'
+	| 'Technology Services'
+	| 'TX Ventures'
 	| 'Corporate Services'
-	| 'Paid Media';
+	| 'IT'
+	| 'Logistics and Printing'
+	| 'Paid Media'
+	| 'Goldbach';
 
-export type IType = 'security' | 'privacy' | 'technology' | 'compliance' | 'soc2';
+export type IType = 'security' | 'privacy' | 'technology';
+
+export type ICategory = 'entity info' | 'risk chart' | 'risk ratings' | 'risk epics';
 
 export interface IQuickchartConfig {
 	backgroundColor: 'transparent';
@@ -237,11 +239,72 @@ export interface IRiskEntityResponse {
 	assessment: IAssessment;
 }
 
+export interface RiskRatingData {
+	assessment: {
+		areas: {
+			[index: number]: {
+				config: {
+					name: string;
+					ratings: RiskRating[];
+					type: string;
+				};
+				rating: number;
+				ratingIndex: number;
+				ratingType: string;
+			};
+		};
+		createdAt: number;
+		dataType: string;
+		entityName: ICompany;
+		id: string;
+		sourceType: IType;
+		updatedAt: number;
+		user: string;
+		weight: number;
+	};
+	companies: Array<{
+		entityName: ICompany;
+		id: string;
+	}>;
+	history: Array<{
+		dataType: string;
+		date: string;
+		id: string;
+	}>;
+	ratings: {
+		impact: number;
+		probability: number;
+	};
+}
+
+export interface RiskRating {
+	areaAssessment: string;
+	criticality: number;
+	epicKey: string;
+	epicLink: string;
+	epicProposal: {
+		description: string;
+		name: string;
+		stories: Array<{
+			description: string;
+			name: string;
+		}>;
+	};
+	epicStatus: string;
+	stories: string[];
+}
+
 export interface IIntentParameters {
 	[index: string]: string | undefined;
 }
 
 export interface IGetAssessmentDataParameters extends IIntentParameters {
+	tx_assessment_type: IType;
+	tx_company: ICompany;
+	tx_assessment_category: ICategory;
+}
+
+export interface IGetRiskChartParameters extends IIntentParameters {
 	tx_assessment_type: IType;
 	tx_company: ICompany;
 }
@@ -257,4 +320,26 @@ export interface IGetTopFindingsParameters extends IIntentParameters {
 
 export interface IGetTopMeasuresParameters extends IIntentParameters {
 	tx_assessment_type: IType;
+}
+
+export interface IGetEntityInfoParameters extends IIntentParameters {
+	tx_assessment_type: IType;
+	tx_company: ICompany;
+}
+
+export interface IGetRiskEpicsParameters extends IIntentParameters {
+	tx_assessment_type: IType;
+	tx_company: ICompany;
+}
+
+export interface IGetRiskRatingsParameters extends IIntentParameters {
+	tx_assessment_type: IType;
+	tx_company: ICompany;
+}
+
+export interface IHelpData {
+	title: string;
+	message: string;
+	hasImage: boolean;
+	image?: string;
 }
