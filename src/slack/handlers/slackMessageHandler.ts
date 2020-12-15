@@ -11,6 +11,7 @@ import {
 import SlackService from '../../services/SlackService';
 import { handleDefaultIntents } from '../../handlers/Default/handleDefaultIntents';
 import { handleGetHelp } from '../../handlers/GetHelp/handleGetHelp';
+import { handleGetAssessmentData } from '../../handlers/GetAssessmentData/handleGetAssessmentData';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
@@ -29,7 +30,7 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 
 	switch (intentName) {
 		case INTENTS.GET_ASSESSMENT_DATA:
-			await handleGetAssesmentData(response, slackService);
+			await handleGetAssessmentData(response, slackService);
 			break;
 
 		case INTENTS.GET_RISK_CHART:

@@ -42,12 +42,37 @@ jest.mock('../services/DialogflowService', () => mockedDialogflowService);
 
 import { IDetectIntentResponseData, ISlackMessageIMEvent } from '../interfaces';
 
-const { INTENTS } = jest.requireActual('../handlers');
 const mockedHandleGetAssessmentData = jest.fn();
 const mockedHandleGetHelp = jest.fn();
 const mockedHandleGetRisks = jest.fn();
 const mockedHandleGetTopFindings = jest.fn();
 const mockedHandleGetTopMeasures = jest.fn();
+const mockedHandleGetGeneralHelp = jest.fn();
+
+const INTENTS = {
+	DEFAULT_WELCOME: 'Default Welcome Intent',
+	DEFAULT_FALLBACK: 'Default Fallback Intent',
+	GET_RISK_CHART: 'GetRiskChart',
+	GET_ASSESSMENT_DATA: 'GetAssessmentData',
+	GET_RISKS: 'GetRisks',
+	GET_TOP_FINDINGS: 'GetTopFindings',
+	GET_TOP_MEASURES: 'GetTopMeasures',
+	GET_HELP: 'GetHelp',
+	GET_HELP_ASSESSMENT_FINDINGS_EPICS: 'GetHelpAssessmentFindingsEpics',
+	GET_HELP_BOARD_TYPE: 'GetHelpBoardType',
+	GET_HELP_ENTITY: 'GetHelpEntity',
+	GET_HELP_KANBAN_BOARD: 'GetHelpKanbanBoard',
+	GET_HELP_ORGANISATION: 'GetHelpOrganisation',
+	GET_HELP_PREQUISITES: 'GetHelpPrequisites',
+	GET_HELP_RISK_AREAS: 'GetHelpRiskAreas',
+	GET_HELP_RISK_TOWER: 'GetHelpRiskTower',
+	GET_HELP_RISK_TYPE: 'GetHelpRiskType',
+	GET_HELP_SHOW_ASSESSMENT: 'GetHelpShowAssessment',
+	GET_HELP_SHOW_FINDINGS: 'GetHelpShowFindings',
+	GET_HELP_SHOW_MEASURES: 'GetHelpShowMeasures',
+	GET_HELP_SHOW_RISKS: 'GetHelpShowRisks',
+	GET_HELP_STORIES: 'GetHelpStories',
+};
 
 jest.mock('../handlers', () => ({
 	INTENTS,
@@ -56,6 +81,7 @@ jest.mock('../handlers', () => ({
 	handleGetRisks: mockedHandleGetRisks,
 	handleGetTopFindings: mockedHandleGetTopFindings,
 	handleGetTopMeasures: mockedHandleGetTopMeasures,
+	handleGetGeneralHelp: mockedHandleGetGeneralHelp,
 }));
 
 import { slackMessageHandler } from '../slack/handlers/slackMessageHandler';
@@ -93,17 +119,6 @@ describe('Testing the slackMessageHandler function', () => {
 			mockedGetAssessmentDataResponse,
 			new mockedSlackService()
 		);
-	});
-
-	it('should call the handleGetHelp function', async () => {
-		const event: Partial<ISlackMessageIMEvent> = {
-			user: 'user',
-			text: 'text',
-		};
-
-		await slackMessageHandler(event as ISlackMessageIMEvent);
-
-		expect(mockedHandleGetHelp).toHaveBeenCalledWith(mockedGetHelpResponse, new mockedSlackService());
 	});
 
 	it('should call the handleGetRisks function', async () => {
