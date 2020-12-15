@@ -1,5 +1,6 @@
 import { KnownBlock } from '@slack/web-api';
 import { IHelpData } from '../../interfaces';
+import { createHelpMessageMenu } from './createHelpMessageBlock';
 import { createNavigationButtons } from './createNavigationButtons';
 
 const BUCKET_URL = 'https://risk-tower-images.s3-eu-west-1.amazonaws.com/about/';
@@ -34,6 +35,7 @@ export function createHelpDataBlock(helpData: IHelpData): KnownBlock[] {
 	}
 
 	const navigationButtons = createNavigationButtons(helpData);
+	const helpMenu = createHelpMessageMenu();
 
-	return [...blocks, ...navigationButtons];
+	return [...blocks, ...navigationButtons, ...helpMenu];
 }
