@@ -142,6 +142,7 @@ export default class DataService {
 
 	static async getEntityInfo(
 		type: IType,
+		roles: IRole[],
 		company: ICompany
 	): Promise<{
 		entityName: string;
@@ -149,10 +150,12 @@ export default class DataService {
 		assessorName: string;
 		entityWeight: string;
 	}> {
+		const data = await DataService.getAssessmentData(type, roles, company);
+
 		return {
-			entityName: company,
-			assessmentDate: '01.01.2020',
-			assessorName: 'Jira: GEN JiraAPI-PMD',
+			entityName: data.name,
+			assessmentDate: data.lastAccessed,
+			assessorName: data.user,
 			entityWeight: 'medium',
 		};
 	}
