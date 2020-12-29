@@ -150,7 +150,7 @@ export default class DataService {
 		assessorName: string;
 		entityWeight: string;
 	}> {
-		const data = await this.getAssessmentData(type, roles, company);
+		const data = await DataService.getAssessmentData(type, roles, company);
 
 		return {
 			entityName: data.name,
