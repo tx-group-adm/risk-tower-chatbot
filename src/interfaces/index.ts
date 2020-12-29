@@ -140,6 +140,8 @@ export interface IAssessment {
 	probability: number;
 	rating: number;
 	ratingColor: string;
+	lastAccessed: string;
+	user: string;
 }
 
 export type ICompany =

@@ -17,8 +17,10 @@ export async function handleGetEntityInfo(
 
 	const type: IType = parameters.tx_assessment_type;
 	const company: ICompany = parameters.tx_company;
+	const email = await slackService.getEmailForUser();
+	const roles = await DataService.getRolesForUser(email);
 
-	const info = await DataService.getEntityInfo(type, company);
+	const info = await DataService.getEntityInfo(type, roles, company);
 	const blocks = createEntityInfoBlock(info);
 
 	await slackService.postMessage('', blocks);
