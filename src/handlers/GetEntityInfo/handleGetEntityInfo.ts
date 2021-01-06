@@ -3,6 +3,7 @@ import { ICompany, IDetectIntentResponseData, IGetEntityInfoParameters, IType } 
 import DataService from '../../services/DataService';
 import SlackService from '../../services/SlackService';
 import { createEntityInfoBlock } from '../../slack/blocks/createEntityInfoBlock';
+import { createMessageBlock } from '../../slack/blocks/createMessageBlock';
 
 export async function handleGetEntityInfo(
 	response: IDetectIntentResponseData,
@@ -20,8 +21,13 @@ export async function handleGetEntityInfo(
 	const email = await slackService.getEmailForUser();
 	const roles = await DataService.getRolesForUser(email);
 
-	const info = await DataService.getEntityInfo(type, roles, company);
-	const blocks = createEntityInfoBlock(info);
+	try {
+		const info = await DataService.getEntityInfo(type, roles, company);
+		const blocks = createEntityInfoBlock(info);
 
-	await slackService.postMessage('', blocks);
+		await slackService.postMessage('', blocks);
+	} catch (err) {
+		const blocks = createMessageBlock(`There is no ${type} entity info available for ${company}.`);
+		await slackService.postMessage('', blocks);
+	}
 }

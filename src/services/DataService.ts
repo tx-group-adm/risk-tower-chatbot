@@ -150,14 +150,19 @@ export default class DataService {
 		assessorName: string;
 		entityWeight: number;
 	}> {
-		const data = await DataService.getAssessmentData(type, roles, company);
+		try {
+			const data = await DataService.getAssessmentData(type, roles, company);
 
-		return {
-			entityName: data.name,
-			assessmentDate: data.lastAccessed,
-			assessorName: data.user,
-			entityWeight: data.weight,
-		};
+			return {
+				entityName: data.name,
+				assessmentDate: data.lastAccessed,
+				assessorName: data.user,
+				entityWeight: data.weight,
+			};
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
 	}
 
 	static async getRiskRatings(type: IType, company: ICompany, roles: IRole[]): Promise<RiskRatingData> {
