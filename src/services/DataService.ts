@@ -184,6 +184,8 @@ export default class DataService {
 				id,
 			});
 
+			console.log(riskRatings);
+
 			return riskRatings;
 		} catch (err) {
 			console.log(err);
