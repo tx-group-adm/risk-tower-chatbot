@@ -19,14 +19,10 @@ export async function handleGetRiskRatings(
 	const email = await slackService.getEmailForUser();
 	const roles = await DataService.getRolesForUser(email);
 
-	const riskRatingData = await DataService.getRiskRatings(type, company, roles);
-	let areas: RiskArea[];
-	if (riskRatingData && riskRatingData.assessment && riskRatingData.assessment.areas) {
-		areas = Object.values(riskRatingData.assessment.areas);
-	} else {
-		areas = [];
-	}
-	const blocks = createRiskRatingBlock(areas);
+	console.log(`getting ${type} risk ratings for ${company}`);
+
+	const riskAreas = await DataService.getRiskRatings(type, company, roles);
+	const blocks = createRiskRatingBlock(riskAreas);
 
 	await slackService.postMessage('', blocks);
 }

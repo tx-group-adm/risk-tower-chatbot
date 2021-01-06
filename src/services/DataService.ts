@@ -11,6 +11,7 @@ import {
 	IOrganisation,
 	IRiskResponse,
 	RiskRatingData,
+	RiskArea,
 } from '../interfaces';
 
 const URL_PREFIX = process.env.STAGE === 'prod' ? 'security' : 'security-dev';
@@ -150,8 +151,12 @@ export default class DataService {
 		assessorName: string;
 		entityWeight: number;
 	}> {
+		console.log(`getting ${type} entity info about ${company}`);
+
 		try {
 			const data = await DataService.getAssessmentData(type, roles, company);
+
+			console.log(JSON.stringify(data));
 
 			return {
 				entityName: data.name,
@@ -165,17 +170,14 @@ export default class DataService {
 		}
 	}
 
-	static async getRiskRatings(type: IType, company: ICompany, roles: IRole[]): Promise<RiskRatingData> {
+	static async getRiskRatings(type: IType, company: ICompany, roles: IRole[]): Promise<RiskArea[]> {
 		const url = `${BASE_URL}/chart/risk-ratings`;
-
-		// TODO: Implement API call
-		// 1. get type, company and roles
-		// 2. get assessment data with type, company and roles
-		// 3. get assessment id
-		// 4. get risk ratings with type, assessment id and roles
 
 		try {
 			const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
+
+			console.log(JSON.stringify(assessment));
+
 			const id = assessment.assessmentId;
 
 			const riskRatings: RiskRatingData = await axios.post(url, {
@@ -186,24 +188,10 @@ export default class DataService {
 
 			console.log(riskRatings);
 
-			return riskRatings;
+			return Object.values(riskRatings.assessment.areas);
 		} catch (err) {
 			console.log(err);
-			const noData: Partial<RiskRatingData> = {
-				assessment: {
-					areas: {},
-					createdAt: 0,
-					dataType: '',
-					entityName: 'TX Group',
-					id: '',
-					sourceType: 'security',
-					updatedAt: 0,
-					user: '',
-					weight: 0,
-				},
-			};
-
-			return noData as RiskRatingData;
+			return [];
 		}
 	}
 }
