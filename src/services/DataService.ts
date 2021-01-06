@@ -148,7 +148,7 @@ export default class DataService {
 		entityName: string;
 		assessmentDate: string;
 		assessorName: string;
-		entityWeight: string;
+		entityWeight: number;
 	}> {
 		const data = await DataService.getAssessmentData(type, roles, company);
 
@@ -156,12 +156,12 @@ export default class DataService {
 			entityName: data.name,
 			assessmentDate: data.lastAccessed,
 			assessorName: data.user,
-			entityWeight: 'medium',
+			entityWeight: data.weight,
 		};
 	}
 
 	static async getRiskRatings(type: IType, company: ICompany, roles: IRole[]): Promise<RiskRatingData> {
-		console.log(type, company, roles);
+		const url = `${BASE_URL}/chart/risk-ratings`;
 
 		// TODO: Implement API call
 		// 1. get type, company and roles
@@ -169,98 +169,15 @@ export default class DataService {
 		// 3. get assessment id
 		// 4. get risk ratings with type, assessment id and roles
 
-		// const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
-		// const assessmentId = assessment.assessmentId;
+		const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
+		const id = assessment.assessmentId;
 
-		// api call goes here
+		const riskRatings: RiskRatingData = await axios.post(url, {
+			type,
+			roles,
+			id,
+		});
 
-		const mockData: RiskRatingData = {
-			assessment: {
-				areas: {
-					0: {
-						config: {
-							name: 'Mock Risks 1',
-							ratings: [
-								{
-									areaAssessment: 'Mock Risks',
-									criticality: 1,
-									epicKey: 'MOCK-KEY',
-									epicLink: 'https://jira.tx.group',
-									epicProposal: {
-										description: 'Mock description',
-										name: 'Mock name',
-										stories: [
-											{
-												name: 'Do mock stuff 1',
-												description: 'do mock stuff description 1',
-											},
-											{
-												name: 'Do mock stuff 2',
-												description: 'do mock stuff description 2',
-											},
-										],
-									},
-									epicStatus: 'To Do',
-									stories: ['MOCK-STORY-1', 'MOCK-STORY-2'],
-								},
-							],
-							type: 'impact',
-						},
-						rating: 1,
-						ratingIndex: 0,
-						ratingType: 'impact',
-					},
-					1: {
-						config: {
-							name: 'Mock Risks 2',
-							ratings: [
-								{
-									areaAssessment: 'Mock Risks',
-									criticality: 1,
-									epicKey: 'MOCK-KEY',
-									epicLink: 'https://jira.tx.group',
-									epicProposal: {
-										description: 'Mock description',
-										name: 'Mock name',
-										stories: [
-											{
-												name: 'Do mock stuff 3',
-												description: 'do mock stuff description 3',
-											},
-											{
-												name: 'Do mock stuff 4',
-												description: 'do mock stuff description 4',
-											},
-										],
-									},
-									epicStatus: 'To Do',
-									stories: ['MOCK-STORY-1', 'MOCK-STORY-2'],
-								},
-							],
-							type: 'impact',
-						},
-						rating: 1,
-						ratingIndex: 0,
-						ratingType: 'impact',
-					},
-				},
-				createdAt: 123,
-				dataType: 'latest',
-				entityName: 'TX Group',
-				id: 'mock-id-123',
-				sourceType: 'security',
-				updatedAt: 123,
-				user: 'Mock user',
-				weight: 1,
-			},
-			companies: [{ entityName: 'TX Group', id: 'mock-id-123' }],
-			history: [],
-			ratings: {
-				impact: 1,
-				probability: 1,
-			},
-		};
-
-		return mockData;
+		return riskRatings;
 	}
 }

@@ -142,6 +142,7 @@ export interface IAssessment {
 	ratingColor: string;
 	lastAccessed: string;
 	user: string;
+	weight: number;
 }
 
 export type ICompany =

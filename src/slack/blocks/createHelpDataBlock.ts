@@ -3,7 +3,7 @@ import { IHelpData } from '../../interfaces';
 import { createHelpMessageMenu } from './createHelpMessageBlock';
 import { createNavigationButtons } from './createNavigationButtons';
 
-const BUCKET_URL = 'https://risk-tower-images.s3-eu-west-1.amazonaws.com/about/';
+const IMAGE_URL = 'https://herafame.sirv.com/Images/';
 
 export function createHelpDataBlock(helpData: IHelpData): KnownBlock[] {
 	const blocks: KnownBlock[] = [
@@ -29,7 +29,7 @@ export function createHelpDataBlock(helpData: IHelpData): KnownBlock[] {
 	if (helpData.hasImage && helpData.image) {
 		blocks.push({
 			type: 'image',
-			image_url: BUCKET_URL + helpData.image,
+			image_url: IMAGE_URL + helpData.image,
 			alt_text: "image couldn't load",
 		});
 	}
