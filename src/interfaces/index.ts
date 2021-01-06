@@ -242,19 +242,21 @@ export interface IRiskEntityResponse {
 	assessment: IAssessment;
 }
 
+export interface RiskArea {
+	config: {
+		name: string;
+		ratings: RiskRating[];
+		type: string;
+	};
+	rating: number;
+	ratingIndex: number;
+	ratingType: string;
+}
+
 export interface RiskRatingData {
 	assessment: {
 		areas: {
-			[index: number]: {
-				config: {
-					name: string;
-					ratings: RiskRating[];
-					type: string;
-				};
-				rating: number;
-				ratingIndex: number;
-				ratingType: string;
-			};
+			[index: number]: RiskArea;
 		};
 		createdAt: number;
 		dataType: string;
