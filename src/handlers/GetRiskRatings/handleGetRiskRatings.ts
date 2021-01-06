@@ -20,7 +20,7 @@ export async function handleGetRiskRatings(
 	const roles = await DataService.getRolesForUser(email);
 
 	const riskRatingData = await DataService.getRiskRatings(type, company, roles);
-	const areas = Object.values(riskRatingData.assessment.areas || {});
+	const areas = Object.values(riskRatingData ? riskRatingData.assessment.areas : {});
 	const blocks = createRiskRatingBlock(areas);
 
 	await slackService.postMessage('', blocks);
