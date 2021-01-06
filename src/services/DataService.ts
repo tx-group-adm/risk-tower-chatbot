@@ -181,6 +181,7 @@ export default class DataService {
 
 			return riskRatings;
 		} catch (err) {
+			console.log(err);
 			const noData: Partial<RiskRatingData> = {
 				assessment: {
 					areas: {},
