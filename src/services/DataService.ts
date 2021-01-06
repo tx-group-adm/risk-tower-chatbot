@@ -169,15 +169,33 @@ export default class DataService {
 		// 3. get assessment id
 		// 4. get risk ratings with type, assessment id and roles
 
-		const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
-		const id = assessment.assessmentId;
+		try {
+			const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
+			const id = assessment.assessmentId;
 
-		const riskRatings: RiskRatingData = await axios.post(url, {
-			type,
-			roles,
-			id,
-		});
+			const riskRatings: RiskRatingData = await axios.post(url, {
+				type,
+				roles,
+				id,
+			});
 
-		return riskRatings;
+			return riskRatings;
+		} catch (err) {
+			const noData: Partial<RiskRatingData> = {
+				assessment: {
+					areas: {},
+					createdAt: 0,
+					dataType: '',
+					entityName: 'TX Group',
+					id: '',
+					sourceType: 'security',
+					updatedAt: 0,
+					user: '',
+					weight: 0,
+				},
+			};
+
+			return noData as RiskRatingData;
+		}
 	}
 }
