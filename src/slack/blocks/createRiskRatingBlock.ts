@@ -1,7 +1,7 @@
 import { KnownBlock, SectionBlock } from '@slack/web-api';
-import { RiskRatingData } from '../../interfaces';
+import { RiskArea } from '../../interfaces';
 
-export function createRiskRatingBlock(riskRatingData: RiskRatingData): KnownBlock[] {
+export function createRiskRatingBlock(areas: RiskArea[]): KnownBlock[] {
 	const blocks: KnownBlock[] = [
 		{
 			type: 'header',
@@ -14,8 +14,6 @@ export function createRiskRatingBlock(riskRatingData: RiskRatingData): KnownBloc
 			type: 'divider',
 		},
 	];
-
-	const areas = Object.values(riskRatingData.assessment.areas);
 
 	if (areas.length == 0) {
 		const messageBlock: SectionBlock = {
