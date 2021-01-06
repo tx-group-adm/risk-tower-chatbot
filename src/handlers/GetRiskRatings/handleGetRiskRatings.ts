@@ -1,5 +1,5 @@
 import { showQuickReplies } from '..';
-import { ICompany, IDetectIntentResponseData, IGetRiskRatingsParameters, IType } from '../../interfaces';
+import { ICompany, IDetectIntentResponseData, IGetRiskRatingsParameters, IType, RiskArea } from '../../interfaces';
 import DataService from '../../services/DataService';
 import SlackService from '../../services/SlackService';
 import { createRiskRatingBlock } from '../../slack/blocks/createRiskRatingBlock';
@@ -20,7 +20,12 @@ export async function handleGetRiskRatings(
 	const roles = await DataService.getRolesForUser(email);
 
 	const riskRatingData = await DataService.getRiskRatings(type, company, roles);
-	const areas = Object.values(riskRatingData ? riskRatingData.assessment.areas : {});
+	let areas: RiskArea[];
+	if (riskRatingData && riskRatingData.assessment && riskRatingData.assessment.areas) {
+		areas = Object.values(riskRatingData.assessment.areas);
+	} else {
+		areas = [];
+	}
 	const blocks = createRiskRatingBlock(areas);
 
 	await slackService.postMessage('', blocks);
