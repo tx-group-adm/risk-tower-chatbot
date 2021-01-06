@@ -21,7 +21,7 @@ export async function handleGetRiskRatings(
 
 	console.log(`getting ${type} risk ratings for ${company}`);
 
-	const riskAreas = await DataService.getRiskRatings(type, company, roles);
+	const riskAreas: RiskArea[] = await DataService.getRiskRatings(type, company, roles);
 	const blocks = createRiskRatingBlock(riskAreas);
 
 	await slackService.postMessage('', blocks);

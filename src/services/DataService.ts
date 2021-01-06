@@ -180,11 +180,13 @@ export default class DataService {
 
 			const id = assessment.assessmentId;
 
-			const riskRatings: RiskRatingData = await axios.post(url, {
-				type,
-				roles,
-				id,
-			});
+			const riskRatings: RiskRatingData = (
+				await axios.post(url, {
+					type,
+					roles,
+					id,
+				})
+			).data;
 
 			console.log(riskRatings);
 
