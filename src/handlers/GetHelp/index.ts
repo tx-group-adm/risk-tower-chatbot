@@ -45,7 +45,8 @@ const HELP_DATA: {
 	},
 	GetHelpPrequisites: {
 		title: 'What are prerequisites to use it?',
-		message: '< text >',
+		message:
+			'You can get started with the Risk Tower Chatbot in no time! The only thing you need to have before you can start using the bot is a Risk Tower account with some access rights. If you need help, just ask me!',
 		hasImage: false,
 	},
 	GetHelpRiskAreas: {
@@ -69,22 +70,26 @@ const HELP_DATA: {
 	},
 	GetHelpShowAssessment: {
 		title: 'How can you show assessment?',
-		message: '< text >',
+		message:
+			'If you want me to show you assessment data, ask me like this: ```Show me security assessment data for TX Group.``` If you allready know the exact type of assessment data you want to see, you can also provide that assessment data type in your request. When asking for assessment data, you are required to provide an assessment type like "security" or "privacy" and also a company name.',
 		hasImage: false,
 	},
 	GetHelpShowFindings: {
 		title: 'How can you show findings?',
-		message: '< text >',
+		message:
+			'If you want me to show you findings, ask me like this: Hi, can you show me the top security findings? When asking for findings, you are required to provide an assessment type like "security" or "privacy".',
 		hasImage: false,
 	},
 	GetHelpShowMeasures: {
 		title: 'How can you show measures?',
-		message: '< text >',
+		message:
+			'If you want me to show you measures, ask me like this: ```Hi, can you show me the top privacy measures?``` When asking for measures, you are required to provide an assessment type like "security" or "privacy".',
 		hasImage: false,
 	},
 	GetHelpShowRisks: {
 		title: 'How can you show risks?',
-		message: '< text >',
+		message:
+			'If you want me to show you risks, ask me like this: ```Hey, show me some security risks.``` When asking for risk data, you are required to provide an assessment type like "security" or "privacy". Optionally, you can also provide a company name. If you don\'t provide a company name, the Risk Tower Chatbot will determine which company you have access to based on your roles on Risk Tower.',
 		hasImage: false,
 	},
 	GetHelpStories: {
