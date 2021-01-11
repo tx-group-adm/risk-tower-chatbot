@@ -6,12 +6,15 @@ import { createNavigationButtons } from './createNavigationButtons';
 const IMAGE_URL = 'https://herafame.sirv.com/Images/';
 
 export function createHelpDataBlock(helpData: IHelpData): KnownBlock[] {
+	const title = `:information_source:${helpData.title}`;
+
 	const blocks: KnownBlock[] = [
 		{
 			type: 'header',
 			text: {
 				type: 'plain_text',
-				text: helpData.title,
+				text: title,
+				emoji: true,
 			},
 		},
 		{

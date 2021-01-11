@@ -77,7 +77,7 @@ const HELP_DATA: {
 	GetHelpShowFindings: {
 		title: 'How can you show findings?',
 		message:
-			'If you want me to show you findings, ask me like this: Hi, can you show me the top security findings? When asking for findings, you are required to provide an assessment type like "security" or "privacy".',
+			'If you want me to show you findings, ask me like this: ```Hi, can you show me the top security findings?``` When asking for findings, you are required to provide an assessment type like "security" or "privacy".',
 		hasImage: false,
 	},
 	GetHelpShowMeasures: {
