@@ -1,5 +1,6 @@
 import { Button, KnownBlock } from '@slack/web-api';
 import { IAssessment, ICompany, IOrganisation, IType } from '../../interfaces';
+import { getRatingColorEmoji } from '../blocks/data/emoji';
 
 export function createRisksBlock(
 	type: IType,
@@ -11,18 +12,21 @@ export function createRisksBlock(
 	const options: Array<{
 		displayText: string;
 		value: string;
+		color: string;
 	}> = children.map((child) => {
 		switch (child.type) {
 			case 'organisation':
 				return {
 					displayText: child.name,
 					value: `Show me ${type} risks for ${child.name}.`,
+					color: child.ratingColor,
 				};
 
 			case 'entity':
 				return {
 					displayText: child.name,
 					value: `Show me ${type} risk chart for ${child.name}.`,
+					color: child.ratingColor,
 				};
 
 			default:
@@ -56,7 +60,7 @@ export function createRisksBlock(
 					type: 'button',
 					text: {
 						type: 'plain_text',
-						text: option.displayText,
+						text: `${getRatingColorEmoji(option.color)}${option.displayText}`,
 					},
 					value: option.value,
 				})
