@@ -207,11 +207,20 @@ export interface ITopMeasureData {
 
 export type ITopMeasure = [string, ITopMeasureData];
 
-export interface IHierarchyItem {
+export interface IHierarchyTreeItem {
 	name: ICompany;
 	companyType: 'entity' | 'organisation';
 	hasAssessment: boolean;
 	assessmentType: Array<string>;
+}
+
+export interface IHierarchyItem {
+	hasAssessment: boolean;
+	highlight: boolean;
+	id: number;
+	name: ICompany;
+	parentId: number | null;
+	type: 'entity' | 'organisation';
 }
 
 export type IRole = 'user' | 'admin';

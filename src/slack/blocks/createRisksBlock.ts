@@ -6,8 +6,9 @@ export function createRisksBlock(
 	type: IType,
 	company: ICompany,
 	url: string,
-	children: Array<IOrganisation | IAssessment>
-): Array<KnownBlock> {
+	children: Array<IOrganisation | IAssessment>,
+	parentName: string | null
+): KnownBlock[] {
 	const _type = type.charAt(0).toUpperCase() + type.slice(1);
 	const options: Array<{
 		displayText: string;
@@ -34,6 +35,30 @@ export function createRisksBlock(
 		}
 	});
 
+	const elements: Button[] = options.map(
+		(option): Button => ({
+			type: 'button',
+			text: {
+				type: 'plain_text',
+				text: `${getRatingColorEmoji(option.color)} ${option.displayText}`,
+			},
+			value: option.value,
+		})
+	);
+
+	if (parentName) {
+		const drillUpButton: Button = {
+			type: 'button',
+			style: 'danger',
+			text: {
+				type: 'plain_text',
+				text: '← Back',
+			},
+			value: `Show me ${type} risks for ${parentName}`,
+		};
+		elements.unshift(drillUpButton);
+	}
+
 	return [
 		{
 			type: 'header',
@@ -55,16 +80,7 @@ export function createRisksBlock(
 		},
 		{
 			type: 'actions',
-			elements: options.map(
-				(option): Button => ({
-					type: 'button',
-					text: {
-						type: 'plain_text',
-						text: `${getRatingColorEmoji(option.color)}${option.displayText}`,
-					},
-					value: option.value,
-				})
-			),
+			elements,
 		},
 	];
 }

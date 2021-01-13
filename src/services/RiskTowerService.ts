@@ -1,11 +1,11 @@
-import { IAssessment, ICompany, IHierarchyItem, IOrganisation, IType } from '../interfaces';
+import { IAssessment, ICompany, IHierarchyItem, IHierarchyTreeItem, IOrganisation, IType } from '../interfaces';
 import DataService from './DataService';
 
 export default class RiskTowerService {
 	static async companyHasAssessment(company: ICompany, type: IType): Promise<boolean> {
 		const hierarchyTree = await DataService.getHierarchyTree();
 		// get company from hierarchy tree
-		const companyFromTree = hierarchyTree.filter((item: IHierarchyItem) => item.name === company)[0];
+		const companyFromTree = hierarchyTree.filter((item: IHierarchyTreeItem) => item.name === company)[0];
 		// check if company has assessment of the provided type
 		const hasAssessment = companyFromTree.hasAssessment && companyFromTree.assessmentType.includes(type);
 
@@ -36,6 +36,21 @@ export default class RiskTowerService {
 			}
 
 			return match;
+		}
+	}
+
+	static async getParentName(parentId: number | null): Promise<string | null> {
+		if (parentId) {
+			const hierarchy = await DataService.getHierarchy();
+			const parent = hierarchy.filter((item: IHierarchyItem) => item.id == parentId)[0];
+
+			if (!parent) {
+				throw new Error(`no parent found for id ${parentId}`);
+			}
+
+			return parent.name;
+		} else {
+			return null;
 		}
 	}
 }

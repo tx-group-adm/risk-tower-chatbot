@@ -41,7 +41,9 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 				const data = risks.children.map((child) => child.rating || 0);
 				const backgroundColor = risks.children.map((child) => child.ratingColor || '#000000');
 				const barChartUrl = await createBarChart(labels, data, backgroundColor);
-				const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children);
+				const parentId = risks.children[0].parentId;
+				const parentName = await RiskTowerService.getParentName(parentId);
+				const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children, parentName);
 				await slackService.postMessage('', organisationBlocks);
 				break;
 			}
@@ -49,7 +51,15 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 		case 'entity':
 			const scatterChartUrl = await createScatterChart(risks.assessment);
 			const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${risks.assessment.impact}* and a probability of *${risks.assessment.probability}*.`;
-			const entityBlocks = createAssessmentDataBlock(risks.assessment.name, assessmentMessage, scatterChartUrl);
+			const parentId = risks.assessment.parentId;
+			const parentName = await RiskTowerService.getParentName(parentId);
+			const entityBlocks = createAssessmentDataBlock(
+				type,
+				risks.assessment.name,
+				assessmentMessage,
+				scatterChartUrl,
+				parentName
+			);
 			await slackService.postMessage('', entityBlocks);
 			break;
 
