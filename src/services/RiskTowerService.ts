@@ -48,6 +48,8 @@ export default class RiskTowerService {
 				throw new Error(`no parent found for id ${parentId}`);
 			}
 
+			console.log(`got parent ${parent.name}`);
+
 			return parent.name;
 		} else {
 			return null;
