@@ -25,7 +25,7 @@ export async function handleGetTopMeasures(
 		await slackService.postMessage(noTopMeasuresMessage);
 	} else {
 		const topMeasuresMessage = `Top ${type} measures`;
-		const blocks = createTopMeasuresBlock(topMeasuresMessage, measures);
+		const blocks = createTopMeasuresBlock(topMeasuresMessage, measures, type);
 
 		await slackService.postMessage('', blocks);
 	}
