@@ -55,4 +55,23 @@ export default class RiskTowerService {
 			return null;
 		}
 	}
+
+	static async getGrandParentName(parentId: number | null): Promise<string | null> {
+		if (parentId) {
+			const hierarchy = await DataService.getHierarchyTree();
+			const parent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parentId)[0];
+			if (!parent) {
+				throw new Error(`no parent found for id ${parentId}`);
+			}
+			const grandParentId = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parent.parentId)[0].id;
+			const grandParent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == grandParentId)[0];
+			if (!grandParent) {
+				return null;
+			} else {
+				return grandParent.name;
+			}
+		} else {
+			return null;
+		}
+	}
 }
