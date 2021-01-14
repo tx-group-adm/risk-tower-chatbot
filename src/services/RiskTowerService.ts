@@ -1,4 +1,4 @@
-import { IAssessment, ICompany, IHierarchyItem, IHierarchyTreeItem, IOrganisation, IType } from '../interfaces';
+import { IAssessment, ICompany, IHierarchyTreeItem, IOrganisation, IType } from '../interfaces';
 import DataService from './DataService';
 
 export default class RiskTowerService {
@@ -41,8 +41,8 @@ export default class RiskTowerService {
 
 	static async getParentName(parentId: number | null): Promise<string | null> {
 		if (parentId) {
-			const hierarchy = await DataService.getHierarchy();
-			const parent = hierarchy.filter((item: IHierarchyItem) => item.id == parentId)[0];
+			const hierarchy = await DataService.getHierarchyTree();
+			const parent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parentId)[0];
 
 			if (!parent) {
 				throw new Error(`no parent found for id ${parentId}`);

@@ -3,7 +3,6 @@ import {
 	IAssessment,
 	ICompany,
 	IHierarchyTreeItem,
-	IHierarchyItem,
 	IJiraTicket,
 	IRole,
 	IType,
@@ -28,18 +27,6 @@ export default class DataService {
 		try {
 			const response = await axios.get(url, CONFIG);
 			return response.data as IHierarchyTreeItem[];
-		} catch (err) {
-			console.log(err);
-			throw err;
-		}
-	}
-
-	static async getHierarchy(): Promise<IHierarchyItem[]> {
-		const url = `${BASE_URL}/entity/hierarchy`;
-
-		try {
-			const response = await axios.get(url, CONFIG);
-			return response.data as IHierarchyItem[];
 		} catch (err) {
 			console.log(err);
 			throw err;
@@ -208,16 +195,5 @@ export default class DataService {
 			console.log(err);
 			return [];
 		}
-	}
-
-	static async getParentEntity(parentId: number): Promise<IHierarchyItem> {
-		const hierarchy = await DataService.getHierarchy();
-		const parent = hierarchy.filter((item: IHierarchyItem) => item.id == parentId)[0];
-
-		if (!parent) {
-			throw new Error(`No parent found with id ${parentId}`);
-		}
-
-		return parent;
 	}
 }
