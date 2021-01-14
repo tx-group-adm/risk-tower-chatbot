@@ -42,11 +42,8 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 				const backgroundColor = risks.children.map((child) => child.ratingColor || '#000000');
 				const barChartUrl = await createBarChart(labels, data, backgroundColor);
 				const parentId = risks.children[0].parentId;
-
-				console.log(`${risks.children[0].name} has parentId ${parentId}`);
-
-				const parentName = await RiskTowerService.getParentName(parentId);
-				const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children, parentName);
+				const grandParentName = await RiskTowerService.getGrandParentName(parentId);
+				const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children, grandParentName);
 				await slackService.postMessage('', organisationBlocks);
 				break;
 			}
