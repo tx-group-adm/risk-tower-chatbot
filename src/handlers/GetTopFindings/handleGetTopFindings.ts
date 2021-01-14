@@ -25,7 +25,7 @@ export async function handleGetTopFindings(
 		await slackService.postMessage(noTopFindingsMessage);
 	} else {
 		const topFindingsMessage = `Top ${type} findings`;
-		const blocks = createTopFindingsBlock(topFindingsMessage, findings);
+		const blocks = createTopFindingsBlock(topFindingsMessage, findings, type);
 
 		await slackService.postMessage('', blocks);
 	}

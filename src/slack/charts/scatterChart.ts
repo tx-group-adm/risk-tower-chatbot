@@ -53,8 +53,8 @@ export async function createScatterChart(data: IAssessment): Promise<string> {
 
 	const requestData: IQuickchartConfig = {
 		backgroundColor: 'transparent',
-		width: 500,
-		height: 300,
+		width: 400,
+		height: 240,
 		format: 'png',
 		chart: chartConfig,
 	};
@@ -64,6 +64,6 @@ export async function createScatterChart(data: IAssessment): Promise<string> {
 	if (response.success) {
 		return response.url;
 	} else {
-		throw new Error('Êrror with quickchart.io');
+		throw new Error('Error with quickchart.io');
 	}
 }
