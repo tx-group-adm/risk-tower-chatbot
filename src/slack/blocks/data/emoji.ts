@@ -1,9 +1,9 @@
 export const EMOJI = {
 	INFORMATION_SOURCE: ':information_source:',
-	GREEN_CIRCLE: ':green_circle:',
-	ORANGE_CIRCLE: ':orange_circle:',
-	RED_CIRCLE: ':red_circle:',
-	WHITE_CIRCLE: ':white_circle:',
+	RISKLEVEL_LOW: ':risklevel_low:',
+	RISKLEVEL_MEDIUM: ':risklevel_medium:',
+	RISKLEVEL_HIGH: ':risklevel_high:',
+	RISKLEVEL_NO_DATA: ':risklevel_no_data:',
 };
 
 export function getRatingColorEmoji(ratingColor: string): string {
@@ -12,16 +12,16 @@ export function getRatingColorEmoji(ratingColor: string): string {
 	}
 	switch (ratingColor.toLocaleUpperCase()) {
 		case '#6AA84F':
-			return EMOJI.GREEN_CIRCLE;
+			return EMOJI.RISKLEVEL_LOW;
 
 		case '#FFA93F':
-			return EMOJI.ORANGE_CIRCLE;
+			return EMOJI.RISKLEVEL_MEDIUM;
 
 		case '#EA2E2E':
-			return EMOJI.RED_CIRCLE;
+			return EMOJI.RISKLEVEL_HIGH;
 
 		case '#FFFFFF':
-			return EMOJI.WHITE_CIRCLE;
+			return EMOJI.RISKLEVEL_NO_DATA;
 
 		default:
 			throw new Error(`unknown rating color ${ratingColor}`);
