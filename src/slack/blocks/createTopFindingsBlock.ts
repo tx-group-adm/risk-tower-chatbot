@@ -10,17 +10,17 @@ export function createTopFindingsBlock(title: string, findings: Array<ITopFindin
 				text: title,
 			},
 		},
+		{
+			type: 'divider',
+		},
 	];
 
 	findings.forEach((item) => {
 		blocks.push({
-			type: 'divider',
-		});
-		blocks.push({
 			type: 'section',
 			text: {
 				type: 'mrkdwn',
-				text: item[0],
+				text: `*${item[0]}*`,
 			},
 		});
 	});

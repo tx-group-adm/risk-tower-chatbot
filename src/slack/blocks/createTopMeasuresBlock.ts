@@ -10,17 +10,17 @@ export function createTopMeasuresBlock(title: string, measures: Array<ITopMeasur
 				text: title,
 			},
 		},
+		{
+			type: 'divider',
+		},
 	];
 
 	measures.forEach((item) => {
 		blocks.push({
-			type: 'divider',
-		});
-		blocks.push({
 			type: 'section',
 			text: {
 				type: 'mrkdwn',
-				text: item[0],
+				text: `*${item[0]}*`,
 			},
 		});
 	});
