@@ -99,6 +99,7 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 		}
 	} catch (err) {
 		console.log('error while handling intent, using error handler to notify user');
+		console.log(err);
 		await errorHandler(slackService);
 	}
 }
