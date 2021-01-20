@@ -13,7 +13,10 @@ import { Button } from '@slack/web-api';
 
 export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
-	response.missingParameters.splice(response.missingParameters.indexOf('tx_company'), 1);
+	if (response.missingParameters.includes('tx_company')) {
+		response.missingParameters.splice(response.missingParameters.indexOf('tx_company'), 1);
+	}
+
 	if (!allRequiredParamsPresent) {
 		return showQuickReplies(response, slackService);
 	}
