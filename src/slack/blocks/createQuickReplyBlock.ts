@@ -17,6 +17,8 @@ export const getQuickReplyOptionsFor = (parameter: IParameter): Array<string> =>
 };
 
 export const createQuickReplyBlock = (message: string, options: Array<string>): Array<KnownBlock> => {
+	console.log(options);
+
 	return [
 		{
 			type: 'section',
