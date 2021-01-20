@@ -350,3 +350,5 @@ export interface IHelpData {
 	hasImage: boolean;
 	image?: string;
 }
+
+export type IAssessmentCategory = 'entity info' | 'risk chart' | 'risk ratings' | 'risk epics';

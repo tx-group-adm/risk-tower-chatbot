@@ -1,9 +1,11 @@
+import { Button } from '@slack/web-api';
 import { showQuickReplies } from '..';
 import { ICompany, IDetectIntentResponseData, IGetEntityInfoParameters, IType } from '../../interfaces';
 import DataService from '../../services/DataService';
 import SlackService from '../../services/SlackService';
 import { createEntityInfoBlock } from '../../slack/blocks/createEntityInfoBlock';
 import { createMessageBlock } from '../../slack/blocks/createMessageBlock';
+import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
 
 export async function handleGetEntityInfo(
 	response: IDetectIntentResponseData,
@@ -23,7 +25,8 @@ export async function handleGetEntityInfo(
 
 	try {
 		const info = await DataService.getEntityInfo(type, roles, company);
-		const blocks = createEntityInfoBlock(info);
+		const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'entity info');
+		const blocks = createEntityInfoBlock(info, switchAssessmentButtons);
 
 		await slackService.postMessage('', blocks);
 	} catch (err) {

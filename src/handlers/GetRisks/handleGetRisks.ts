@@ -8,6 +8,8 @@ import { createAssessmentDataBlock } from '../../slack/blocks/createAssessmentDa
 import { createRisksBlock } from '../../slack/blocks/createRisksBlock';
 import { createMessageBlock } from '../../slack/blocks/createMessageBlock';
 import { showQuickReplies } from '..';
+import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
+import { Button } from '@slack/web-api';
 
 export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	const allRequiredParamsPresent = response.allRequiredParamsPresent;
@@ -53,12 +55,14 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 			const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${risks.assessment.impact}* and a probability of *${risks.assessment.probability}*.`;
 			const parentId = risks.assessment.parentId;
 			const parentName = await RiskTowerService.getParentName(parentId);
+			const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk chart');
 			const entityBlocks = createAssessmentDataBlock(
 				type,
 				risks.assessment.name,
 				assessmentMessage,
 				scatterChartUrl,
-				parentName
+				parentName,
+				switchAssessmentButtons
 			);
 			await slackService.postMessage('', entityBlocks);
 			break;

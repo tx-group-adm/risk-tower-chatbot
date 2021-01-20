@@ -13,6 +13,8 @@ import DataService from '../../services/DataService';
 import { AxiosError } from 'axios';
 import { showQuickReplies } from '..';
 import RiskTowerService from '../../services/RiskTowerService';
+import { Button } from '@slack/web-api';
+import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
 
 export async function handleGetRiskChart(
 	response: IDetectIntentResponseData,
@@ -36,7 +38,15 @@ export async function handleGetRiskChart(
 			const assessmentMessage = `The ${type} risk chart for ${company} shows an impact of *${assessment.impact}* and a probability of *${assessment.probability}*`;
 			const url = await createScatterChart(assessment);
 			const parentName = await RiskTowerService.getParentName(assessment.parentId);
-			const blocks = createAssessmentDataBlock(type, assessment.name, assessmentMessage, url, parentName);
+			const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk chart');
+			const blocks = createAssessmentDataBlock(
+				type,
+				assessment.name,
+				assessmentMessage,
+				url,
+				parentName,
+				switchAssessmentButtons
+			);
 			await slackService.postMessage('', blocks);
 		} else {
 			const noAssessmentMessage = `Currently, there is no ${type} assessment data for ${company}.`;
