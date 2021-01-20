@@ -37,6 +37,7 @@ export { handleGetTopFindings } from './GetTopFindings/handleGetTopFindings';
 export { handleGetTopMeasures } from './GetTopMeasures/handleGetTopMeasures';
 
 export async function showQuickReplies(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
+	console.log(JSON.stringify(response));
 	const missingParameters: IParameter[] = response.missingParameters;
 	const message = response.messages.join('\n');
 	const options = getQuickReplyOptionsFor(missingParameters[0]);
