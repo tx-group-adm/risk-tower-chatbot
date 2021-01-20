@@ -41,8 +41,11 @@ export default class DialogflowService {
 				.filter((msg) => msg !== undefined) as Array<string>;
 
 			const params = struct.decode(parameters) as { [index: string]: string };
+
+			console.log(JSON.stringify(params));
+
 			const missingParameters = Object.keys(params)
-				.filter((key) => params[key] === '')
+				.filter((key) => params[key].trim() === '')
 				.sort() as Array<IParameter>;
 			const intentName = intent.displayName;
 			return {

@@ -32,7 +32,7 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 	const response = await dialogflowService.processTextMessage(event.text, sessionId);
 	const intentName = response.intentName;
 
-	console.log(`missing parameters: ${response.missingParameters}`);
+	console.log(`missing parameters: ${JSON.stringify(response.missingParameters)}`);
 
 	try {
 		switch (intentName) {
