@@ -63,14 +63,9 @@ export default class RiskTowerService {
 			if (!parent) {
 				throw new Error(`no parent found for id ${parentId}`);
 			}
-			const grandParentId = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parent.parentId)[0].id;
-			if (grandParentId) {
-				const grandParent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == grandParentId)[0];
-				if (!grandParent) {
-					throw new Error(`no parent found for id ${grandParentId}`);
-				} else {
-					return grandParent.name;
-				}
+			const grandParent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parent.parentId)[0];
+			if (grandParent) {
+				return grandParent.name;
 			} else {
 				return null;
 			}
