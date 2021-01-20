@@ -1,7 +1,7 @@
-import { KnownBlock } from '@slack/web-api';
+import { Button, KnownBlock } from '@slack/web-api';
 import { IJiraTicket } from '../../interfaces';
 
-export function createJiraTicketsBlock(tickets: IJiraTicket[]): KnownBlock[] {
+export function createJiraTicketsBlock(tickets: IJiraTicket[], switchAssessmentButtons: Button[]): KnownBlock[] {
 	const blocks: KnownBlock[] = [
 		{
 			type: 'header',
@@ -27,6 +27,23 @@ export function createJiraTicketsBlock(tickets: IJiraTicket[]): KnownBlock[] {
 			type: 'divider',
 		});
 	});
+
+	blocks.push(
+		{
+			type: 'divider',
+		},
+		{
+			type: 'section',
+			text: {
+				type: 'mrkdwn',
+				text: 'Want to see more assessment data?',
+			},
+		},
+		{
+			type: 'actions',
+			elements: switchAssessmentButtons,
+		}
+	);
 
 	return blocks;
 }

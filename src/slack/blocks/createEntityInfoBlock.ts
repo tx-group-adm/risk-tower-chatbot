@@ -1,4 +1,4 @@
-import { KnownBlock } from '@slack/web-api';
+import { Button, KnownBlock } from '@slack/web-api';
 
 function getEntityWeight(weight: number): string {
 	if (weight <= 0.5) {
@@ -10,12 +10,15 @@ function getEntityWeight(weight: number): string {
 	}
 }
 
-export function createEntityInfoBlock(info: {
-	entityName: string;
-	assessmentDate: string;
-	assessorName: string;
-	entityWeight: number;
-}): KnownBlock[] {
+export function createEntityInfoBlock(
+	info: {
+		entityName: string;
+		assessmentDate: string;
+		assessorName: string;
+		entityWeight: number;
+	},
+	switchAssessmentButtons: Button[]
+): KnownBlock[] {
 	return [
 		{
 			type: 'header',
@@ -35,6 +38,20 @@ export function createEntityInfoBlock(info: {
 					info.assessorName
 				}\n*Entity weight:*  ${getEntityWeight(info.entityWeight)}`,
 			},
+		},
+		{
+			type: 'divider',
+		},
+		{
+			type: 'section',
+			text: {
+				type: 'mrkdwn',
+				text: 'Want to see more assessment data?',
+			},
+		},
+		{
+			type: 'actions',
+			elements: switchAssessmentButtons,
 		},
 	];
 }

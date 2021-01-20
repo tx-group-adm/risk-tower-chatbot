@@ -1,7 +1,7 @@
-import { KnownBlock, SectionBlock } from '@slack/web-api';
+import { Button, KnownBlock, SectionBlock } from '@slack/web-api';
 import { RiskArea } from '../../interfaces';
 
-export function createRiskRatingBlock(areas: RiskArea[]): KnownBlock[] {
+export function createRiskRatingBlock(areas: RiskArea[], switchAssessmentButtons: Button[]): KnownBlock[] {
 	const blocks: KnownBlock[] = [
 		{
 			type: 'header',
@@ -36,6 +36,23 @@ export function createRiskRatingBlock(areas: RiskArea[]): KnownBlock[] {
 			blocks.push(ratingBlock);
 		});
 	}
+
+	blocks.push(
+		{
+			type: 'divider',
+		},
+		{
+			type: 'section',
+			text: {
+				type: 'mrkdwn',
+				text: 'Want to see more assessment data?',
+			},
+		},
+		{
+			type: 'actions',
+			elements: switchAssessmentButtons,
+		}
+	);
 
 	return blocks;
 }

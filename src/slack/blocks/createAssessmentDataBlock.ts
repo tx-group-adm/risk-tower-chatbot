@@ -6,9 +6,10 @@ export function createAssessmentDataBlock(
 	company: ICompany,
 	message: string,
 	url: string,
-	parentName: string | null
+	parentName: string | null,
+	switchAssessmentButtons: Button[]
 ): Array<KnownBlock> {
-	const elements: Button[] = [
+	const drillUpButton: Button[] = [
 		{
 			type: 'button',
 			text: {
@@ -45,7 +46,21 @@ export function createAssessmentDataBlock(
 		},
 		{
 			type: 'actions',
-			elements,
+			elements: drillUpButton,
+		},
+		{
+			type: 'divider',
+		},
+		{
+			type: 'section',
+			text: {
+				type: 'mrkdwn',
+				text: 'Want to see more assessment data?',
+			},
+		},
+		{
+			type: 'actions',
+			elements: switchAssessmentButtons,
 		},
 	];
 }

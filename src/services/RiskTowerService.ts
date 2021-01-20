@@ -56,6 +56,9 @@ export default class RiskTowerService {
 		}
 	}
 
+	// TODO: clean up functions
+	// use a getParent function, from that use getParentName & getGrandParentName
+
 	static async getGrandParentName(parentId: number | null): Promise<string | null> {
 		if (parentId) {
 			const hierarchy = await DataService.getHierarchyTree();

@@ -1,8 +1,10 @@
+import { Button } from '@slack/web-api';
 import { showQuickReplies } from '..';
 import { ICompany, IDetectIntentResponseData, IGetRiskEpicsParameters, IJiraTicket, IType } from '../../interfaces';
 import DataService from '../../services/DataService';
 import SlackService from '../../services/SlackService';
 import { createJiraTicketsBlock } from '../../slack/blocks/createJiraTicketsBlock';
+import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
 
 export async function handleGetRiskEpics(
 	response: IDetectIntentResponseData,
@@ -20,7 +22,8 @@ export async function handleGetRiskEpics(
 	const jiraTickets: IJiraTicket[] = await DataService.getJiraTickets(company, type);
 
 	if (jiraTickets.length > 0) {
-		const blocks = createJiraTicketsBlock(jiraTickets);
+		const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk epics');
+		const blocks = createJiraTicketsBlock(jiraTickets, switchAssessmentButtons);
 		await slackService.postMessage('', blocks);
 	} else {
 		await slackService.postMessage(`There are no ${type} risk epics for ${company} at the moment.`);
