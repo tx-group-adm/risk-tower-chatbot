@@ -47,5 +47,7 @@ export function createSwitchAsessmentButtons(
 		},
 	];
 
-	return buttons.splice(ids[assessmentCategory], 1);
+	buttons.splice(ids[assessmentCategory], 1);
+
+	return buttons;
 }
