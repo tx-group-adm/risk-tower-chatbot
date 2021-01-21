@@ -1,6 +1,6 @@
 import { Button, KnownBlock } from '@slack/web-api';
 import { IAssessment, ICompany, IOrganisation, IType } from '../../interfaces';
-import { getRatingColorEmoji } from '../blocks/data/emoji';
+import { getRiskLevelEmojiByColor } from '../blocks/data/emoji';
 
 export function createRisksBlock(
 	type: IType,
@@ -40,7 +40,7 @@ export function createRisksBlock(
 			type: 'button',
 			text: {
 				type: 'plain_text',
-				text: `${getRatingColorEmoji(option.color)} ${option.displayText}`,
+				text: `${getRiskLevelEmojiByColor(option.color)} ${option.displayText}`,
 			},
 			value: option.value,
 		})
