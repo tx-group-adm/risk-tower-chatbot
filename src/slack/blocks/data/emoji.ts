@@ -6,7 +6,7 @@ export const EMOJI = {
 	RISKLEVEL_NO_DATA: ':risklevel_no_data:',
 };
 
-export function getRatingColorEmoji(ratingColor: string): string {
+export function getRiskLevelEmojiByColor(ratingColor: string): string {
 	if (!ratingColor) {
 		ratingColor = '#FFFFFF';
 	}
@@ -25,5 +25,23 @@ export function getRatingColorEmoji(ratingColor: string): string {
 
 		default:
 			throw new Error(`unknown rating color ${ratingColor}`);
+	}
+}
+
+export function getRiskLevelEmojiByCriticality(criticality: number): string {
+	switch (criticality) {
+		case 0:
+		case 1:
+			return EMOJI.RISKLEVEL_LOW;
+
+		case 2:
+		case 3:
+			return EMOJI.RISKLEVEL_MEDIUM;
+
+		case 4:
+			return EMOJI.RISKLEVEL_HIGH;
+
+		default:
+			throw new Error(`unknown criticality ${criticality}`);
 	}
 }
