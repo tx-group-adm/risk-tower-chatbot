@@ -26,9 +26,18 @@ export async function createBarChart(
 		options: {
 			legend: {
 				display: false,
+				align: 'center',
 			},
 			responsive: false,
 			scales: {
+				xAxes: [
+					{
+						ticks: {
+							minRotation: 0,
+							maxRotation: 0,
+						},
+					},
+				],
 				yAxes: [
 					{
 						ticks: { beginAtZero: true, stepSize, max },
