@@ -13,7 +13,8 @@ export async function handleGetTopMeasures(
 		// set tx_assessment_type to 'security' if user is top level admin
 		if (response.missingParameters.includes('tx_assessment_type')) {
 			const email = await slackService.getEmailForUser();
-			if (userIsTopLevelAdmin(email)) {
+			const isUserTopLevelAdmin = await userIsTopLevelAdmin(email);
+			if (isUserTopLevelAdmin) {
 				response.parameters['tx_assessment_type'] = 'security';
 				response.missingParameters.splice(response.missingParameters.indexOf('tx_assessment_type'), 1);
 				if (response.missingParameters.length == 0) {
