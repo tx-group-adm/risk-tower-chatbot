@@ -1,5 +1,6 @@
 import { Button, KnownBlock, SectionBlock } from '@slack/web-api';
 import { RiskArea } from '../../interfaces';
+import { getRiskLevelEmojiByCriticality } from './data/emoji';
 
 export function createRiskRatingBlock(areas: RiskArea[], switchAssessmentButtons: Button[]): KnownBlock[] {
 	const blocks: KnownBlock[] = [
@@ -26,11 +27,14 @@ export function createRiskRatingBlock(areas: RiskArea[], switchAssessmentButtons
 		blocks.push(messageBlock);
 	} else {
 		areas.forEach((area) => {
+			const rating = area.rating;
+			const areaAssessment = area.config.ratings.filter((r) => r.criticality == rating)[0];
+
 			const ratingBlock: SectionBlock = {
 				type: 'section',
 				text: {
 					type: 'mrkdwn',
-					text: `*${area.config.name}:* ${area.config.ratings[0].areaAssessment}`,
+					text: `${getRiskLevelEmojiByCriticality(rating)} *${area.config.name}:* ${areaAssessment}`,
 				},
 			};
 			blocks.push(ratingBlock);
