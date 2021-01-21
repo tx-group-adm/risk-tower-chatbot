@@ -60,3 +60,27 @@ export async function userIsTopLevelAdmin(email: string): Promise<boolean> {
 		return false;
 	}
 }
+
+export async function handleMissingParameters(
+	response: IDetectIntentResponseData,
+	slackService: SlackService
+): Promise<boolean> {
+	let allRequiredParamsPresent = response.allRequiredParamsPresent;
+	// set tx_assessment_type to 'security' if user is top level admin
+	if (response.missingParameters.includes('tx_assessment_type')) {
+		const email = await slackService.getEmailForUser();
+		const isUserTopLevelAdmin = await userIsTopLevelAdmin(email);
+		if (isUserTopLevelAdmin) {
+			response.parameters['tx_assessment_type'] = 'security';
+			response.missingParameters.splice(response.missingParameters.indexOf('tx_assessment_type'), 1);
+			if (response.missingParameters.length == 0) {
+				allRequiredParamsPresent = true;
+			}
+		}
+	}
+	if (!allRequiredParamsPresent) {
+		showQuickReplies(response, slackService);
+		return true;
+	}
+	return false;
+}
