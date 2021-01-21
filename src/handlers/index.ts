@@ -65,15 +65,32 @@ export async function handleMissingParameters(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<boolean> {
-	let allRequiredParamsPresent = response.allRequiredParamsPresent;
+	console.log('allRequiredParamsPresent was false, handling missing parameters');
+
+	let allRequiredParamsPresent = false;
 	// set tx_assessment_type to 'security' if user is top level admin
 	if (response.missingParameters.includes('tx_assessment_type')) {
+		console.log('response.missingParameters includes tx_assessment_type!');
+
 		const email = await slackService.getEmailForUser();
 		const isUserTopLevelAdmin = await userIsTopLevelAdmin(email);
 		if (isUserTopLevelAdmin) {
+			console.log('user is a top level admin');
+			console.log('setting tx_assessment_type to security...');
+
 			response.parameters['tx_assessment_type'] = 'security';
+
+			console.log(`response.parameters: ${JSON.stringify(response.parameters)}`);
+
+			console.log('removing tx_assessment_type from missingParameters...');
+
 			response.missingParameters.splice(response.missingParameters.indexOf('tx_assessment_type'), 1);
+
+			console.log(`response.missingParameters: ${JSON.stringify(response.missingParameters)}`);
+
 			if (response.missingParameters.length == 0) {
+				console.log('no more missing parameters!');
+
 				allRequiredParamsPresent = true;
 			}
 		}
