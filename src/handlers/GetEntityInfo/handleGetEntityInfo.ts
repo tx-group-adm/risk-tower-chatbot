@@ -1,5 +1,5 @@
 import { Button } from '@slack/web-api';
-import { showQuickReplies } from '..';
+import { handleMissingParameters } from '..';
 import { ICompany, IDetectIntentResponseData, IGetEntityInfoParameters, IType } from '../../interfaces';
 import DataService from '../../services/DataService';
 import SlackService from '../../services/SlackService';
@@ -11,9 +11,11 @@ export async function handleGetEntityInfo(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<void> {
-	const allRequiredParamsPresent = response.allRequiredParamsPresent;
-	if (!allRequiredParamsPresent) {
-		return showQuickReplies(response, slackService);
+	if (!response.allRequiredParamsPresent) {
+		const showingQuickReplies = await handleMissingParameters(response, slackService);
+		if (showingQuickReplies) {
+			return;
+		}
 	}
 
 	const parameters = response.parameters as IGetEntityInfoParameters;

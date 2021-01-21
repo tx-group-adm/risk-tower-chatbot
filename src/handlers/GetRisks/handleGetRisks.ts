@@ -7,18 +7,20 @@ import { createScatterChart } from '../../slack/charts/scatterChart';
 import { createAssessmentDataBlock } from '../../slack/blocks/createAssessmentDataBlock';
 import { createRisksBlock } from '../../slack/blocks/createRisksBlock';
 import { createMessageBlock } from '../../slack/blocks/createMessageBlock';
-import { showQuickReplies } from '..';
+import { handleMissingParameters } from '..';
 import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
 import { Button } from '@slack/web-api';
 
 export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
-	const allRequiredParamsPresent = response.allRequiredParamsPresent;
 	if (response.missingParameters.includes('tx_company')) {
 		response.missingParameters.splice(response.missingParameters.indexOf('tx_company'), 1);
 	}
 
-	if (!allRequiredParamsPresent) {
-		return showQuickReplies(response, slackService);
+	if (!response.allRequiredParamsPresent) {
+		const showingQuickReplies = await handleMissingParameters(response, slackService);
+		if (showingQuickReplies) {
+			return;
+		}
 	}
 
 	const parameters = response.parameters as IGetRisksParameters;
