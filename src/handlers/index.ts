@@ -1,4 +1,5 @@
 import { IDetectIntentResponseData, IParameter } from '../interfaces';
+import DataService from '../services/DataService';
 import SlackService from '../services/SlackService';
 import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/createQuickReplyBlock';
 
@@ -44,4 +45,18 @@ export async function showQuickReplies(response: IDetectIntentResponseData, slac
 	const blocks = createQuickReplyBlock(message, options);
 
 	await slackService.postMessage('', blocks);
+}
+
+export async function userIsTopLevelAdmin(email: string): Promise<boolean> {
+	try {
+		const roles = await DataService.getRolesForUser(email);
+		if (roles.length == 1 && roles[0] === 'admin') {
+			return true;
+		} else {
+			return false;
+		}
+	} catch (err) {
+		console.log(err);
+		return false;
+	}
 }

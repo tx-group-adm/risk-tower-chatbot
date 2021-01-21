@@ -2,15 +2,29 @@ import { createTopMeasuresBlock } from '../../slack/blocks/createTopMeasuresBloc
 import { IDetectIntentResponseData, IGetTopMeasuresParameters } from '../../interfaces';
 import SlackService from '../../services/SlackService';
 import DataService from '../../services/DataService';
-import { showQuickReplies } from '..';
+import { showQuickReplies, userIsTopLevelAdmin } from '..';
 
 export async function handleGetTopMeasures(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<void> {
-	const allRequiredParamsPresent = response.allRequiredParamsPresent;
+	let allRequiredParamsPresent = response.allRequiredParamsPresent;
 	if (!allRequiredParamsPresent) {
-		return showQuickReplies(response, slackService);
+		// set tx_assessment_type to 'security' if user is top level admin
+		if (response.missingParameters.includes('tx_assessment_type')) {
+			const email = await slackService.getEmailForUser();
+			const isUserTopLevelAdmin = await userIsTopLevelAdmin(email);
+			if (isUserTopLevelAdmin) {
+				response.parameters['tx_assessment_type'] = 'security';
+				response.missingParameters.splice(response.missingParameters.indexOf('tx_assessment_type'), 1);
+				if (response.missingParameters.length == 0) {
+					allRequiredParamsPresent = true;
+				}
+			}
+		}
+		if (!allRequiredParamsPresent) {
+			return showQuickReplies(response, slackService);
+		}
 	}
 
 	const parameters = response.parameters as IGetTopMeasuresParameters;
