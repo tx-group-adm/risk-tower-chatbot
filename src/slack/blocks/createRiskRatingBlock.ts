@@ -28,7 +28,7 @@ export function createRiskRatingBlock(areas: RiskArea[], switchAssessmentButtons
 	} else {
 		areas.forEach((area) => {
 			const rating = area.rating;
-			const areaAssessment = area.config.ratings.filter((r) => r.criticality == rating)[0];
+			const areaAssessment = area.config.ratings.filter((r) => r.criticality == rating)[0].areaAssessment;
 
 			const ratingBlock: SectionBlock = {
 				type: 'section',
