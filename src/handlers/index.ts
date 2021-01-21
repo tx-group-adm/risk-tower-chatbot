@@ -37,7 +37,7 @@ export { handleGetRisks } from './GetRisks/handleGetRisks';
 export { handleGetTopFindings } from './GetTopFindings/handleGetTopFindings';
 export { handleGetTopMeasures } from './GetTopMeasures/handleGetTopMeasures';
 
-async function showQuickReplies(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
+export async function showQuickReplies(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	console.log(JSON.stringify(response));
 	const missingParameters: IParameter[] = response.missingParameters;
 	const message = response.messages.join('\n');
@@ -47,7 +47,7 @@ async function showQuickReplies(response: IDetectIntentResponseData, slackServic
 	await slackService.postMessage('', blocks);
 }
 
-export async function userIsTopLevelAdmin(email: string): Promise<boolean> {
+export async function isUserTopLevelAdmin(email: string): Promise<boolean> {
 	try {
 		const roles = await DataService.getRolesForUser(email);
 		if (roles.length == 1 && roles[0] === 'admin') {
@@ -59,45 +59,4 @@ export async function userIsTopLevelAdmin(email: string): Promise<boolean> {
 		console.log(err);
 		return false;
 	}
-}
-
-export async function handleMissingParameters(
-	response: IDetectIntentResponseData,
-	slackService: SlackService
-): Promise<boolean> {
-	console.log('allRequiredParamsPresent was false, handling missing parameters');
-
-	let allRequiredParamsPresent = false;
-	// set tx_assessment_type to 'security' if user is top level admin
-	if (response.missingParameters.includes('tx_assessment_type')) {
-		console.log('response.missingParameters includes tx_assessment_type!');
-
-		const email = await slackService.getEmailForUser();
-		const isUserTopLevelAdmin = await userIsTopLevelAdmin(email);
-		if (isUserTopLevelAdmin) {
-			console.log('user is a top level admin');
-			console.log('setting tx_assessment_type to security...');
-
-			response.parameters['tx_assessment_type'] = 'security';
-
-			console.log(`response.parameters: ${JSON.stringify(response.parameters)}`);
-
-			console.log('removing tx_assessment_type from missingParameters...');
-
-			response.missingParameters.splice(response.missingParameters.indexOf('tx_assessment_type'), 1);
-
-			console.log(`response.missingParameters: ${JSON.stringify(response.missingParameters)}`);
-
-			if (response.missingParameters.length == 0) {
-				console.log('no more missing parameters!');
-
-				allRequiredParamsPresent = true;
-			}
-		}
-	}
-	if (!allRequiredParamsPresent) {
-		showQuickReplies(response, slackService);
-		return true;
-	}
-	return false;
 }

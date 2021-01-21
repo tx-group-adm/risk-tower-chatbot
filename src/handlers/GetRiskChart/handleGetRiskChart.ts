@@ -11,20 +11,17 @@ import { createScatterChart } from '../../slack/charts/scatterChart';
 import { createAssessmentDataBlock } from '../../slack/blocks/createAssessmentDataBlock';
 import DataService from '../../services/DataService';
 import { AxiosError } from 'axios';
-import { handleMissingParameters } from '..';
 import RiskTowerService from '../../services/RiskTowerService';
 import { Button } from '@slack/web-api';
 import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
+import { showQuickReplies } from '..';
 
 export async function handleGetRiskChart(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<void> {
 	if (!response.allRequiredParamsPresent) {
-		const showingQuickReplies = await handleMissingParameters(response, slackService);
-		if (showingQuickReplies) {
-			return;
-		}
+		return showQuickReplies(response, slackService);
 	}
 
 	const parameters = response.parameters as IGetRiskChartParameters;

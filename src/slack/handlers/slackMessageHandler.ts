@@ -16,6 +16,7 @@ import { handleGetEntityInfo } from '../../handlers/GetEntityInfo/handleGetEntit
 import { handleGetRiskEpics } from '../../handlers/GetRiskEpics/handleGetRiskEpics';
 import { handleGetRiskRatings } from '../../handlers/GetRiskRatings/handleGetRiskRatings';
 import { errorHandler } from './errorHandler';
+import { isUserTopLevelAdmin } from '../../handlers';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
@@ -32,8 +33,20 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 	const response = await dialogflowService.processTextMessage(event.text, sessionId);
 	const intentName = response.intentName;
 
-	console.log('typeof response.missingParameters: ' + typeof response.missingParameters);
 	console.log(`missing parameters: ${JSON.stringify(response.missingParameters)}`);
+
+	if (
+		Object.keys(response.parameters).includes('tx_assessment_type') &&
+		response.missingParameters.includes('tx_assessment_type')
+	) {
+		const email = await slackService.getEmailForUser();
+		const userIsTopLevelAdmin = await isUserTopLevelAdmin(email);
+		if (userIsTopLevelAdmin) {
+			const fakeEvent = event;
+			fakeEvent.text = 'security';
+			return slackMessageHandler(fakeEvent);
+		}
+	}
 
 	try {
 		switch (intentName) {
