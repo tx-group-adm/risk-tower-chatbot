@@ -2,17 +2,14 @@ import { createTopMeasuresBlock } from '../../slack/blocks/createTopMeasuresBloc
 import { IDetectIntentResponseData, IGetTopMeasuresParameters } from '../../interfaces';
 import SlackService from '../../services/SlackService';
 import DataService from '../../services/DataService';
-import { handleMissingParameters } from '..';
+import { showQuickReplies } from '..';
 
 export async function handleGetTopMeasures(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<void> {
 	if (!response.allRequiredParamsPresent) {
-		const showingQuickReplies = await handleMissingParameters(response, slackService);
-		if (showingQuickReplies) {
-			return;
-		}
+		return showQuickReplies(response, slackService);
 	}
 
 	const parameters = response.parameters as IGetTopMeasuresParameters;
