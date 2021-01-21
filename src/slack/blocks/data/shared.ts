@@ -6,7 +6,9 @@ function createTopFindingsOrMeasuresText(item: ITopFinding | ITopMeasure): strin
 	const textValue = item[0];
 	const configName = item[1].configName[0];
 
-	const text = `${riskLevelEmoji} *${textValue}* _(${configName})_`;
+	const text = `${riskLevelEmoji} *${textValue}* _(${configName})_\n_Companies affected: (${item[1].company.join(
+		', '
+	)})_`;
 
 	return text;
 }
