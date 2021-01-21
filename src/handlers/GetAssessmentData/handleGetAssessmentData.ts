@@ -1,4 +1,4 @@
-import { showQuickReplies } from '..';
+import { handleMissingParameters } from '..';
 import { IDetectIntentResponseData, IGetAssessmentDataParameters } from '../../interfaces';
 import SlackService from '../../services/SlackService';
 import { handleGetEntityInfo } from '../GetEntityInfo/handleGetEntityInfo';
@@ -10,9 +10,11 @@ export async function handleGetAssessmentData(
 	response: IDetectIntentResponseData,
 	slackService: SlackService
 ): Promise<void> {
-	const allRequiredParamsPresent = response.allRequiredParamsPresent;
-	if (!allRequiredParamsPresent) {
-		return showQuickReplies(response, slackService);
+	if (!response.allRequiredParamsPresent) {
+		const showingQuickReplies = await handleMissingParameters(response, slackService);
+		if (showingQuickReplies) {
+			return;
+		}
 	}
 
 	const parameters = response.parameters as IGetAssessmentDataParameters;
