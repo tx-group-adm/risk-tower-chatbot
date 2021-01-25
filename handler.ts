@@ -9,13 +9,12 @@ import { sendMessageOnUsersBehalf } from './src/slack/handlers/sendMessageOnUser
 export const slackevent = (event: IEvent, context: Context, callback: Callback): void => {
 	try {
 		console.log(JSON.stringify(event));
+
 		if (isSlackEvent(event)) {
 			const slackEvent: ISlackEventCallback | ISlackEventOnUsersBehalf = JSON.parse(event.body);
 			if (!isEventCallback(slackEvent)) {
-				console.log('EVENT_ON_USERS_BEHALF');
 				sendMessageOnUsersBehalf(slackEvent.event, slackEvent.displayText);
 			}
-			console.log('EVENT_CALLBACK');
 			slackMessageHandler(slackEvent.event);
 		}
 		return callback(null, HTTP200());
