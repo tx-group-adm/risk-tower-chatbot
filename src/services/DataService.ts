@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { TreeItemNotFoundError } from '../errors/TreeItemNotFoundError';
 import {
 	IAssessment,
 	ICompany,
@@ -99,7 +100,7 @@ export default class DataService {
 
 		const topLevelCompany = RiskTowerService.getTreeItem(company, tree);
 		if (!topLevelCompany) {
-			throw new Error('item not in tree');
+			throw new TreeItemNotFoundError(`${company} was not found in ${type} tree`);
 		}
 		switch (topLevelCompany.type) {
 			case 'organisation':
