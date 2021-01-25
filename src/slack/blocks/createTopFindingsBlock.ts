@@ -34,7 +34,7 @@ export function createTopFindingsBlock(title: string, findings: Array<ITopFindin
 			type: 'section',
 			text: {
 				type: 'mrkdwn',
-				text: `Do you want to see the top ${type} measures too?`,
+				text: `Do you want to see the top ${type} measures?`,
 			},
 		},
 		{

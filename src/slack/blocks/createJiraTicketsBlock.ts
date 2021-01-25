@@ -20,7 +20,7 @@ export function createJiraTicketsBlock(tickets: IJiraTicket[], switchAssessmentB
 			type: 'section',
 			text: {
 				type: 'mrkdwn',
-				text: `*${ticket.area}:*    <${ticket.epicLink}|${ticket.name} - ${ticket.status}>`,
+				text: `*${ticket.area}:*    <${ticket.epicLink}|${ticket.name}> *Status:* ${ticket.status}`,
 			},
 		});
 		blocks.push({
