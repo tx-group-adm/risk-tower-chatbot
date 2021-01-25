@@ -60,6 +60,6 @@ export async function createBarChart(
 	if (response.success) {
 		return response.url;
 	} else {
-		throw new Error('Êrror with quickchart.io');
+		throw new Error('Error with quickchart.io');
 	}
 }

@@ -99,7 +99,7 @@ export default class DataService {
 
 		const topLevelCompany = RiskTowerService.getTreeItem(company, tree);
 		if (!topLevelCompany) {
-			throw new Error("Couldn't find item in tree");
+			throw new Error('item not in tree');
 		}
 		switch (topLevelCompany.type) {
 			case 'organisation':
