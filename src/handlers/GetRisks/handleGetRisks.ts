@@ -10,6 +10,7 @@ import { createMessageBlock } from '../../slack/blocks/createMessageBlock';
 import { showQuickReplies } from '..';
 import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
 import { Button } from '@slack/web-api';
+import { TreeItemNotFoundError } from '../../errors/TreeItemNotFoundError';
 
 export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	if (response.missingParameters.includes('tx_company')) {
@@ -74,9 +75,11 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 				throw new Error(`unknown type`);
 		}
 	} catch (err) {
-		if (err.message === 'item not in tree') {
+		if (err instanceof TreeItemNotFoundError) {
 			const noRiksForCompanyMessage = `There are no ${type} risks for ${company} at the moment`;
 			await slackService.postMessage(noRiksForCompanyMessage);
+		} else {
+			throw err;
 		}
 	}
 }
