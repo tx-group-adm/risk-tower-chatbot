@@ -30,9 +30,6 @@ export function createJiraTicketsBlock(tickets: IJiraTicket[], switchAssessmentB
 
 	blocks.push(
 		{
-			type: 'divider',
-		},
-		{
 			type: 'section',
 			text: {
 				type: 'mrkdwn',
