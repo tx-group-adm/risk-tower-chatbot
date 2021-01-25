@@ -19,6 +19,7 @@ import { errorHandler } from './errorHandler';
 import { isUserTopLevelAdmin } from '../../handlers';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
+	console.log('EVENT_CALLBACK');
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
 	const slackService = new SlackService(event);
 	const dialogflowService = new DialogflowService(DIALOGFLOW_PROJECT_ID as string);
