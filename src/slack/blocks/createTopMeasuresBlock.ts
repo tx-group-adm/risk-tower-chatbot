@@ -34,7 +34,7 @@ export function createTopMeasuresBlock(title: string, measures: Array<ITopMeasur
 			type: 'section',
 			text: {
 				type: 'mrkdwn',
-				text: `Do you want to see the top ${type} findings too?`,
+				text: `Do you want to see the top ${type} findings?`,
 			},
 		},
 		{
