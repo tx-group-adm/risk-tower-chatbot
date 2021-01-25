@@ -32,44 +32,51 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 	const email = await slackService.getEmailForUser();
 	const roles = await DataService.getRolesForUser(email);
 
-	const risks = await DataService.getRisks(type, company, roles);
+	try {
+		const risks = await DataService.getRisks(type, company, roles);
 
-	switch (risks.type) {
-		case 'organisation':
-			if (risks.children.length == 0) {
-				const messageBlock = createMessageBlock(`There is no risk data for ${company}.`);
-				await slackService.postMessage('', messageBlock);
+		switch (risks.type) {
+			case 'organisation':
+				if (risks.children.length == 0) {
+					const messageBlock = createMessageBlock(`There is no risk data for ${company}.`);
+					await slackService.postMessage('', messageBlock);
+					break;
+				} else {
+					const labels = risks.children.map((child) => child.name);
+					const data = risks.children.map((child) => child.rating || 0);
+					const backgroundColor = risks.children.map((child) => child.ratingColor || '#000000');
+					const barChartUrl = await createBarChart(labels, data, backgroundColor);
+					const parentId = risks.children[0].parentId;
+					const grandParentName = await RiskTowerService.getGrandParentName(parentId);
+					const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children, grandParentName);
+					await slackService.postMessage('', organisationBlocks);
+					break;
+				}
+
+			case 'entity':
+				const scatterChartUrl = await createScatterChart(risks.assessment);
+				const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${risks.assessment.impact}* and a probability of *${risks.assessment.probability}*.`;
+				const parentId = risks.assessment.parentId;
+				const parentName = await RiskTowerService.getParentName(parentId);
+				const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk chart');
+				const entityBlocks = createAssessmentDataBlock(
+					type,
+					risks.assessment.name,
+					assessmentMessage,
+					scatterChartUrl,
+					parentName,
+					switchAssessmentButtons
+				);
+				await slackService.postMessage('', entityBlocks);
 				break;
-			} else {
-				const labels = risks.children.map((child) => child.name);
-				const data = risks.children.map((child) => child.rating || 0);
-				const backgroundColor = risks.children.map((child) => child.ratingColor || '#000000');
-				const barChartUrl = await createBarChart(labels, data, backgroundColor);
-				const parentId = risks.children[0].parentId;
-				const grandParentName = await RiskTowerService.getGrandParentName(parentId);
-				const organisationBlocks = createRisksBlock(type, company, barChartUrl, risks.children, grandParentName);
-				await slackService.postMessage('', organisationBlocks);
-				break;
-			}
 
-		case 'entity':
-			const scatterChartUrl = await createScatterChart(risks.assessment);
-			const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${risks.assessment.impact}* and a probability of *${risks.assessment.probability}*.`;
-			const parentId = risks.assessment.parentId;
-			const parentName = await RiskTowerService.getParentName(parentId);
-			const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk chart');
-			const entityBlocks = createAssessmentDataBlock(
-				type,
-				risks.assessment.name,
-				assessmentMessage,
-				scatterChartUrl,
-				parentName,
-				switchAssessmentButtons
-			);
-			await slackService.postMessage('', entityBlocks);
-			break;
-
-		default:
-			throw new Error(`unknown type`);
+			default:
+				throw new Error(`unknown type`);
+		}
+	} catch (err) {
+		if (err.message === 'item not in tree') {
+			const noRiksForCompanyMessage = `There are no ${type} risks for ${company} at the moment`;
+			await slackService.postMessage(noRiksForCompanyMessage);
+		}
 	}
 }
