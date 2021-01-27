@@ -49,6 +49,11 @@ export default class DialogflowService {
 			const missingParameters = Object.keys(params)
 				.filter((key) => params[key].trim() === '')
 				.sort() as Array<IParameter>;
+
+			if (intent.displayName === '') {
+				intent.displayName = 'SmallTalk';
+			}
+
 			const intentName = intent.displayName;
 			return {
 				messages,
