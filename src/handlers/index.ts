@@ -49,15 +49,10 @@ export async function showQuickReplies(response: IDetectIntentResponseData, slac
 }
 
 export async function isUserTopLevelAdmin(email: string): Promise<boolean> {
-	try {
-		const roles = await DataService.getRolesForUser(email);
-		if (roles.length == 1 && roles[0] === 'admin') {
-			return true;
-		} else {
-			return false;
-		}
-	} catch (err) {
-		console.log(err);
+	const roles = await DataService.getRolesForUser(email);
+	if (roles.length == 1 && roles[0] === 'admin') {
+		return true;
+	} else {
 		return false;
 	}
 }

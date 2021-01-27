@@ -73,17 +73,15 @@ export default class DataService {
 	static async getJiraTickets(company: ICompany, type: IType): Promise<IJiraTicket[]> {
 		const url = `${BASE_URL}/jira-tickets?companyName=${company}&type=${type}`;
 
-		console.log(`Getting jira tickes. company:${company}, type:${type}`);
-
 		try {
 			const response = await axios.get(url, CONFIG);
 			return response.data.jiraTickets as IJiraTicket[];
 		} catch (err) {
 			const error = err as AxiosError;
-			console.log(error.response?.data.message);
 			if (error.response?.data.message === "Jira tickets don't exist for set values") {
 				return [];
 			} else {
+				console.log(err);
 				throw err;
 			}
 		}
@@ -152,12 +150,8 @@ export default class DataService {
 		assessorName: string;
 		entityWeight: number;
 	}> {
-		console.log(`getting ${type} entity info about ${company}`);
-
 		try {
 			const data = await DataService.getAssessmentData(type, roles, company);
-
-			console.log(JSON.stringify(data));
 
 			return {
 				entityName: data.name,
@@ -176,9 +170,6 @@ export default class DataService {
 
 		try {
 			const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
-
-			console.log(JSON.stringify(assessment));
-
 			const id = assessment.assessmentId;
 
 			const riskRatings: RiskRatingData = (
@@ -188,8 +179,6 @@ export default class DataService {
 					id,
 				})
 			).data;
-
-			console.log(riskRatings);
 
 			return Object.values(riskRatings.assessment.areas);
 		} catch (err) {

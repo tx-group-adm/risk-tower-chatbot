@@ -43,10 +43,6 @@ export default class DialogflowService {
 
 			const params = struct.decode(parameters) as { [index: string]: string };
 
-			console.log(JSON.stringify(params));
-			console.log('param keys: ' + Object.keys(params));
-			console.log('filtered keys: ' + Object.keys(params).filter((key) => params[key].trim() === ''));
-
 			const missingParameters = Object.keys(params)
 				.filter((key) => params[key].trim() === '')
 				.sort() as Array<IParameter>;

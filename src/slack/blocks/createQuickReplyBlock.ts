@@ -12,13 +12,10 @@ const QUICKREPLIES: {
 };
 
 export const getQuickReplyOptionsFor = (parameter: IParameter): Array<string> => {
-	console.log('getting quickreply options for ' + parameter);
 	return QUICKREPLIES[parameter];
 };
 
 export const createQuickReplyBlock = (message: string, options: Array<string>): Array<KnownBlock> => {
-	console.log(options);
-
 	return [
 		{
 			type: 'section',

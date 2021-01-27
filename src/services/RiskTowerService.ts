@@ -15,10 +15,7 @@ export default class RiskTowerService {
 	static async getTopLevelCompanyForUser(user: string): Promise<ICompany> {
 		const roles = await DataService.getRolesForUser(user);
 
-		console.log(`roles for ${user}: ${roles}`);
-
-		// get top level company based on access roles
-		// for the moment just return TX Group
+		// TODO: implement role system
 
 		return 'TX Group';
 	}
@@ -39,36 +36,32 @@ export default class RiskTowerService {
 		}
 	}
 
+	static async getParentNode(parentId: number): Promise<IHierarchyTreeItem> {
+		const hierarchy = await DataService.getHierarchyTree();
+		const parent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parentId)[0];
+		if (!parent) {
+			throw new Error(`no parent found for id ${parentId}`);
+		} else {
+			return parent;
+		}
+	}
+
 	static async getParentName(parentId: number | null): Promise<string | null> {
 		if (parentId) {
-			const hierarchy = await DataService.getHierarchyTree();
-			const parent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parentId)[0];
-
-			if (!parent) {
-				throw new Error(`no parent found for id ${parentId}`);
-			}
-
-			console.log(`got parent ${parent.name}`);
-
+			const parent = await RiskTowerService.getParentNode(parentId);
 			return parent.name;
 		} else {
 			return null;
 		}
 	}
 
-	// TODO: clean up functions
-	// use a getParent function, from that use getParentName & getGrandParentName
-
-	static async getGrandParentName(parentId: number | null): Promise<string | null> {
+	static async getGrandParentName(parentId: number): Promise<string | null> {
 		if (parentId) {
-			const hierarchy = await DataService.getHierarchyTree();
-			const parent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parentId)[0];
-			if (!parent) {
-				throw new Error(`no parent found for id ${parentId}`);
-			}
-			const grandParent = hierarchy.filter((item: IHierarchyTreeItem) => item.id == parent.parentId)[0];
-			if (grandParent) {
-				return grandParent.name;
+			const parent = await RiskTowerService.getParentNode(parentId);
+			const grandParentId = parent.parentId;
+			if (grandParentId) {
+				const grandParentName = await RiskTowerService.getGrandParentName(grandParentId);
+				return grandParentName;
 			} else {
 				return null;
 			}
