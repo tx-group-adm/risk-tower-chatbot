@@ -2,6 +2,7 @@ import { struct } from 'pb-util';
 import { IDetectIntentResponseData, IParameter } from '../interfaces';
 import { ClientOptions, DetectIntentRequest, SessionsClientV2 } from '../interfaces/dialogflow';
 import { SessionsClient } from '@google-cloud/dialogflow';
+import { INTENTS } from '../handlers';
 
 export default class DialogflowService {
 	private sessionClient: SessionsClientV2;
@@ -49,6 +50,11 @@ export default class DialogflowService {
 			const missingParameters = Object.keys(params)
 				.filter((key) => params[key].trim() === '')
 				.sort() as Array<IParameter>;
+
+			if (intent.displayName === '') {
+				intent.displayName = INTENTS.SMALL_TALK;
+			}
+
 			const intentName = intent.displayName;
 			return {
 				messages,

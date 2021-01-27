@@ -6,6 +6,7 @@ import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/
 export const INTENTS = {
 	DEFAULT_WELCOME: 'Default Welcome Intent',
 	DEFAULT_FALLBACK: 'Default Fallback Intent',
+	SMALL_TALK: 'SmallTalk',
 	GET_RISK_CHART: 'GetRiskChart',
 	GET_ASSESSMENT_DATA: 'GetAssessmentData',
 	GET_RISKS: 'GetRisks',
