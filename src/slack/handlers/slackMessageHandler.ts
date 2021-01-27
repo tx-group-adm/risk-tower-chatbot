@@ -110,6 +110,8 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 				break;
 
 			default:
+				console.log('smalltalk response:');
+				console.log(JSON.stringify(response));
 				throw new Error(`No handler for intent: ${intentName}`);
 		}
 	} catch (err) {
