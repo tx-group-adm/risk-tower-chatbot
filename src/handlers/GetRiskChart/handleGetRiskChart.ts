@@ -51,7 +51,7 @@ export async function handleGetRiskChart(
 			const noAssessmentMessage = `Currently, there is no ${type} assessment data for ${company}.`;
 			await slackService.postMessage(noAssessmentMessage);
 		}
-	} catch (err: unknown) {
+	} catch (err) {
 		const errorMessage = (err as AxiosError).response?.data.message;
 		if (errorMessage) {
 			await slackService.postMessage(errorMessage);

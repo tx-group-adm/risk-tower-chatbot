@@ -55,7 +55,7 @@ export default class RiskTowerService {
 		}
 	}
 
-	static async getGrandParentName(parentId: number): Promise<string | null> {
+	static async getGrandParentName(parentId: number | null): Promise<string | null> {
 		if (parentId) {
 			const parent = await RiskTowerService.getParentNode(parentId);
 			const grandParentId = parent.parentId;
