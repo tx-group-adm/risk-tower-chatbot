@@ -17,10 +17,9 @@ export async function handleGetRiskRatings(
 	const parameters = response.parameters as IGetRiskRatingsParameters;
 	const type: IType = parameters.tx_assessment_type;
 	const company: ICompany = parameters.tx_company;
+
 	const email = await slackService.getEmailForUser();
 	const roles = await DataService.getRolesForUser(email);
-
-	console.log(`getting ${type} risk ratings for ${company}`);
 
 	const riskAreas: RiskArea[] = await DataService.getRiskRatings(type, company, roles);
 	const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk ratings');
