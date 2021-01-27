@@ -60,7 +60,7 @@ export default class RiskTowerService {
 			const parent = await RiskTowerService.getParentNode(parentId);
 			const grandParentId = parent.parentId;
 			if (grandParentId) {
-				const grandParentName = await RiskTowerService.getGrandParentName(grandParentId);
+				const grandParentName = await RiskTowerService.getParentName(grandParentId);
 				return grandParentName;
 			} else {
 				return null;
