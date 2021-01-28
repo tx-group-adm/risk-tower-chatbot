@@ -5,7 +5,6 @@ import {
 	ICompany,
 	IHierarchyTreeItem,
 	IJiraTicket,
-	IRole,
 	IType,
 	ITopFinding,
 	ITopMeasure,
@@ -13,6 +12,7 @@ import {
 	IRiskResponse,
 	RiskRatingData,
 	RiskArea,
+	IRoles,
 } from '../interfaces';
 
 const URL_PREFIX = process.env.STAGE === 'prod' ? 'security' : 'security-dev';
@@ -34,19 +34,19 @@ export default class DataService {
 		}
 	}
 
-	static async getRolesForUser(email: string): Promise<IRole[]> {
+	static async getRolesForUser(email: string): Promise<IRoles> {
 		const url = `${BASE_URL}/user/roles?email=${email}`;
 
 		try {
 			const response = await axios.get(url, CONFIG);
-			return response.data as IRole[];
+			return response.data as IRoles;
 		} catch (err) {
 			console.log(err);
 			throw err;
 		}
 	}
 
-	static async getAssessmentData(type: IType, roles: IRole[], company: ICompany): Promise<IAssessment> {
+	static async getAssessmentData(type: IType, roles: IRoles, company: ICompany): Promise<IAssessment> {
 		const url = `${BASE_URL}/entity/assessments`;
 
 		try {
@@ -87,7 +87,7 @@ export default class DataService {
 		}
 	}
 
-	static async getRisks(type: IType, company: ICompany, roles: IRole[]): Promise<IRiskResponse> {
+	static async getRisks(type: IType, company: ICompany, roles: IRoles): Promise<IRiskResponse> {
 		const url = `${BASE_URL}/chart/assessments`;
 		const response = await axios.post(url, {
 			type,
@@ -118,7 +118,7 @@ export default class DataService {
 		}
 	}
 
-	static async getTopFindings(type: IType, roles: IRole[]): Promise<ITopFinding[]> {
+	static async getTopFindings(type: IType, roles: IRoles): Promise<ITopFinding[]> {
 		const url = `${BASE_URL}/chart/assessments`;
 		const response = await axios.post(url, {
 			type,
@@ -129,7 +129,7 @@ export default class DataService {
 		return findings;
 	}
 
-	static async getTopMeasures(type: IType, roles: IRole[]): Promise<ITopMeasure[]> {
+	static async getTopMeasures(type: IType, roles: IRoles): Promise<ITopMeasure[]> {
 		const url = `${BASE_URL}/chart/assessments`;
 		const response = await axios.post(url, {
 			type,
@@ -142,7 +142,7 @@ export default class DataService {
 
 	static async getEntityInfo(
 		type: IType,
-		roles: IRole[],
+		roles: IRoles,
 		company: ICompany
 	): Promise<{
 		entityName: string;
@@ -165,7 +165,7 @@ export default class DataService {
 		}
 	}
 
-	static async getRiskRatings(type: IType, company: ICompany, roles: IRole[]): Promise<RiskArea[]> {
+	static async getRiskRatings(type: IType, company: ICompany, roles: IRoles): Promise<RiskArea[]> {
 		const url = `${BASE_URL}/chart/risk-ratings`;
 
 		try {

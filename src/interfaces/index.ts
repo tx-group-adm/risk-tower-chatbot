@@ -216,7 +216,16 @@ export interface IHierarchyTreeItem {
 	assessmentType: Array<string>;
 }
 
-export type IRole = 'user' | 'admin';
+export type IRoles = [RoleType, ICompany | undefined];
+export type RoleType =
+	| 'admin'
+	| 'read_only'
+	| 'admin_security'
+	| 'read_security'
+	| 'admin_privacy'
+	| 'read_privacy'
+	| 'admin_technology'
+	| 'read_technology';
 
 export interface IOrganisation {
 	name: ICompany;

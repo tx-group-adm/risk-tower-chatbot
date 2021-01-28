@@ -3,7 +3,7 @@ import {
 	ICompany,
 	IDetectIntentResponseData,
 	IGetRiskChartParameters,
-	IRole,
+	IRoles,
 	IType,
 } from '../../interfaces';
 import SlackService from '../../services/SlackService';
@@ -26,7 +26,7 @@ export async function handleGetRiskChart(
 
 	const parameters = response.parameters as IGetRiskChartParameters;
 	const email = await slackService.getEmailForUser();
-	const roles: IRole[] = await DataService.getRolesForUser(email);
+	const roles: IRoles = await DataService.getRolesForUser(email);
 	const type: IType = parameters.tx_assessment_type;
 	const company: ICompany = parameters.tx_company;
 
