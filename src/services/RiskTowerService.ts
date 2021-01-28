@@ -1,4 +1,4 @@
-import { IAssessment, ICompany, IHierarchyTreeItem, IOrganisation, IType } from '../interfaces';
+import { IAssessment, ICompany, IHierarchyTreeItem, IOrganisation, IRoles, IType } from '../interfaces';
 import DataService from './DataService';
 
 export default class RiskTowerService {
@@ -13,11 +13,14 @@ export default class RiskTowerService {
 	}
 
 	static async getTopLevelCompanyForUser(user: string): Promise<ICompany> {
-		const roles = await DataService.getRolesForUser(user);
+		const roles: IRoles = await DataService.getRolesForUser(user);
+		const company = roles[1];
 
-		// TODO: implement role system
-
-		return 'TX Group';
+		if (company) {
+			return company;
+		} else {
+			return 'TX Group';
+		}
 	}
 
 	static getTreeItem(name: ICompany, node: IOrganisation | IAssessment): IOrganisation | IAssessment | null {

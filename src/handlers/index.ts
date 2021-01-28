@@ -1,4 +1,4 @@
-import { IDetectIntentResponseData, IParameter } from '../interfaces';
+import { IDetectIntentResponseData, IParameter, RoleType } from '../interfaces';
 import DataService from '../services/DataService';
 import SlackService from '../services/SlackService';
 import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/createQuickReplyBlock';
@@ -50,7 +50,12 @@ export async function showQuickReplies(response: IDetectIntentResponseData, slac
 
 export async function isUserTopLevelAdmin(email: string): Promise<boolean> {
 	const roles = await DataService.getRolesForUser(email);
-	if (roles.length == 1 && roles[0] === 'admin') {
+	const roleType: RoleType = roles[0];
+	const validRoles: RoleType[] = ['admin', 'admin_security', 'read_only', 'read_security'];
+
+	// does user have rights to see security data
+
+	if (validRoles.includes(roleType)) {
 		return true;
 	} else {
 		return false;
