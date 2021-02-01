@@ -1,67 +1,24 @@
-import {
-	HandlerResponse,
-	IWarmupEvent,
-	ISlackEvent,
-	ISlackUrlVerificationEvent,
-	ISlackEventCallback,
-} from './src/interfaces';
-import { isSlackEvent } from './src/handlers/helpers/isSlackEvent';
-import { errorHandler } from './src/handlers/errorHandler';
-import { slackMessageIMHandler } from './src/handlers/slackMessageIMHandler';
+import { IEvent, ISlackEventCallback, ISlackEventOnUsersBehalf } from './src/interfaces';
+import { slackMessageHandler } from './src/slack/handlers/slackMessageHandler';
+import { isSlackEvent } from './src/slack/isSlackEvent';
+import { isEventCallback } from './src/slack/isEventCallback';
+import { HTTP200, HTTP500 } from './src/responses';
+import { Callback, Context } from 'aws-lambda';
+import { sendMessageOnUsersBehalf } from './src/slack/handlers/sendMessageOnUsersBehalf';
 
-export const slackevent = async (event: ISlackEvent | IWarmupEvent): Promise<HandlerResponse> => {
+export const slackevent = (event: IEvent, context: Context, callback: Callback): void => {
 	try {
-		if (isSlackEvent(event)) {
-			const slackEvent: ISlackUrlVerificationEvent | ISlackEventCallback = JSON.parse(event.body);
+		console.log(JSON.stringify(event));
 
-			if (slackEvent.type === 'url_verification') {
-				console.log('URL_VERIFICATION');
-				return {
-					isBase64Encoded: false,
-					statusCode: 200,
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ challenge: slackEvent.challenge }),
-				};
-			} else if (slackEvent.type === 'event_callback') {
-				console.log('EVENT_CALLBACK');
-				console.log(JSON.stringify(slackEvent));
-				await slackMessageIMHandler(slackEvent.event);
-				return {
-					isBase64Encoded: false,
-					statusCode: 200,
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: '',
-				};
-			} else {
-				console.log('INVALID EVENT');
-				console.log(JSON.stringify(event));
-				return {
-					isBase64Encoded: false,
-					statusCode: 500,
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: 'Invalid event',
-				};
+		if (isSlackEvent(event)) {
+			const slackEvent: ISlackEventCallback | ISlackEventOnUsersBehalf = JSON.parse(event.body);
+			if (!isEventCallback(slackEvent)) {
+				sendMessageOnUsersBehalf(slackEvent.event, slackEvent.displayText);
 			}
-		} else {
-			console.log('WARMUP EVENT');
-			console.log(JSON.stringify(event));
-			return {
-				isBase64Encoded: false,
-				statusCode: 200,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: '',
-			};
+			slackMessageHandler(slackEvent.event);
 		}
+		return callback(null, HTTP200());
 	} catch (err) {
-		errorHandler(err);
-		throw err;
+		return callback(err, HTTP500(err.message));
 	}
 };

@@ -2,16 +2,14 @@ service: risk-tower-chatbot
 
 plugins:
   - serverless-offline
-  - serverless-webpack
   - serverless-plugin-warmup
 
 package:
   individually: true
-  exclude:
-    - "**"
   include:
-    - "!node_modules/@types/**"
-    - src/**
+    - node_modules
+    - dist
+    - images
 
 provider:
   name: aws
@@ -25,26 +23,17 @@ provider:
     DIALOGFLOW_PROJECT_ID: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PROJECT_ID}
     SLACK_BOT_TOKEN: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):SLACK_BOT_TOKEN}
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "lambda:InvokeFunction"
-      Resource: "*"
+        - 'lambda:InvokeFunction'
+      Resource: '*'
 
 functions:
   slackevent:
     warmup: true
     timeout: 300
-    handler: handler.slackevent
+    handler: dist/handler.slackevent
     events:
       - http:
           method: post
           path: slackevent
-
-custom:
-  webpack:
-    webpackConfig: "webpack.config.js"
-    packager: "npm"
-    includeModules: true
-    forceExclude:
-      - aws-sdk
-      - reflect-metadata
