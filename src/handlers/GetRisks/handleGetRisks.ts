@@ -36,6 +36,8 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 	try {
 		const risks = await DataService.getRisks(type, company, roles);
 
+		console.log(risks);
+
 		switch (risks.type) {
 			case 'organisation':
 				if (risks.children.length == 0) {
