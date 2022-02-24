@@ -22,6 +22,8 @@ provider:
     DIALOGFLOW_PRIVATE_KEY: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PRIVATE_KEY}
     DIALOGFLOW_PROJECT_ID: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PROJECT_ID}
     SLACK_BOT_TOKEN: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):SLACK_BOT_TOKEN}
+    OKTA_CLIENT_ID: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):OKTA_CLIENT_ID}
+    OKTA_CLIENT_SECRET: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):OKTA_CLIENT_SECRET}
     STAGE: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):STAGE}
   iamRoleStatements:
     - Effect: 'Allow'
