@@ -361,3 +361,10 @@ export interface IHelpData {
 }
 
 export type IAssessmentCategory = 'entity info' | 'risk chart' | 'risk ratings' | 'risk epics';
+
+export interface OktaAccessTokenResponse {
+	token_type: 'Bearer';
+	expires_in: number;
+	access_token: string;
+	scope: 'groups';
+}

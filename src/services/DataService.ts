@@ -1,4 +1,5 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { URLSearchParams } from 'url';
 import { TreeItemNotFoundError } from '../errors/TreeItemNotFoundError';
 import {
 	IAssessment,
@@ -13,11 +14,11 @@ import {
 	RiskRatingData,
 	RiskArea,
 	IRoles,
+	OktaAccessTokenResponse,
 } from '../interfaces';
 
 const URL_PREFIX = process.env.STAGE === 'prod' ? 'security' : 'security-dev';
 const BASE_URL = `https://${URL_PREFIX}.tx.group/api`;
-const CONFIG = { headers: { 'Content-Type': 'application/json' } };
 
 import RiskTowerService from './RiskTowerService';
 
@@ -26,7 +27,8 @@ export default class DataService {
 		const url = `${BASE_URL}/entity/hierarchy/tree`;
 
 		try {
-			const response = await axios.get(url, CONFIG);
+			const config = await DataService.getAxiosConfig();
+			const response = await axios.get(url, config);
 			return response.data as IHierarchyTreeItem[];
 		} catch (err) {
 			console.log(err);
@@ -38,7 +40,8 @@ export default class DataService {
 		const url = `${BASE_URL}/user/roles?email=${email}`;
 
 		try {
-			const response = await axios.get(url, CONFIG);
+			const config = await DataService.getAxiosConfig();
+			const response = await axios.get(url, config);
 			return response.data as IRoles;
 		} catch (err) {
 			console.log(err);
@@ -50,7 +53,8 @@ export default class DataService {
 		const url = `${BASE_URL}/entity/assessments`;
 
 		try {
-			const response = await axios.post(url, { type, roles, company }, CONFIG);
+			const config = await DataService.getAxiosConfig();
+			const response = await axios.post(url, { type, roles, company }, config);
 			return response.data.data;
 		} catch (err) {
 			console.log(err);
@@ -62,7 +66,8 @@ export default class DataService {
 		const url = `${BASE_URL}/all-types`;
 
 		try {
-			const response = await axios.get(url, CONFIG);
+			const config = await DataService.getAxiosConfig();
+			const response = await axios.get(url, config);
 			return response.data;
 		} catch (err) {
 			console.log(err);
@@ -74,7 +79,8 @@ export default class DataService {
 		const url = `${BASE_URL}/jira-tickets?companyName=${company}&type=${type}`;
 
 		try {
-			const response = await axios.get(url, CONFIG);
+			const config = await DataService.getAxiosConfig();
+			const response = await axios.get(url, config);
 			return response.data.jiraTickets as IJiraTicket[];
 		} catch (err) {
 			const error = err as AxiosError;
@@ -89,10 +95,15 @@ export default class DataService {
 
 	static async getRisks(type: IType, company: ICompany, roles: IRoles): Promise<IRiskResponse> {
 		const url = `${BASE_URL}/chart/assessments`;
-		const response = await axios.post(url, {
-			type,
-			roles,
-		});
+		const config = await DataService.getAxiosConfig();
+		const response = await axios.post(
+			url,
+			{
+				type,
+				roles,
+			},
+			config
+		);
 
 		const tree = response.data.tree as IOrganisation | IAssessment;
 
@@ -120,10 +131,15 @@ export default class DataService {
 
 	static async getTopFindings(type: IType, roles: IRoles): Promise<ITopFinding[]> {
 		const url = `${BASE_URL}/chart/assessments`;
-		const response = await axios.post(url, {
-			type,
-			roles,
-		});
+		const config = await DataService.getAxiosConfig();
+		const response = await axios.post(
+			url,
+			{
+				type,
+				roles,
+			},
+			config
+		);
 		const findings = response.data.topEpics.sortedAreas as ITopFinding[];
 
 		return findings;
@@ -131,10 +147,15 @@ export default class DataService {
 
 	static async getTopMeasures(type: IType, roles: IRoles): Promise<ITopMeasure[]> {
 		const url = `${BASE_URL}/chart/assessments`;
-		const response = await axios.post(url, {
-			type,
-			roles,
-		});
+		const config = await DataService.getAxiosConfig();
+		const response = await axios.post(
+			url,
+			{
+				type,
+				roles,
+			},
+			config
+		);
 		const measures = response.data.topEpics.sortedEpics as ITopMeasure[];
 
 		return measures;
@@ -169,15 +190,20 @@ export default class DataService {
 		const url = `${BASE_URL}/chart/risk-ratings`;
 
 		try {
+			const config = await DataService.getAxiosConfig();
 			const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
 			const id = assessment.assessmentId;
 
 			const riskRatings: RiskRatingData = (
-				await axios.post(url, {
-					type,
-					roles,
-					id,
-				})
+				await axios.post(
+					url,
+					{
+						type,
+						roles,
+						id,
+					},
+					config
+				)
 			).data;
 
 			return Object.values(riskRatings.assessment.areas);
@@ -185,5 +211,39 @@ export default class DataService {
 			console.log(err);
 			return [];
 		}
+	}
+
+	public static async getOktaAccessToken(): Promise<OktaAccessTokenResponse> {
+		const url = 'https://login.tx.group/oauth2/aus4ulq2jdMwScBQ40i7/v1/token';
+
+		const params = new URLSearchParams();
+		params.append('grant_type', 'client_credentials');
+		params.append('scope', 'groups');
+
+		const oktaClientIdAndSecretBase64 = Buffer.from(
+			`${process.env.OKTA_CLIENT_ID}:${process.env.OKTA_CLIENT_SECRET}`
+		).toString('base64');
+
+		const config: AxiosRequestConfig = {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				Authorization: `Basic ${oktaClientIdAndSecretBase64}`,
+			},
+		};
+		const response: OktaAccessTokenResponse = (await axios.post(url, params, config)).data;
+
+		return response;
+	}
+
+	private static async getAxiosConfig(): Promise<AxiosRequestConfig> {
+		const { access_token } = await DataService.getOktaAccessToken();
+		const config: AxiosRequestConfig = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${access_token}`,
+			},
+		};
+
+		return config;
 	}
 }
