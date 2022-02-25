@@ -52,6 +52,7 @@ export async function handleGetRiskChart(
 			await slackService.postMessage(noAssessmentMessage);
 		}
 	} catch (err) {
+		console.error(err);
 		const errorMessage = (err as AxiosError).response?.data.message;
 		if (errorMessage) {
 			await slackService.postMessage(errorMessage);
