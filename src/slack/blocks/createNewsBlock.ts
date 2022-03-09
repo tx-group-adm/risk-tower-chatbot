@@ -47,14 +47,26 @@ export function createNewsBlock(
 				text: 'Incidents',
 			},
 		},
-		{
-			type: 'section',
-			fields: incidentFields.map((field) => ({
-				type: 'plain_text',
-				text: field,
-				emoji: true,
-			})),
-		},
+		...(incidentFields.length > 0
+			? ([
+					{
+						type: 'section',
+						fields: incidentFields.map((field) => ({
+							type: 'plain_text',
+							text: field,
+							emoji: true,
+						})),
+					},
+			  ] as KnownBlock[])
+			: ([
+					{
+						type: 'section',
+						text: {
+							type: 'plain_text',
+							text: `There are no incidents of ${company} for ${timeText[dateFilter]}`,
+						},
+					},
+			  ] as KnownBlock[])),
 		{
 			type: 'section',
 			text: {
@@ -62,13 +74,25 @@ export function createNewsBlock(
 				text: 'Highlights',
 			},
 		},
-		{
-			type: 'section',
-			fields: highlightFields.map((field) => ({
-				type: 'plain_text',
-				text: field,
-				emoji: true,
-			})),
-		},
+		...(highlightFields.length > 0
+			? ([
+					{
+						type: 'section',
+						fields: highlightFields.map((field) => ({
+							type: 'plain_text',
+							text: field,
+							emoji: true,
+						})),
+					},
+			  ] as KnownBlock[])
+			: ([
+					{
+						type: 'section',
+						text: {
+							type: 'plain_text',
+							text: `There are no highlights of ${company} for ${timeText[dateFilter]}`,
+						},
+					},
+			  ] as KnownBlock[])),
 	];
 }
