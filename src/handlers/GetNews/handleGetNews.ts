@@ -10,7 +10,7 @@ export async function handleGetNews(response: IDetectIntentResponseData, slackSe
 	console.log('GetNews parameters: ', JSON.stringify(response.parameters));
 
 	const parameters = response.parameters as IGetNewsParameters;
-	const company = parameters.tx_compamy;
+	const company = parameters.tx_company;
 	const date_time = parameters.date_time;
 
 	await slackService.postMessage(`Get News for ${company}, date_time: ${date_time}`);

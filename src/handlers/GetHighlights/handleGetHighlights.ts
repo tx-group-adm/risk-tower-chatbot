@@ -13,7 +13,7 @@ export async function handleGetHighlights(
 	console.log('GetHighlights parameters: ', JSON.stringify(response.parameters));
 
 	const parameters = response.parameters as IGetHighlightsParameters;
-	const company = parameters.tx_compamy;
+	const company = parameters.tx_company;
 	const date_time = parameters.date_time;
 
 	await slackService.postMessage(`Get Highlights for ${company}, date_time: ${date_time}`);
