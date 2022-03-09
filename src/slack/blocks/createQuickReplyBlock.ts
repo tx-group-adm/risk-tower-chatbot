@@ -68,31 +68,30 @@ export const createDateDropdownBlock = (message: string): KnownBlock[] => {
 								type: 'plain_text',
 								text: 'Current month',
 							},
-							value: 'current_month',
+							value: 'current month',
 						},
 						{
 							text: {
 								type: 'plain_text',
 								text: 'Last month',
 							},
-							value: 'last_month',
+							value: 'last month',
 						},
 						{
 							text: {
 								type: 'plain_text',
 								text: 'Current year',
 							},
-							value: 'current_year',
+							value: 'current year',
 						},
 						{
 							text: {
 								type: 'plain_text',
 								text: 'Last year',
 							},
-							value: 'last_year',
+							value: 'last year',
 						},
 					],
-					action_id: 'actionId-3',
 				},
 			],
 		},
