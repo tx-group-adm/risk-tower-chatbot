@@ -1,13 +1,4 @@
-import {
-	DateFilter,
-	DateTime,
-	IAssessment,
-	ICompany,
-	IHierarchyTreeItem,
-	IOrganisation,
-	IRoles,
-	IType,
-} from '../interfaces';
+import { IAssessment, ICompany, IHierarchyTreeItem, IOrganisation, IRoles, IType } from '../interfaces';
 import DataService from './DataService';
 
 export default class RiskTowerService {
