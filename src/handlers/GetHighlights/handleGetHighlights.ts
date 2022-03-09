@@ -1,6 +1,9 @@
 import { showDateDropdown, showQuickReplies } from '..';
-import { IDetectIntentResponseData, IGetHighlightsParameters } from '../../interfaces';
+import { DateTime, IDetectIntentResponseData, IGetHighlightsParameters } from '../../interfaces';
+import DataService from '../../services/DataService';
 import SlackService from '../../services/SlackService';
+import { createHighlightsBlock } from '../../slack/blocks/createHighlightsBlock';
+import { dateTimeToDateFilter } from '../../utils/date';
 
 export async function handleGetHighlights(
 	response: IDetectIntentResponseData,
@@ -17,7 +20,11 @@ export async function handleGetHighlights(
 
 	const parameters = response.parameters as IGetHighlightsParameters;
 	const company = parameters.tx_company;
-	const date_time = parameters.date_time;
+	const date_time = parameters.date_time as DateTime;
 
-	await slackService.postMessage(`Get Highlights for ${company}, date_time: ${date_time}`);
+	const dateFilter = dateTimeToDateFilter(date_time);
+	const highlights = await DataService.getHighlights(company, dateFilter);
+	const blocks = createHighlightsBlock(highlights, company, dateFilter);
+
+	await slackService.postMessage('', blocks);
 }
