@@ -1,4 +1,4 @@
-import { showQuickReplies } from '..';
+import { showDateDropdown, showQuickReplies } from '..';
 import { IDetectIntentResponseData, IGetIncidentsParameters } from '../../interfaces';
 import SlackService from '../../services/SlackService';
 
@@ -7,7 +7,10 @@ export async function handleGetIncidents(
 	slackService: SlackService
 ): Promise<void> {
 	if (!response.allRequiredParamsPresent) {
-		return showQuickReplies(response, slackService);
+		if (response.missingParameters[0] === 'tx_company') {
+			return showQuickReplies(response, slackService);
+		}
+		return showDateDropdown(response, slackService);
 	}
 
 	console.log('GetIncidents parameters: ', JSON.stringify(response.parameters));

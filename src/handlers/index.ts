@@ -1,7 +1,11 @@
 import { IDetectIntentResponseData, IParameter, RoleType } from '../interfaces';
 import DataService from '../services/DataService';
 import SlackService from '../services/SlackService';
-import { createQuickReplyBlock, getQuickReplyOptionsFor } from '../slack/blocks/createQuickReplyBlock';
+import {
+	createDateDropdownBlock,
+	createQuickReplyBlock,
+	getQuickReplyOptionsFor,
+} from '../slack/blocks/createQuickReplyBlock';
 
 export const INTENTS = {
 	DEFAULT_WELCOME: 'Default Welcome Intent',
@@ -47,6 +51,13 @@ export async function showQuickReplies(response: IDetectIntentResponseData, slac
 	const message = response.messages.join('\n');
 	const options = getQuickReplyOptionsFor(missingParameters[0]);
 	const blocks = createQuickReplyBlock(message, options);
+
+	await slackService.postMessage('', blocks);
+}
+
+export async function showDateDropdown(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
+	const message = response.messages.join('\n');
+	const blocks = createDateDropdownBlock(message);
 
 	await slackService.postMessage('', blocks);
 }
