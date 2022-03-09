@@ -47,7 +47,12 @@ export default class DialogflowService {
 			console.log('decoded params: ', JSON.stringify(params));
 
 			const missingParameters = Object.keys(params)
-				.filter((key) => params[key].trim() === '')
+				.filter((key) => {
+					if (typeof params[key] === 'string') {
+						return params[key].trim() === '';
+					}
+					return false;
+				})
 				.sort() as Array<IParameter>;
 
 			if (intent.displayName === '') {
