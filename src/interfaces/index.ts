@@ -353,6 +353,21 @@ export interface IGetRiskRatingsParameters extends IIntentParameters {
 	tx_company: ICompany;
 }
 
+export interface IGetIncidentsParameters extends IIntentParameters {
+	tx_compamy: ICompany;
+	date_time: any;
+}
+
+export interface IGetHighlightsParameters extends IIntentParameters {
+	tx_compamy: ICompany;
+	date_time: any;
+}
+
+export interface IGetNewsParameters extends IIntentParameters {
+	tx_compamy: ICompany;
+	date_time: any;
+}
+
 export interface IHelpData {
 	title: string;
 	message: string;
