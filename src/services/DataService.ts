@@ -14,6 +14,13 @@ import {
 	RiskRatingData,
 	RiskArea,
 	IRoles,
+	Incident,
+	Highlight,
+	DateFilter,
+	TypeFilter,
+	GetNewsResponse,
+	GetIncidentsResponse,
+	GetHighlightsResponse,
 	OktaAccessTokenResponse,
 } from '../interfaces';
 
@@ -210,6 +217,54 @@ export default class DataService {
 		} catch (err) {
 			console.log(err);
 			return [];
+		}
+	}
+
+	static async getNews(company: ICompany, dateFilter: DateFilter): Promise<(Incident | Highlight)[]> {
+		const typeFilter: TypeFilter = 'all';
+		const url = `${BASE_URL}/public/incidents?typeFilter=${typeFilter}&dateFilter=${dateFilter}`;
+
+		try {
+			const config = await DataService.getAxiosConfig();
+			const response: GetNewsResponse = (await axios.get(url, config)).data;
+			const news = response.filter((entity) => entity.name === company)[0].incidents;
+
+			return news;
+		} catch (err) {
+			console.error(err);
+			throw err;
+		}
+	}
+
+	static async getIncidents(company: ICompany, dateFilter: DateFilter): Promise<Incident[]> {
+		const typeFilter: TypeFilter = 'incident';
+		const url = `${BASE_URL}/public/incidents?typeFilter=${typeFilter}&dateFilter=${dateFilter}`;
+
+		try {
+			const config = await DataService.getAxiosConfig();
+			const response: GetIncidentsResponse = (await axios.get(url, config)).data;
+			const incidents = response.filter((entity) => entity.name === company)[0].incidents;
+
+			return incidents;
+		} catch (err) {
+			console.error(err);
+			throw err;
+		}
+	}
+
+	static async getHighlights(company: ICompany, dateFilter: DateFilter): Promise<Highlight[]> {
+		const typeFilter: TypeFilter = 'highlight';
+		const url = `${BASE_URL}/public/incidents?typeFilter=${typeFilter}&dateFilter=${dateFilter}`;
+
+		try {
+			const config = await DataService.getAxiosConfig();
+			const response: GetHighlightsResponse = (await axios.get(url, config)).data;
+			const highlights = response.filter((entity) => entity.name === company)[0].incidents;
+
+			return highlights;
+		} catch (err) {
+			console.error(err);
+			throw err;
 		}
 	}
 

@@ -164,6 +164,13 @@ export type IType = 'security' | 'privacy' | 'technology';
 
 export type ICategory = 'entity info' | 'risk chart' | 'risk ratings' | 'risk epics';
 
+export interface DateTime {
+	endDate: string;
+	startDate: string;
+}
+
+export type IDateTime = DateTime | '';
+
 export interface IQuickchartConfig {
 	backgroundColor: 'transparent';
 	width: number;
@@ -311,7 +318,8 @@ export interface RiskRating {
 }
 
 export interface IIntentParameters {
-	[index: string]: string | undefined;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[index: string]: any;
 }
 
 export interface IGetAssessmentDataParameters extends IIntentParameters {
@@ -355,17 +363,17 @@ export interface IGetRiskRatingsParameters extends IIntentParameters {
 
 export interface IGetIncidentsParameters extends IIntentParameters {
 	tx_compamy: ICompany;
-	date_time: any;
+	date_time: IDateTime;
 }
 
 export interface IGetHighlightsParameters extends IIntentParameters {
 	tx_compamy: ICompany;
-	date_time: any;
+	date_time: IDateTime;
 }
 
 export interface IGetNewsParameters extends IIntentParameters {
 	tx_compamy: ICompany;
-	date_time: any;
+	date_time: IDateTime;
 }
 
 export interface IHelpData {
@@ -376,6 +384,63 @@ export interface IHelpData {
 }
 
 export type IAssessmentCategory = 'entity info' | 'risk chart' | 'risk ratings' | 'risk epics';
+
+export interface Incident {
+	id: string;
+	type: 'incident';
+	date: string;
+	text: string;
+}
+
+export interface Highlight {
+	id: string;
+	type: 'highlight';
+	date: string;
+	text: string;
+}
+
+export type TypeFilter = 'all' | 'incident' | 'highlight';
+export type DateFilter = /*'all' | */ 'currentMonth' | 'previousMonth' | 'currentYear' | 'previousYear';
+
+export interface GetNewsResponseItem {
+	name: ICompany;
+	id: number;
+	type: 'entity' | 'organization';
+	parentId: number;
+	incidents: (Incident | Highlight)[];
+	currentMonthIncidents: number;
+	currentMonthHighlights: number;
+	incidentsCount: number;
+	highLightCount: number;
+}
+
+export interface GetIncidentsResponseItem {
+	name: ICompany;
+	id: number;
+	type: 'entity' | 'organization';
+	parentId: number;
+	incidents: Incident[];
+	currentMonthIncidents: number;
+	currentMonthHighlights: number;
+	incidentsCount: number;
+	highLightCount: number;
+}
+
+export interface GetHighlightsResponseItem {
+	name: ICompany;
+	id: number;
+	type: 'entity' | 'organization';
+	parentId: number;
+	incidents: Highlight[];
+	currentMonthIncidents: number;
+	currentMonthHighlights: number;
+	incidentsCount: number;
+	highLightCount: number;
+}
+
+export type GetNewsResponse = GetNewsResponseItem[];
+export type GetIncidentsResponse = GetIncidentsResponseItem[];
+export type GetHighlightsResponse = GetHighlightsResponseItem[];
 
 export interface OktaAccessTokenResponse {
 	token_type: 'Bearer';

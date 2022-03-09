@@ -1,6 +1,9 @@
 import { showDateDropdown, showQuickReplies } from '..';
-import { IDetectIntentResponseData, IGetNewsParameters } from '../../interfaces';
+import { DateTime, IDetectIntentResponseData, IGetNewsParameters } from '../../interfaces';
+import DataService from '../../services/DataService';
 import SlackService from '../../services/SlackService';
+import { createNewsBlock } from '../../slack/blocks/createNewsBlock';
+import { dateTimeToDateFilter } from '../../utils/date';
 
 export async function handleGetNews(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	if (!response.allRequiredParamsPresent) {
@@ -14,7 +17,11 @@ export async function handleGetNews(response: IDetectIntentResponseData, slackSe
 
 	const parameters = response.parameters as IGetNewsParameters;
 	const company = parameters.tx_company;
-	const date_time = parameters.date_time;
+	const date_time = parameters.date_time as DateTime;
 
-	await slackService.postMessage(`Get News for ${company}, date_time: ${date_time}`);
+	const dateFilter = dateTimeToDateFilter(date_time);
+	const news = await DataService.getNews(company, dateFilter);
+	const blocks = createNewsBlock(news, company, dateFilter);
+
+	await slackService.postMessage('', blocks);
 }
