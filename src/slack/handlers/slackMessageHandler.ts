@@ -17,6 +17,9 @@ import { handleGetRiskEpics } from '../../handlers/GetRiskEpics/handleGetRiskEpi
 import { handleGetRiskRatings } from '../../handlers/GetRiskRatings/handleGetRiskRatings';
 import { errorHandler } from './errorHandler';
 import { isUserTopLevelAdmin } from '../../handlers';
+import { handleGetIncidents } from '../../handlers/GetIncidents/handleGetIncidents';
+import { handleGetHighlights } from '../../handlers/GetHighlights/handleGetHighlights';
+import { handleGetNews } from '../../handlers/GetNews/handleGetNews';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
 	console.log('EVENT_CALLBACK');
@@ -79,6 +82,18 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 
 			case INTENTS.GET_RISK_RATINGS:
 				await handleGetRiskRatings(response, slackService);
+				break;
+
+			case INTENTS.GET_INCIDENTS:
+				await handleGetIncidents(response, slackService);
+				break;
+
+			case INTENTS.GET_HIGHLIGHTS:
+				await handleGetHighlights(response, slackService);
+				break;
+
+			case INTENTS.GET_NEWS:
+				await handleGetNews(response, slackService);
 				break;
 
 			case INTENTS.GET_GENERAL_HELP:
