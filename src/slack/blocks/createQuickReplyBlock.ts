@@ -12,6 +12,7 @@ const QUICKREPLIES: {
 };
 
 export const getQuickReplyOptionsFor = (parameter: IParameter): Array<string> => {
+	if (parameter === 'date_time') return [];
 	return QUICKREPLIES[parameter];
 };
 
@@ -59,7 +60,7 @@ export const createDateDropdownBlock = (message: string): KnownBlock[] => {
 					type: 'static_select',
 					placeholder: {
 						type: 'plain_text',
-						text: 'Choose a time sspan',
+						text: 'Choose a time span',
 					},
 					options: [
 						{

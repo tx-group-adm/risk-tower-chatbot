@@ -10,10 +10,10 @@ export async function handleGetIncidents(
 	slackService: SlackService
 ): Promise<void> {
 	if (!response.allRequiredParamsPresent) {
-		if (response.missingParameters[0] === 'tx_company') {
-			return showQuickReplies(response, slackService);
+		if (response.missingParameters[0] === 'date_time') {
+			return showDateDropdown(response, slackService);
 		}
-		return showDateDropdown(response, slackService);
+		return showQuickReplies(response, slackService);
 	}
 
 	console.log('GetIncidents parameters: ', JSON.stringify(response.parameters));

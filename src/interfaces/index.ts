@@ -125,7 +125,7 @@ export interface IDetectIntentResponseData {
 	intentName: string;
 }
 
-export type IParameter = 'tx_company' | 'tx_assessment_type' | 'tx_assessment_category';
+export type IParameter = 'tx_company' | 'tx_assessment_type' | 'tx_assessment_category' | 'date_time';
 
 export interface IAssessment {
 	assessmentId: string;
