@@ -441,3 +441,10 @@ export interface GetHighlightsResponseItem {
 export type GetNewsResponse = GetNewsResponseItem[];
 export type GetIncidentsResponse = GetIncidentsResponseItem[];
 export type GetHighlightsResponse = GetHighlightsResponseItem[];
+
+export interface OktaAccessTokenResponse {
+	token_type: 'Bearer';
+	expires_in: number;
+	access_token: string;
+	scope: 'groups';
+}
