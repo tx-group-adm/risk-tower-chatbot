@@ -119,7 +119,9 @@ export interface ISlackBlockActionsSelectEvent {
 	actions: BlockAction[];
 }
 
-export interface BlockAction {
+export type BlockAction = ButtonBlockAction | StaticSelectBlockAction;
+
+export interface ButtonBlockAction {
 	type: string;
 	block_id: string;
 	action_id: string;
@@ -130,6 +132,18 @@ export interface BlockAction {
 	};
 	action_ts: string;
 	value: string;
+}
+
+export interface StaticSelectBlockAction {
+	type: 'static_select';
+	block_id: string;
+	action_id: string;
+	placeholder: PlainTextElement;
+	selected_option: {
+		text: PlainTextElement;
+		value: string;
+	};
+	action_ts: string;
 }
 
 export interface ISlackMessageIMEvent {

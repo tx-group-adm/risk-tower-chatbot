@@ -1,4 +1,11 @@
-import { BlockAction, HandlerResponse, ISlackBlockActionsEvent, ISlackMessageIMEvent } from '../../interfaces';
+import {
+	BlockAction,
+	ButtonBlockAction,
+	HandlerResponse,
+	ISlackBlockActionsEvent,
+	ISlackMessageIMEvent,
+	StaticSelectBlockAction,
+} from '../../interfaces';
 import { HTTP200 } from '../../responses';
 import { slackMessageHandler } from './slackMessageHandler';
 
@@ -9,7 +16,7 @@ export async function slackBlockActionsHandler(event: ISlackBlockActionsEvent): 
 				case 'quickreply': {
 					const messageEvent: ISlackMessageIMEvent = {
 						channel: event.channel.id,
-						text: action.value,
+						text: (action as ButtonBlockAction).value.replace('+', ' '),
 						user: event.user.id,
 						type: 'message',
 						channel_type: 'im',
@@ -23,7 +30,7 @@ export async function slackBlockActionsHandler(event: ISlackBlockActionsEvent): 
 				case 'date_dropdown': {
 					const messageEvent: ISlackMessageIMEvent = {
 						channel: event.channel.id,
-						text: action.value,
+						text: (action as StaticSelectBlockAction).selected_option.value.replace('+', ' '),
 						user: event.user.id,
 						type: 'message',
 						channel_type: 'im',
