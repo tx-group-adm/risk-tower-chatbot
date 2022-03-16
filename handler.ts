@@ -1,24 +1,15 @@
-import { IEvent, ISlackEventCallback, ISlackEventOnUsersBehalf } from './src/interfaces';
+import { HandlerResponse, SlackEventType } from './src/interfaces';
 import { slackMessageHandler } from './src/slack/handlers/slackMessageHandler';
-import { isSlackEvent } from './src/slack/isSlackEvent';
-import { isEventCallback } from './src/slack/isEventCallback';
-import { HTTP200, HTTP500 } from './src/responses';
-import { Callback, Context } from 'aws-lambda';
-import { sendMessageOnUsersBehalf } from './src/slack/handlers/sendMessageOnUsersBehalf';
+import { slackBlockActionsHandler } from './src/slack/handlers/slackBlockActionsHandler';
 
-export const slackevent = (event: IEvent, context: Context, callback: Callback): void => {
-	try {
-		console.log(JSON.stringify(event));
+export async function slackevent(slackEvent: SlackEventType): Promise<HandlerResponse> {
+	console.log(JSON.stringify(slackEvent));
 
-		if (isSlackEvent(event)) {
-			const slackEvent: ISlackEventCallback | ISlackEventOnUsersBehalf = JSON.parse(event.body);
-			if (!isEventCallback(slackEvent)) {
-				sendMessageOnUsersBehalf(slackEvent.event, slackEvent.displayText);
-			}
-			slackMessageHandler(slackEvent.event);
-		}
-		return callback(null, HTTP200());
-	} catch (err) {
-		return callback(err, HTTP500(err.message));
+	switch (slackEvent.type) {
+		case 'event_callback':
+			return slackMessageHandler(slackEvent.event);
+
+		case 'block_actions':
+			return slackBlockActionsHandler(slackEvent);
 	}
-};
+}

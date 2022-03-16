@@ -1,3 +1,4 @@
+import { ActionsBlock, PlainTextElement, SectionBlock } from '@slack/web-api';
 import { ChartConfiguration } from 'chart.js';
 
 export interface HandlerResponse {
@@ -12,12 +13,6 @@ export interface ISlackEvent {
 	body: string;
 }
 
-export interface IWarmupEvent {
-	source: string;
-}
-
-export type IEvent = ISlackEvent | IWarmupEvent;
-
 export interface ISlackEventCallback {
 	api_app_id: string;
 	authed_users: Array<string>;
@@ -29,10 +24,112 @@ export interface ISlackEventCallback {
 	type: 'event_callback';
 }
 
-export interface ISlackEventOnUsersBehalf {
-	type: 'event_on_users_behalf';
-	event: ISlackMessageIMEvent;
-	displayText: string;
+export type SlackEventType = ISlackEventCallback | ISlackBlockActionsEvent;
+
+export type ISlackBlockActionsEvent = ISlackBlockActionsButtonEvent | ISlackBlockActionsSelectEvent;
+
+export interface ISlackBlockActionsButtonEvent {
+	type: 'block_actions';
+	user: {
+		id: string;
+		username: string;
+		name: string;
+		team_id: string;
+	};
+	api_app_id: string;
+	token: string;
+	container: {
+		type: string;
+		message_ts: string;
+		channel_id: string;
+		is_ephemeral: boolean;
+	};
+	trigger_id: string;
+	team: {
+		id: string;
+		domain: string;
+	};
+	channel: {
+		id: string;
+		name: string;
+	};
+	message: {
+		bot_id: string;
+		type: string;
+		text: string;
+		user: string;
+		ts: string;
+		team: string;
+		blocks: Array<SectionBlock | ActionsBlock>;
+	};
+	response_url: string;
+	actions: BlockAction[];
+}
+
+// use block_id = static_select_help_block, action_id = static_select_help_action
+
+export interface ISlackBlockActionsSelectEvent {
+	type: 'block_actions';
+	user: {
+		id: string;
+		username: string;
+		name: string;
+		team_id: string;
+	};
+	api_app_id: string;
+	token: string;
+	container: {
+		type: string;
+		text: string;
+	};
+	trigger_id: string;
+	team: {
+		id: string;
+		domain: string;
+	};
+	channel: {
+		id: string;
+		name: string;
+	};
+	message: {
+		bot_id: string;
+		type: string;
+		text: string;
+		user: string;
+		ts: string;
+		team: string;
+		blocks: Array<SectionBlock | ActionsBlock>;
+	};
+	enterprise: null;
+	is_enterprise_install: boolean;
+	state: {
+		values: {
+			static_select_help_block: {
+				static_select_help_action: {
+					type: 'static_select';
+					selected_option: {
+						text: PlainTextElement;
+						value: string;
+					};
+				};
+			};
+		};
+	};
+	response_url: string;
+	actions: BlockAction[];
+}
+
+export interface BlockAction {
+	type: string;
+	block_id: string;
+	action_id: string;
+	text: {
+		type: 'plain_text';
+		text: string;
+		emoji: true;
+	};
+	action_ts: string;
+	value: string;
 }
 
 export interface ISlackMessageIMEvent {

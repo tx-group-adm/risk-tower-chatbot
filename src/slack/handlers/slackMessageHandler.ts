@@ -1,4 +1,4 @@
-import { ISlackMessageIMEvent } from '../../interfaces';
+import { HandlerResponse, ISlackMessageIMEvent } from '../../interfaces';
 import DialogflowService from '../../services/DialogflowService';
 import {
 	INTENTS,
@@ -20,8 +20,9 @@ import { isUserTopLevelAdmin } from '../../handlers';
 import { handleGetIncidents } from '../../handlers/GetIncidents/handleGetIncidents';
 import { handleGetHighlights } from '../../handlers/GetHighlights/handleGetHighlights';
 import { handleGetNews } from '../../handlers/GetNews/handleGetNews';
+import { HTTP200, HTTP500 } from '../../responses';
 
-export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<void> {
+export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<HandlerResponse> {
 	console.log('EVENT_CALLBACK');
 	const { DIALOGFLOW_PROJECT_ID } = process.env;
 	const slackService = new SlackService(event);
@@ -30,7 +31,7 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 	if (event.bot_id || event.upload) {
 		console.log(`ignore event`);
 		console.log(event);
-		return;
+		return HTTP200();
 	}
 
 	const sessionId = event.user;
@@ -126,9 +127,13 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 			default:
 				throw new Error(`No handler for intent: ${intentName}`);
 		}
+
+		return HTTP200();
 	} catch (err) {
+		const error = err as Error;
 		console.log('error while handling intent, using error handler to notify user');
-		console.log(err);
+		console.log(error);
 		await errorHandler(slackService);
+		return HTTP500('Oops, something went wrong, check the logs for more information.');
 	}
 }
