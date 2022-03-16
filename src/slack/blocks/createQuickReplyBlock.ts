@@ -32,6 +32,7 @@ export const createQuickReplyBlock = (message: string, options: Array<string>): 
 			type: 'actions',
 			elements: options.map(
 				(option): Button => ({
+					action_id: 'quickreply',
 					type: 'button',
 					text: {
 						type: 'plain_text',
@@ -57,6 +58,7 @@ export const createDateDropdownBlock = (message: string): KnownBlock[] => {
 			type: 'actions',
 			elements: [
 				{
+					action_id: 'date_dropdown',
 					type: 'static_select',
 					placeholder: {
 						type: 'plain_text',

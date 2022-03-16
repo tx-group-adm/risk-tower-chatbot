@@ -2,7 +2,7 @@ service: risk-tower-chatbot
 
 plugins:
   - serverless-offline
-  - serverless-plugin-warmup
+  # - serverless-plugin-warmup
 
 package:
   individually: true
@@ -33,7 +33,6 @@ provider:
 
 functions:
   slackevent:
-    warmup: true
     timeout: 300
     handler: dist/handler.slackevent
     events:
