@@ -23,6 +23,9 @@ export async function handleGetHighlights(
 	const date_time = parameters.date_time as DateTime;
 
 	const dateFilter = dateTimeToDateFilter(date_time);
+
+	console.log('date_time:', date_time, 'dateFilter:', dateFilter);
+
 	const highlights = await DataService.getHighlights(company, dateFilter);
 	const blocks = createHighlightsBlock(highlights, company, dateFilter);
 
