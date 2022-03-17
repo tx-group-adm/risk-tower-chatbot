@@ -23,6 +23,9 @@ export async function handleGetIncidents(
 	const date_time = parameters.date_time as DateTime;
 
 	const dateFilter = dateTimeToDateFilter(date_time);
+
+	console.log('date_time:', date_time, 'dateFilter:', dateFilter);
+
 	const incidents = await DataService.getIncidents(company, dateFilter);
 	const blocks = createIncidentsBlock(incidents, company, dateFilter);
 

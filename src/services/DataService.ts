@@ -227,6 +227,7 @@ export default class DataService {
 		try {
 			const config = await DataService.getAxiosConfig();
 			const response: GetNewsResponse = (await axios.get(url, config)).data;
+			console.log(`response for "GET ${url}"`, response);
 			const news = response.filter((entity) => entity.name === company)[0].incidents;
 
 			return news;
@@ -243,6 +244,7 @@ export default class DataService {
 		try {
 			const config = await DataService.getAxiosConfig();
 			const response: GetIncidentsResponse = (await axios.get(url, config)).data;
+			console.log(`response for "GET ${url}"`, response);
 			const incidents = response.filter((entity) => entity.name === company)[0].incidents;
 
 			return incidents;
@@ -259,6 +261,7 @@ export default class DataService {
 		try {
 			const config = await DataService.getAxiosConfig();
 			const response: GetHighlightsResponse = (await axios.get(url, config)).data;
+			console.log(`response for "GET ${url}"`, response);
 			const highlights = response.filter((entity) => entity.name === company)[0].incidents;
 
 			return highlights;

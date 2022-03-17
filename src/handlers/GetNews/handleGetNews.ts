@@ -20,6 +20,9 @@ export async function handleGetNews(response: IDetectIntentResponseData, slackSe
 	const date_time = parameters.date_time as DateTime;
 
 	const dateFilter = dateTimeToDateFilter(date_time);
+
+	console.log('date_time:', date_time, 'dateFilter:', dateFilter);
+
 	const news = await DataService.getNews(company, dateFilter);
 	const blocks = createNewsBlock(news, company, dateFilter);
 
