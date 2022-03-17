@@ -10,6 +10,12 @@ import { HTTP200 } from '../../responses';
 import { slackMessageHandler } from './slackMessageHandler';
 
 export async function slackBlockActionsHandler(event: ISlackBlockActionsEvent): Promise<HandlerResponse> {
+	event.actions.map((action: BlockAction) => {
+		if (action.action_id.startsWith('quickreply')) {
+			action.action_id = 'quickreply';
+		}
+		return action;
+	});
 	await Promise.all(
 		event.actions.map(async (action: BlockAction) => {
 			switch (action.action_id) {
