@@ -31,8 +31,8 @@ export const createQuickReplyBlock = (message: string, options: Array<string>): 
 		{
 			type: 'actions',
 			elements: options.map(
-				(option): Button => ({
-					action_id: 'quickreply',
+				(option, i): Button => ({
+					action_id: `quickreply_${i}`,
 					type: 'button',
 					text: {
 						type: 'plain_text',
