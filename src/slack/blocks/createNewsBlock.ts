@@ -7,6 +7,17 @@ export function createNewsBlock(
 	company: ICompany,
 	dateFilter: DateFilter
 ): KnownBlock[] {
+	if (news.length == 0) {
+		return [
+			{
+				type: 'section',
+				text: {
+					type: 'plain_text',
+					text: `There are no news for ${company} for the selected timespan.`,
+				},
+			},
+		];
+	}
 	const incidents = news.filter((item) => item.type === 'incident');
 	const highlights = news.filter((item) => item.type === 'highlight');
 
