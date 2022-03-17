@@ -7,6 +7,17 @@ export function createHighlightsBlock(
 	company: ICompany,
 	dateFilter: DateFilter
 ): KnownBlock[] {
+	if (highlights.length == 0) {
+		return [
+			{
+				type: 'section',
+				text: {
+					type: 'plain_text',
+					text: `There are no highlights for ${company} for the selected timespan.`,
+				},
+			},
+		];
+	}
 	const highlightDates = highlights.map((highlight) => normalizeDateString(highlight.date));
 	const highlightMessages = highlights.map((highlight) => highlight.text);
 	const fields: string[] = [];
