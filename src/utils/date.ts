@@ -23,27 +23,23 @@ export function normalizeDateString(dateString: string): string {
 }
 
 export function dateTimeToDateFilter(date_time: DateTime): DateFilter {
-	const startDate = new Date(date_time.startDate);
-	const endDate = new Date(date_time.endDate);
-	const currentDate = new Date();
+	// yep this is ugly
+	const { startDate, endDate } = date_time;
+	const [startYear, startMonth] = startDate.split('T')[0].split('-').map(parseInt);
+	const [, endMonth] = endDate.split('T')[0].split('-').map(parseInt);
+	const [currentYear, currentMonth] = new Date().toISOString().split('T')[0].split('-').map(parseInt);
 
-	// check if startDate and endDate have the same month -> either current month or last month
-	if (startDate.getMonth() == endDate.getMonth()) {
-		// check if startDate and currentDate have the same month -> if yes, it is current month, else it is last month
-		if (startDate.getMonth() == currentDate.getMonth()) {
+	if (startMonth == endMonth) {
+		// same month -> current month OR previous month
+		if (startMonth == currentMonth) {
 			return 'currentMonth';
 		}
 		return 'previousMonth';
-	}
-
-	// check if startDate and endDate have the same year -> either current year or last year
-	if (startDate.getFullYear() == endDate.getFullYear()) {
-		// check if startDate and current Date have the same year -> if yes, it is current year, else it is last year
-		if (startDate.getFullYear() == currentDate.getFullYear()) {
+	} else {
+		if (startYear == currentYear) {
 			return 'currentYear';
+		} else {
+			return 'previousYear';
 		}
-		return 'previousYear';
 	}
-
-	throw new Error(`Invalid date time: ${date_time}`);
 }
