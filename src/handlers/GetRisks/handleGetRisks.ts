@@ -3,7 +3,6 @@ import SlackService from '../../services/SlackService';
 import RiskTowerService from '../../services/RiskTowerService';
 import DataService from '../../services/DataService';
 import { createBarChart } from '../../slack/charts/barChart';
-import { createScatterChart } from '../../slack/charts/scatterChart';
 import { createAssessmentDataBlock } from '../../slack/blocks/createAssessmentDataBlock';
 import { createRisksBlock } from '../../slack/blocks/createRisksBlock';
 import { createMessageBlock } from '../../slack/blocks/createMessageBlock';
@@ -11,6 +10,7 @@ import { showQuickReplies } from '..';
 import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
 import { Button } from '@slack/web-api';
 import { TreeItemNotFoundError } from '../../errors/TreeItemNotFoundError';
+import { createSingleBarChart } from '../../slack/charts/singleBarChart';
 
 export async function handleGetRisks(response: IDetectIntentResponseData, slackService: SlackService): Promise<void> {
 	if (response.missingParameters.includes('tx_company')) {
@@ -57,7 +57,7 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 				}
 
 			case 'entity':
-				const scatterChartUrl = await createScatterChart(risks.assessment);
+				const chartUrl = await createSingleBarChart(risks.assessment);
 				const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${risks.assessment.impact}* and a probability of *${risks.assessment.probability}*.`;
 				const parentId = risks.assessment.parentId;
 				const parentName = await RiskTowerService.getParentName(parentId);
@@ -66,7 +66,7 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 					type,
 					risks.assessment.name,
 					assessmentMessage,
-					scatterChartUrl,
+					chartUrl,
 					parentName,
 					switchAssessmentButtons
 				);
