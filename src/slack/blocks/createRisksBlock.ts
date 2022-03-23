@@ -36,13 +36,14 @@ export function createRisksBlock(
 	});
 
 	const elements: Button[] = options.map(
-		(option): Button => ({
+		(option, index): Button => ({
 			type: 'button',
 			text: {
 				type: 'plain_text',
 				text: `${getRiskLevelEmojiByColor(option.color)} ${option.displayText}`,
 			},
 			value: option.value,
+			action_id: `quickreply_${index}`,
 		})
 	);
 
@@ -55,6 +56,7 @@ export function createRisksBlock(
 				text: '← Back',
 			},
 			value: `Show me ${type} risks for ${parentName}`,
+			action_id: `quickreply_${elements.length}`,
 		};
 		elements.unshift(drillUpButton);
 	}
