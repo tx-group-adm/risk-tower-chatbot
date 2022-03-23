@@ -7,7 +7,6 @@ import {
 	IType,
 } from '../../interfaces';
 import SlackService from '../../services/SlackService';
-import { createScatterChart } from '../../slack/charts/scatterChart';
 import { createAssessmentDataBlock } from '../../slack/blocks/createAssessmentDataBlock';
 import DataService from '../../services/DataService';
 import { AxiosError } from 'axios';
@@ -15,6 +14,7 @@ import RiskTowerService from '../../services/RiskTowerService';
 import { Button } from '@slack/web-api';
 import { createSwitchAsessmentButtons } from '../../slack/blocks/createSwitchAsessmentButtons';
 import { showQuickReplies } from '..';
+import { createSingleBarChart } from '../../slack/charts/singleBarChart';
 
 export async function handleGetRiskChart(
 	response: IDetectIntentResponseData,
@@ -35,7 +35,7 @@ export async function handleGetRiskChart(
 
 		if (assessment.hasAssessment) {
 			const assessmentMessage = `The ${type} risk chart for ${company} shows an impact of *${assessment.impact}* and a probability of *${assessment.probability}*`;
-			const url = await createScatterChart(assessment);
+			const url = await createSingleBarChart(assessment);
 			const parentName = await RiskTowerService.getParentName(assessment.parentId);
 			const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk chart');
 			const blocks = createAssessmentDataBlock(
