@@ -3,7 +3,7 @@ import { IAssessment, IQuickchartConfig } from '../../interfaces';
 import axios from 'axios';
 
 export async function createSingleBarChart(data: IAssessment): Promise<string> {
-	const value = data.rating;
+	const value = Number(data.rating.toFixed(2));
 	const backgroundColor = data.ratingColor;
 
 	const config: ChartConfiguration = {
@@ -35,10 +35,9 @@ export async function createSingleBarChart(data: IAssessment): Promise<string> {
 						},
 						scaleLabel: {
 							display: true,
-							fontSize: 30,
+							fontSize: 20,
 							fontColor: '#000000',
 							labelString: `${value}%`,
-							padding: -10,
 						},
 					},
 				],
