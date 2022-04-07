@@ -34,18 +34,10 @@ export async function handleGetRiskChart(
 		const assessment: IAssessment = await DataService.getAssessmentData(type, roles, company);
 
 		if (assessment.hasAssessment) {
-			const assessmentMessage = `The ${type} risk chart for ${company} shows an impact of *${assessment.impact}* and a probability of *${assessment.probability}*`;
-			const url = await createSingleBarChart(assessment);
+			await createSingleBarChart(assessment, slackService);
 			const parentName = await RiskTowerService.getParentName(assessment.parentId);
 			const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk chart');
-			const blocks = createAssessmentDataBlock(
-				type,
-				assessment.name,
-				assessmentMessage,
-				url,
-				parentName,
-				switchAssessmentButtons
-			);
+			const blocks = createAssessmentDataBlock(type, parentName, switchAssessmentButtons);
 			await slackService.postMessage('', blocks);
 		} else {
 			const noAssessmentMessage = `Currently, there is no ${type} assessment data for ${company}.`;
