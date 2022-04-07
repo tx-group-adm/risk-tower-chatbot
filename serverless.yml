@@ -24,6 +24,7 @@ provider:
     SLACK_BOT_TOKEN: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):SLACK_BOT_TOKEN}
     OKTA_CLIENT_ID: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):OKTA_CLIENT_ID}
     OKTA_CLIENT_SECRET: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):OKTA_CLIENT_SECRET}
+    FONTCONFIG_PATH: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):FONTCONFIG_PATH}
     STAGE: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):STAGE}
   iamRoleStatements:
     - Effect: 'Allow'
