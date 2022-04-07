@@ -19,10 +19,10 @@ function getBarChartSVG(data: IAssessment): string {
 	const CHART_HEIGHT = 300;
 
 	// subtract 1 pixel so border of chart container is visible (doesn't change the representation of the chart)
-	const barHeight = CHART_HEIGHT * Number(rating.toFixed(3)) - 1;
+	const barHeight = CHART_HEIGHT * (rating / 100) - 1;
 
 	// distance from container to chart + distance from chart container to bar
-	const barPositionY = (SIZE - CHART_HEIGHT) / 2 + (CHART_HEIGHT - barHeight) - 1;
+	const barPositionY = (SIZE - CHART_HEIGHT) / 2 + (CHART_HEIGHT - barHeight) - 0.5;
 
 	console.log(data);
 	console.log(`barHeight: ${barHeight}`);
@@ -40,7 +40,7 @@ function getBarChartSVG(data: IAssessment): string {
       />
       <rect
         class="chart-container"
-        x="200"
+        x="230"
         y="100"
         width="100px"
         height="300px"
@@ -49,109 +49,90 @@ function getBarChartSVG(data: IAssessment): string {
         stroke-width="1"
         shape-rendering="crispEdges"
       />
-      <rect
+      <rect 
         class="chart-value"
-        x="200"
+        x="230.5"
         y="${barPositionY}"
         width="99px"
-        height="${barHeight}"
+        height="${barHeight}px"
         fill="${ratingColor}"
       />
       <text
         class="value-label"
-        x="235"
+        x="265"
         y="395"
         fill="black"
         fill-opacity="0.5"
-        font-family="Open Sans"
+        font-family="Source Sans"
         font-size="20px"
       >
-        60%
+        50%
       </text>
       <text
         class="text-label"
         x="130"
-        y="155"
+        y="140"
         fill="black"
-        font-family="Open Sans"
-        font-size="13px"
+        font-family="Source Sans"
+        font-size="12px"
       >
-        High
+        High Resilience
       </text>
       <text
         class="text-label"
-        x="340"
-        y="155"
+        x="350"
+        y="140"
         fill="black"
-        font-family="Open Sans"
-        font-size="13px"
+        font-family="Source Sans"
+        font-size="12px"
       >
-        80%
+        75%
       </text>
       <line
         class="line-label line-high"
         x1="130"
-        y1="160"
+        y1="175"
         x2="370"
-        y2="160"
+        y2="175"
         stroke="black"
         stroke-width="1"
       />
       <text
         class="text-label"
         x="130"
-        y="245"
+        y="250"
         fill="black"
-        font-family="Open Sans"
-        font-size="13px"
+        font-family="Source Sans"
+        font-size="12px"
       >
-        Medium
+        Medium Resilience
       </text>
-      <text
-        class="text-label"
-        x="340"
-        y="245"
-        fill="black"
-        font-family="Open Sans"
-        font-size="13px"
-      >
-        50%
-      </text>
-      <line
-        class="line-label line-medium"
-        x1="130"
-        y1="250"
-        x2="370"
-        y2="250"
-        stroke="black"
-        stroke-width="1"
-      />
       <text
         class="text-label"
         x="130"
-        y="335"
+        y="365"
         fill="black"
-        font-family="Open Sans"
-        font-size="13px"
+        font-family="Source Sans"
+        font-size="12px"
       >
-        Low
+        Low Resilience
       </text>
       <text
         class="text-label"
-        x="340"
-        y="335"
+        x="350"
+        y="365"
         fill="black"
-        font-family="Open Sans"
-        font-size="13px"
+        font-family="Source Sans"
+        font-size="12px"
       >
-        20%
+        25%
       </text>
       <line
         class="line-label line-low"
         x1="130"
-        y1="340"
+        y1="325"
         x2="370"
-        y2="340"
+        y2="325"
         stroke="black"
         stroke-width="1"
       />
