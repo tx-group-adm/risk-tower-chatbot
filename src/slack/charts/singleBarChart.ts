@@ -5,11 +5,11 @@ import SlackService from '../../services/SlackService';
 
 export async function createSingleBarChart(data: IAssessment, slackService: SlackService): Promise<void> {
 	const svg = getBarChartSVG(data);
-	await fs.promises.writeFile('chart.svg', svg);
-	const filePath = './chart.svg';
+	await fs.promises.writeFile('/tmp/chart.svg', svg);
+	const filePath = '/tmp/chart.svg';
 	const sharpImage = sharp(filePath);
-	await sharpImage.toFile('chart.png');
-	const buffer = await fs.promises.readFile('./chart.png');
+	await sharpImage.toFile('/tmp/chart.png');
+	const buffer = await fs.promises.readFile('/tmp/chart.png');
 	await slackService.uploadFile(buffer);
 }
 
