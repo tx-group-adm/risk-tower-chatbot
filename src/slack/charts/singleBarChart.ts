@@ -24,6 +24,7 @@ function getBarChartSVG(data: IAssessment): string {
 	// distance from container to chart + distance from chart container to bar
 	const barPositionY = (SIZE - CHART_HEIGHT) / 2 + (CHART_HEIGHT - barHeight) - 1;
 
+	console.log(data);
 	console.log(`barHeight: ${barHeight}`);
 	console.log(`barPositionY: ${barPositionY}`);
 
