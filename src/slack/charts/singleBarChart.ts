@@ -1,73 +1,158 @@
-import { ChartConfiguration } from 'chart.js';
-import { IAssessment, IQuickchartConfig } from '../../interfaces';
-import axios from 'axios';
+import { IAssessment } from '../../interfaces';
+import fs from 'fs';
+import sharp from 'sharp';
+import SlackService from '../../services/SlackService';
 
-export async function createSingleBarChart(data: IAssessment): Promise<string> {
-	const value = Number(data.rating.toFixed(2));
-	const backgroundColor = data.ratingColor;
+export async function createSingleBarChart(data: IAssessment, slackService: SlackService): Promise<void> {
+	const svg = getBarChartSVG(data);
+	await fs.promises.writeFile('chart.svg', svg);
+	const filePath = './chart.svg';
+	const sharpImage = sharp(filePath);
+	await sharpImage.toFile('chart.png');
+	const buffer = await fs.promises.readFile('./chart.png');
+	await slackService.uploadFile(buffer);
+}
 
-	const config: ChartConfiguration = {
-		type: 'bar',
-		data: {
-			datasets: [
-				{
-					data: [value],
-					backgroundColor,
-					borderWidth: 1,
-					borderColor: '#000000',
-					barThickness: 120,
-				},
-			],
-		},
-		options: {
-			legend: {
-				display: false,
-				align: 'center',
-			},
-			responsive: false,
-			scales: {
-				xAxes: [
-					{
-						ticks: {
-							fontSize: 50,
-							maxRotation: 0,
-							minRotation: 0,
-						},
-						scaleLabel: {
-							display: true,
-							fontSize: 20,
-							fontColor: '#000000',
-							labelString: `${value}%`,
-						},
-					},
-				],
-				yAxes: [
-					{
-						ticks: {
-							beginAtZero: true,
-							stepSize: 10,
-							min: 0,
-							max: 100,
-						},
-					},
-				],
-			},
-		},
-	};
+function getBarChartSVG(data: IAssessment): string {
+	const { rating, ratingColor } = data;
+	const SIZE = 500;
+	const CHART_HEIGHT = 300;
 
-	const requestData: IQuickchartConfig = {
-		backgroundColor: 'transparent',
-		width: 400,
-		height: 240,
-		format: 'png',
-		chart: config,
-	};
+	// subtract 1 pixel so border of chart container is visible (doesn't change the representation of the chart)
+	const barHeight = CHART_HEIGHT * Number(rating.toFixed(3)) - 1;
 
-	const response = (await axios.post('https://quickchart.io/chart/create', requestData)).data;
+	// distance from container to chart + distance from chart container to bar
+	const barPositionY = (SIZE - CHART_HEIGHT) / 2 + (CHART_HEIGHT - barHeight);
 
-	if (response.success) {
-		return response.url;
-	} else {
-		throw new Error('Error with quickchart.io');
-	}
+	const svg = `
+	<svg width="500" height="500">
+      <rect
+        class="container"
+        width="500"
+        height="500"
+        fill="white"
+        stroke="black"
+        stroke-width="1"
+      />
+      <rect
+        class="chart-container"
+        x="200"
+        y="100"
+        width="100px"
+        height="300px"
+        fill="white"
+        stroke="black"
+        stroke-width="1"
+        shape-rendering="crispEdges"
+      />
+      <rect
+        class="chart-value"
+        x="200"
+        y="${barPositionY}"
+        width="99px"
+        height="${barHeight}"
+        fill="${ratingColor}"
+      />
+      <text
+        class="value-label"
+        x="235"
+        y="395"
+        fill="black"
+        fill-opacity="0.5"
+        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-size="20px"
+      >
+        60%
+      </text>
+      <text
+        class="text-label"
+        x="130"
+        y="155"
+        fill="black"
+        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-size="13px"
+      >
+        High
+      </text>
+      <text
+        class="text-label"
+        x="340"
+        y="155"
+        fill="black"
+        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-size="13px"
+      >
+        80%
+      </text>
+      <line
+        class="line-label line-high"
+        x1="130"
+        y1="160"
+        x2="370"
+        y2="160"
+        stroke="black"
+        stroke-width="1"
+      />
+      <text
+        class="text-label"
+        x="130"
+        y="245"
+        fill="black"
+        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-size="13px"
+      >
+        Medium
+      </text>
+      <text
+        class="text-label"
+        x="340"
+        y="245"
+        fill="black"
+        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-size="13px"
+      >
+        50%
+      </text>
+      <line
+        class="line-label line-medium"
+        x1="130"
+        y1="250"
+        x2="370"
+        y2="250"
+        stroke="black"
+        stroke-width="1"
+      />
+      <text
+        class="text-label"
+        x="130"
+        y="335"
+        fill="black"
+        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-size="13px"
+      >
+        Low
+      </text>
+      <text
+        class="text-label"
+        x="340"
+        y="335"
+        fill="black"
+        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-size="13px"
+      >
+        20%
+      </text>
+      <line
+        class="line-label line-low"
+        x1="130"
+        y1="340"
+        x2="370"
+        y2="340"
+        stroke="black"
+        stroke-width="1"
+      />
+    </svg>
+	`;
+
+	return svg;
 }

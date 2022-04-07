@@ -57,19 +57,11 @@ export async function handleGetRisks(response: IDetectIntentResponseData, slackS
 				}
 
 			case 'entity':
-				const chartUrl = await createSingleBarChart(risks.assessment);
-				const assessmentMessage = `The ${type} chart for ${company} shows an impact of *${risks.assessment.impact}* and a probability of *${risks.assessment.probability}*.`;
+				await createSingleBarChart(risks.assessment, slackService);
 				const parentId = risks.assessment.parentId;
 				const parentName = await RiskTowerService.getParentName(parentId);
 				const switchAssessmentButtons: Button[] = createSwitchAsessmentButtons(type, company, 'risk chart');
-				const entityBlocks = createAssessmentDataBlock(
-					type,
-					risks.assessment.name,
-					assessmentMessage,
-					chartUrl,
-					parentName,
-					switchAssessmentButtons
-				);
+				const entityBlocks = createAssessmentDataBlock(type, parentName, switchAssessmentButtons);
 				await slackService.postMessage('', entityBlocks);
 				break;
 
