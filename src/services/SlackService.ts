@@ -34,10 +34,11 @@ export default class SlackService {
 		return profile.email;
 	}
 
-	async uploadFile(file: Buffer): Promise<void> {
+	async uploadFile(file: Buffer, title?: string): Promise<void> {
 		await this.webClient.files.upload({
 			channels: this.event.channel,
 			file,
+			filename: title,
 		});
 	}
 

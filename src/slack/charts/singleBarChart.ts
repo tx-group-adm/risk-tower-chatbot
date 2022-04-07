@@ -10,7 +10,7 @@ export async function createSingleBarChart(data: IAssessment, slackService: Slac
 	const sharpImage = sharp(filePath);
 	await sharpImage.toFile('/tmp/chart.png');
 	const buffer = await fs.promises.readFile('/tmp/chart.png');
-	await slackService.uploadFile(buffer);
+	await slackService.uploadFile(buffer, `Risk chart for ${data.name}`);
 }
 
 function getBarChartSVG(data: IAssessment): string {
@@ -59,7 +59,7 @@ function getBarChartSVG(data: IAssessment): string {
         y="395"
         fill="black"
         fill-opacity="0.5"
-        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-family="Open Sans"
         font-size="20px"
       >
         60%
@@ -69,7 +69,7 @@ function getBarChartSVG(data: IAssessment): string {
         x="130"
         y="155"
         fill="black"
-        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-family="Open Sans"
         font-size="13px"
       >
         High
@@ -79,7 +79,7 @@ function getBarChartSVG(data: IAssessment): string {
         x="340"
         y="155"
         fill="black"
-        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-family="Open Sans"
         font-size="13px"
       >
         80%
@@ -98,7 +98,7 @@ function getBarChartSVG(data: IAssessment): string {
         x="130"
         y="245"
         fill="black"
-        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-family="Open Sans"
         font-size="13px"
       >
         Medium
@@ -108,7 +108,7 @@ function getBarChartSVG(data: IAssessment): string {
         x="340"
         y="245"
         fill="black"
-        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-family="Open Sans"
         font-size="13px"
       >
         50%
@@ -127,7 +127,7 @@ function getBarChartSVG(data: IAssessment): string {
         x="130"
         y="335"
         fill="black"
-        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-family="Open Sans"
         font-size="13px"
       >
         Low
@@ -137,7 +137,7 @@ function getBarChartSVG(data: IAssessment): string {
         x="340"
         y="335"
         fill="black"
-        font-family="Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif"
+        font-family="Open Sans"
         font-size="13px"
       >
         20%
