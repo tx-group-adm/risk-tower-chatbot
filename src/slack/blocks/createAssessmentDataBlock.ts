@@ -15,6 +15,7 @@ export function createAssessmentDataBlock(
 			},
 			value: `Show me ${type} risks for ${parentName}`,
 			style: 'danger',
+			action_id: 'quickreply_0',
 		},
 	];
 

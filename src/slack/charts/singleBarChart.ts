@@ -40,7 +40,7 @@ function getBarChartSVG(data: IAssessment): string {
       />
       <rect
         class="chart-container"
-        x="230"
+        x="235"
         y="100"
         width="100px"
         height="300px"
@@ -51,7 +51,7 @@ function getBarChartSVG(data: IAssessment): string {
       />
       <rect 
         class="chart-value"
-        x="230.5"
+        x="235"
         y="${barPositionY}"
         width="99px"
         height="${barHeight}px"
@@ -59,7 +59,7 @@ function getBarChartSVG(data: IAssessment): string {
       />
       <text
         class="value-label"
-        x="265"
+        x="270"
         y="395"
         fill="black"
         fill-opacity="0.5"
