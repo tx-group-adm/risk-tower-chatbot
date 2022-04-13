@@ -47,5 +47,5 @@ functions:
           path: update-dialogflow-companies
       - schedule:
           description: 'update the dialogflow company entity once a day'
-          rate: rate(10 minutes)
+          rate: cron(0 5 * * ? *)
           enabled: true
