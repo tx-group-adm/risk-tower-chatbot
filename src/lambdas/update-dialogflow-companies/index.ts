@@ -16,7 +16,7 @@ export async function handler(): Promise<HandlerResponse> {
 		const entities = new dialogflow.v2beta1.EntityTypesClient(options);
 		const entityList = (
 			await entities.listEntityTypes({
-				parent: 'projects/risk-tower-solution-dev/agent',
+				parent: `projects/risk-tower-solution${process.env.STAGE === 'prod' ? '' : '-dev'}/agent`,
 			})
 		)[0];
 		const companyEntity = entityList.filter((entity) => entity.displayName === 'tx_company')[0];
