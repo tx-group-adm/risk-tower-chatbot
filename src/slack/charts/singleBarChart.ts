@@ -66,7 +66,7 @@ function getBarChartSVG(data: IAssessment): string {
         font-family="Source Sans"
         font-size="20px"
       >
-        50%
+        ${rating}%
       </text>
       <text
         class="text-label"
