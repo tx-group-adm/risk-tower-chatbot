@@ -3,11 +3,11 @@ import { ChartConfiguration } from 'chart.js';
 
 export interface HandlerResponse {
 	statusCode: number;
-	body: string;
-	headers: {
+	body?: string;
+	headers?: {
 		[header: string]: string | number | boolean;
 	};
-	isBase64Encoded: boolean;
+	isBase64Encoded?: boolean;
 }
 export interface ISlackEvent {
 	body: string;
