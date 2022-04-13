@@ -21,6 +21,7 @@ import { handleGetIncidents } from '../../handlers/GetIncidents/handleGetInciden
 import { handleGetHighlights } from '../../handlers/GetHighlights/handleGetHighlights';
 import { handleGetNews } from '../../handlers/GetNews/handleGetNews';
 import { HTTP200, HTTP500 } from '../../responses';
+import { handleUpdateCompanies } from '../../handlers/Update Companies/handleUpdateCompanies';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<HandlerResponse> {
 	console.log('EVENT_CALLBACK');
@@ -99,6 +100,10 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 
 			case INTENTS.GET_GENERAL_HELP:
 				await handleGetGeneralHelp(response, slackService);
+				break;
+
+			case INTENTS.UPDATE_COMPANIES:
+				await handleUpdateCompanies(response, slackService);
 				break;
 
 			case INTENTS.GET_HELP_ASSESSMENT_FINDINGS_EPICS:
