@@ -20,6 +20,7 @@ export function createSwitchAsessmentButtons(
 				text: 'entity info',
 			},
 			value: `Show me ${type} entity info for ${company}`,
+			action_id: 'quickreply_1',
 		},
 		{
 			type: 'button',
@@ -28,6 +29,7 @@ export function createSwitchAsessmentButtons(
 				text: 'risk chart',
 			},
 			value: `Show me the ${type} risk chart for ${company}`,
+			action_id: 'quickreply_2',
 		},
 		{
 			type: 'button',
@@ -36,6 +38,7 @@ export function createSwitchAsessmentButtons(
 				text: 'risk ratings',
 			},
 			value: `Show me ${type} risk ratings for ${company}`,
+			action_id: 'quickreply_3',
 		},
 		{
 			type: 'button',
@@ -44,6 +47,7 @@ export function createSwitchAsessmentButtons(
 				text: 'risk epics',
 			},
 			value: `Show me ${type} risk epics for ${company}`,
+			action_id: 'quickreply_4',
 		},
 	];
 

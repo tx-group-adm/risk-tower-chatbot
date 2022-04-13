@@ -16,7 +16,7 @@ export async function handleGetNews(response: IDetectIntentResponseData, slackSe
 	console.log('GetNews parameters: ', JSON.stringify(response.parameters));
 
 	const parameters = response.parameters as IGetNewsParameters;
-	const company = parameters.tx_company;
+	const company = parameters.tx_company || 'TX Group';
 	const date_time = parameters.date_time as DateTime;
 
 	const dateFilter = dateTimeToDateFilter(date_time);

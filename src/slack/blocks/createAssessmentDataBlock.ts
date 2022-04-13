@@ -1,11 +1,8 @@
 import { Button, KnownBlock } from '@slack/web-api';
-import { ICompany, IType } from '../../interfaces';
+import { IType } from '../../interfaces';
 
 export function createAssessmentDataBlock(
 	type: IType,
-	company: ICompany,
-	message: string,
-	url: string,
 	parentName: string | null,
 	switchAssessmentButtons: Button[]
 ): Array<KnownBlock> {
@@ -18,32 +15,11 @@ export function createAssessmentDataBlock(
 			},
 			value: `Show me ${type} risks for ${parentName}`,
 			style: 'danger',
+			action_id: 'quickreply_0',
 		},
 	];
 
 	return [
-		{
-			type: 'header',
-			text: {
-				type: 'plain_text',
-				text: `Assessment data for ${company}`,
-			},
-		},
-		{
-			type: 'divider',
-		},
-		{
-			type: 'section',
-			text: {
-				type: 'mrkdwn',
-				text: message,
-			},
-		},
-		{
-			type: 'image',
-			image_url: url,
-			alt_text: 'assessment data chart',
-		},
 		{
 			type: 'actions',
 			elements: drillUpButton,

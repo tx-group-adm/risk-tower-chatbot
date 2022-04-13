@@ -1,73 +1,143 @@
-import { ChartConfiguration } from 'chart.js';
-import { IAssessment, IQuickchartConfig } from '../../interfaces';
-import axios from 'axios';
+import { IAssessment } from '../../interfaces';
+import fs from 'fs';
+import sharp from 'sharp';
+import SlackService from '../../services/SlackService';
 
-export async function createSingleBarChart(data: IAssessment): Promise<string> {
-	const value = Number(data.rating.toFixed(2));
-	const backgroundColor = data.ratingColor;
+export async function createSingleBarChart(data: IAssessment, slackService: SlackService): Promise<void> {
+	const svg = getBarChartSVG(data);
+	await fs.promises.writeFile('/tmp/chart.svg', svg);
+	const filePath = '/tmp/chart.svg';
+	const sharpImage = sharp(filePath);
+	await sharpImage.toFile('/tmp/chart.png');
+	const buffer = await fs.promises.readFile('/tmp/chart.png');
+	await slackService.uploadFile(buffer, `Risk chart for ${data.name}`);
+}
 
-	const config: ChartConfiguration = {
-		type: 'bar',
-		data: {
-			datasets: [
-				{
-					data: [value],
-					backgroundColor,
-					borderWidth: 1,
-					borderColor: '#000000',
-					barThickness: 120,
-				},
-			],
-		},
-		options: {
-			legend: {
-				display: false,
-				align: 'center',
-			},
-			responsive: false,
-			scales: {
-				xAxes: [
-					{
-						ticks: {
-							fontSize: 50,
-							maxRotation: 0,
-							minRotation: 0,
-						},
-						scaleLabel: {
-							display: true,
-							fontSize: 20,
-							fontColor: '#000000',
-							labelString: `${value}%`,
-						},
-					},
-				],
-				yAxes: [
-					{
-						ticks: {
-							beginAtZero: true,
-							stepSize: 10,
-							min: 0,
-							max: 100,
-						},
-					},
-				],
-			},
-		},
-	};
+function getBarChartSVG(data: IAssessment): string {
+	const { rating, ratingColor } = data;
+	const SIZE = 500;
+	const CHART_HEIGHT = 300;
 
-	const requestData: IQuickchartConfig = {
-		backgroundColor: 'transparent',
-		width: 400,
-		height: 240,
-		format: 'png',
-		chart: config,
-	};
+	// subtract 1 pixel so border of chart container is visible (doesn't change the representation of the chart)
+	const barHeight = CHART_HEIGHT * (rating / 100) - 1;
 
-	const response = (await axios.post('https://quickchart.io/chart/create', requestData)).data;
+	// distance from container to chart + distance from chart container to bar
+	const barPositionY = (SIZE - CHART_HEIGHT) / 2 + (CHART_HEIGHT - barHeight) - 0.5;
 
-	if (response.success) {
-		return response.url;
-	} else {
-		throw new Error('Error with quickchart.io');
-	}
+	console.log(data);
+	console.log(`barHeight: ${barHeight}`);
+	console.log(`barPositionY: ${barPositionY}`);
+
+	const svg = `
+	<svg width="500" height="500">
+      <rect
+        class="container"
+        width="500"
+        height="500"
+        fill="white"
+        stroke="black"
+        stroke-width="1"
+      />
+      <rect
+        class="chart-container"
+        x="240"
+        y="100"
+        width="100px"
+        height="300px"
+        fill="white"
+        stroke="black"
+        stroke-width="1"
+        shape-rendering="crispEdges"
+      />
+      <rect 
+        class="chart-value"
+        x="240"
+        y="${barPositionY}"
+        width="99px"
+        height="${barHeight}px"
+        fill="${ratingColor}"
+      />
+      <text
+        class="value-label"
+        x="275"
+        y="395"
+        fill="black"
+        fill-opacity="0.5"
+        font-family="Source Sans"
+        font-size="20px"
+      >
+        50%
+      </text>
+      <text
+        class="text-label"
+        x="130"
+        y="140"
+        fill="black"
+        font-family="Source Sans"
+        font-size="12px"
+      >
+        High Resilience
+      </text>
+      <text
+        class="text-label"
+        x="350"
+        y="140"
+        fill="black"
+        font-family="Source Sans"
+        font-size="12px"
+      >
+        75%
+      </text>
+      <line
+        class="line-label line-high"
+        x1="130"
+        y1="175"
+        x2="370"
+        y2="175"
+        stroke="black"
+        stroke-width="1"
+      />
+      <text
+        class="text-label"
+        x="130"
+        y="250"
+        fill="black"
+        font-family="Source Sans"
+        font-size="12px"
+      >
+        Medium Resilience
+      </text>
+      <text
+        class="text-label"
+        x="130"
+        y="365"
+        fill="black"
+        font-family="Source Sans"
+        font-size="12px"
+      >
+        Low Resilience
+      </text>
+      <text
+        class="text-label"
+        x="350"
+        y="365"
+        fill="black"
+        font-family="Source Sans"
+        font-size="12px"
+      >
+        25%
+      </text>
+      <line
+        class="line-label line-low"
+        x1="130"
+        y1="325"
+        x2="370"
+        y2="325"
+        stroke="black"
+        stroke-width="1"
+      />
+    </svg>
+	`;
+
+	return svg;
 }

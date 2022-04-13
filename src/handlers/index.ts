@@ -37,6 +37,7 @@ export const INTENTS = {
 	GET_HELP_SHOW_MEASURES: 'GetHelpShowMeasures',
 	GET_HELP_SHOW_RISKS: 'GetHelpShowRisks',
 	GET_HELP_STORIES: 'GetHelpStories',
+	UPDATE_COMPANIES: 'Update Companies',
 };
 
 export { handleGetRiskChart } from './GetRiskChart/handleGetRiskChart';
