@@ -6,6 +6,7 @@
 	"dependencies": {
 		"@google-cloud/dialogflow": "^3.2.0",
 		"@slack/web-api": "^5.11.0",
+		"aws-sdk": "^2.1113.0",
 		"axios": "^0.21.0",
 		"dialogflow": "^1.2.0",
 		"google-auth-library": "^6.0.6",
