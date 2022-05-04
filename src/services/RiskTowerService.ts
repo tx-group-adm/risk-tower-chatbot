@@ -19,7 +19,8 @@ export default class RiskTowerService {
 		if (company) {
 			return company;
 		} else {
-			return 'TX Group';
+			const defaultCompany = (await DataService.getHierarchyTree()).filter((item) => item.parentId == null)[0].name;
+			return defaultCompany;
 		}
 	}
 

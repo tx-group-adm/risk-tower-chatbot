@@ -25,7 +25,8 @@ import {
 } from '../interfaces';
 
 const URL_PREFIX = process.env.STAGE === 'prod' ? 'security' : 'security-dev';
-const BASE_URL = `https://${URL_PREFIX}.tx.group/api`;
+const DOMAIN = process.env.DOMAIN;
+const BASE_URL = `https://${URL_PREFIX}.${DOMAIN}/api`;
 
 import RiskTowerService from './RiskTowerService';
 

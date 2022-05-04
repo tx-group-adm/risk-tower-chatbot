@@ -2,21 +2,21 @@ service: risk-tower-chatbot
 
 plugins:
   - serverless-offline
+  - serverless-plugin-warmup
 
 package:
   individually: true
   include:
     - node_modules
     - dist
-    - images
 
 provider:
   name: aws
   region: eu-central-1
   stage: ${opt:stage, 'dev'}
   runtime: nodejs12.x
-  timeout: 30
   environment:
+    DOMAIN: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DOMAIN}
     DIALOGFLOW_CLIENT_EMAIL: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_CLIENT_EMAIL}
     DIALOGFLOW_PRIVATE_KEY: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PRIVATE_KEY}
     DIALOGFLOW_PROJECT_ID: ${file(./config/config.${opt:stage, self:provider.stage, 'dev'}.json):DIALOGFLOW_PROJECT_ID}
@@ -32,13 +32,19 @@ provider:
       Resource: '*'
 
 functions:
-  slackevent:
-    timeout: 300
-    handler: dist/handler.slackevent
+  replier:
+    handler: dist/src/lambdas/replier/index.handler
     events:
       - http:
           method: post
-          path: slackevent
+          path: replier
+    warmup: true
+  events-api:
+    handler: dist/src/lambdas/events-api/index.handler
+    events:
+      - http:
+          method: post
+          path: events-api
   update-dialogflow-companies:
     handler: dist/src/lambdas/update-dialogflow-companies/index.handler
     events:
