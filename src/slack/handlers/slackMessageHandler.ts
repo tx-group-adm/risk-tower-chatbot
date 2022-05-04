@@ -20,7 +20,6 @@ import { isUserTopLevelAdmin } from '../../handlers';
 import { handleGetIncidents } from '../../handlers/GetIncidents/handleGetIncidents';
 import { handleGetHighlights } from '../../handlers/GetHighlights/handleGetHighlights';
 import { handleGetNews } from '../../handlers/GetNews/handleGetNews';
-import { HTTP200, HTTP500 } from '../../responses';
 import { handleUpdateCompanies } from '../../handlers/Update Companies/handleUpdateCompanies';
 
 export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<HandlerResponse> {
@@ -32,7 +31,9 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 	if (event.bot_id || event.upload) {
 		console.log(`ignore event`);
 		console.log(event);
-		return HTTP200();
+		return {
+			statusCode: 200,
+		};
 	}
 
 	const sessionId = event.user;
@@ -133,12 +134,17 @@ export async function slackMessageHandler(event: ISlackMessageIMEvent): Promise<
 				throw new Error(`No handler for intent: ${intentName}`);
 		}
 
-		return HTTP200();
+		return {
+			statusCode: 200,
+		};
 	} catch (err) {
 		const error = err as Error;
 		console.log('error while handling intent, using error handler to notify user');
 		console.log(error);
 		await errorHandler(slackService);
-		return HTTP500('Oops, something went wrong, check the logs for more information.');
+		return {
+			statusCode: 500,
+			body: JSON.stringify({ message: 'Oops, something went wrong, check the logs for more information.' }),
+		};
 	}
 }

@@ -50,7 +50,7 @@ export async function showQuickReplies(response: IDetectIntentResponseData, slac
 	console.log(JSON.stringify(response));
 	const missingParameters: IParameter[] = response.missingParameters;
 	const message = response.messages.join('\n');
-	const options = getQuickReplyOptionsFor(missingParameters[0]);
+	const options = await getQuickReplyOptionsFor(missingParameters[0], response.parameters);
 	const blocks = createQuickReplyBlock(message, options);
 
 	await slackService.postMessage('', blocks);

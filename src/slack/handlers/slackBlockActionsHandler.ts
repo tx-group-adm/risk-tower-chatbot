@@ -6,7 +6,6 @@ import {
 	ISlackMessageIMEvent,
 	StaticSelectBlockAction,
 } from '../../interfaces';
-import { HTTP200 } from '../../responses';
 import { slackMessageHandler } from './slackMessageHandler';
 
 export async function slackBlockActionsHandler(event: ISlackBlockActionsEvent): Promise<HandlerResponse> {
@@ -54,5 +53,7 @@ export async function slackBlockActionsHandler(event: ISlackBlockActionsEvent): 
 		})
 	);
 
-	return HTTP200();
+	return {
+		statusCode: 200,
+	};
 }
