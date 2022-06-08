@@ -18,8 +18,11 @@ export async function handleGetIncidents(
 
 	console.log('GetIncidents parameters: ', JSON.stringify(response.parameters));
 
+	// the company without parentId is the highest company in the hierarchy so it should be used as the default company if none is provided
+	const defaultCompany = (await DataService.getHierarchyTree()).filter((item) => item.parentId == null)[0].name;
+
 	const parameters = response.parameters as IGetIncidentsParameters;
-	const company = parameters.tx_company || 'TX Group';
+	const company = parameters.tx_company || defaultCompany;
 	const date_time = parameters.date_time as DateTime;
 
 	const dateFilter = dateTimeToDateFilter(date_time);

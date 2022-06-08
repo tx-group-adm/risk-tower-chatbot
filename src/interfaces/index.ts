@@ -9,8 +9,24 @@ export interface HandlerResponse {
 	};
 	isBase64Encoded?: boolean;
 }
+
 export interface ISlackEvent {
+	headers: {
+		[headerName: string]: string;
+	};
 	body: string;
+}
+
+export interface IWarmupEvent {
+	source: string;
+}
+
+export type IEvent = ISlackEvent | IWarmupEvent;
+
+export interface ISlackUrlVerificationEvent {
+	token: string;
+	challenge: string;
+	type: 'url_verification';
 }
 
 export interface ISlackEventCallback {
@@ -256,20 +272,7 @@ export interface IAssessment {
 	weight: number;
 }
 
-export type ICompany =
-	| 'TX Group'
-	| 'TX Markets'
-	| 'Group and Services'
-	| 'Tamedia'
-	| 'Goldbach Group'
-	| '20 Minuten'
-	| 'Technology Services'
-	| 'TX Ventures'
-	| 'Corporate Services'
-	| 'IT'
-	| 'Logistics and Printing'
-	| 'Paid Media'
-	| 'Goldbach';
+export type ICompany = string;
 
 export type IType = 'security' | 'privacy' | 'technology';
 

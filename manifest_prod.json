@@ -1,0 +1,31 @@
+{
+	"display_information": {
+		"name": "Risk Tower Security",
+		"description": "Risk Tower Security - A chatbot that let's you interact with risk tower",
+		"background_color": "#000000"
+	},
+	"features": {
+		"bot_user": {
+			"display_name": "Risk Tower Security",
+			"always_online": true
+		}
+	},
+	"oauth_config": {
+		"scopes": {
+			"bot": ["chat:write", "im:history", "users.profile:read", "files:write"]
+		}
+	},
+	"settings": {
+		"event_subscriptions": {
+			"request_url": "<your_lambda_url>/prod/slackreplier",
+			"bot_events": ["message.im"]
+		},
+		"interactivity": {
+			"is_enabled": true,
+			"request_url": "<your_lambda_url>/prod/slackreplier"
+		},
+		"org_deploy_enabled": false,
+		"socket_mode_enabled": false,
+		"token_rotation_enabled": false
+	}
+}

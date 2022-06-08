@@ -12,7 +12,7 @@ export async function handleUpdateCompanies(
 		region: 'eu-central-1',
 	});
 
-	const eventsApiLambdaName = `risk-tower-chatbot-${process.env.STAGE}-slackevent`;
+	const eventsApiLambdaName = `risk-tower-chatbot-${process.env.STAGE}-events-api`;
 	const params: InvocationRequest = {
 		FunctionName: eventsApiLambdaName,
 		InvocationType: 'Event',
