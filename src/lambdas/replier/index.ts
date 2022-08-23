@@ -32,7 +32,7 @@ export async function handler(event: IEvent): Promise<HandlerResponse> {
 			case 'event_callback':
 			case 'block_actions':
 				const lambda = new AWS.Lambda();
-				const functionName = `risk-tower-chatbot-${process.env.STAGE}-slackevent`;
+				const functionName = `risk-tower-chatbot-${process.env.STAGE}-events-api`;
 				const params: InvocationRequest = {
 					FunctionName: functionName,
 					InvocationType: 'Event',
