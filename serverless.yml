@@ -33,20 +33,20 @@ provider:
 
 functions:
   replier:
-    handler: dist/src/lambdas/replier/index.handler
+    handler: dist/lambdas/replier/index.handler
     events:
       - http:
           method: post
           path: replier
     warmup: true
   events-api:
-    handler: dist/src/lambdas/events-api/index.handler
+    handler: dist/lambdas/events-api/index.handler
     events:
       - http:
           method: post
           path: events-api
   update-dialogflow-companies:
-    handler: dist/src/lambdas/update-dialogflow-companies/index.handler
+    handler: dist/lambdas/update-dialogflow-companies/index.handler
     events:
       - http:
           method: post
